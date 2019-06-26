@@ -67,8 +67,10 @@ layui.define(['laytpl', 'layer'], function(exports){
     
     options.data = options.data || {};
     options.headers = options.headers || {};
+
+    var reg = RegExp(/login/);
     
-    if(request.tokenName){
+    if(request.tokenName && options.url.indexOf("login") ==-1){
       //自动给参数传入默认 token
       options.data[request.tokenName] = request.tokenName in options.data 
         ?  options.data[request.tokenName]
@@ -86,7 +88,7 @@ layui.define(['laytpl', 'layer'], function(exports){
     return $.ajax($.extend({
       type: 'get'
       ,dataType: 'json'
-      ,success: function(res){
+      ,success: function(res){        
         var statusCode = response.statusCode;
         
         //只有 response 的 code 一切正常才执行 done

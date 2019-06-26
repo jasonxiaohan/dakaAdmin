@@ -87,19 +87,29 @@ layui.define(['form', 'upload'], function(exports){
   
   //设置我的资料
   form.on('submit(setmyinfo)', function(obj){
-    layer.msg(JSON.stringify(obj.field));
+    // layer.msg(JSON.stringify(obj.field));
+    obj.field.admin_id=1;
+    console.log(obj);
     
     //提交修改
-    /*
+    
     admin.req({
-      url: ''
+      url: setter.remoteurl+'/systemadmin/users'
       ,data: obj.field
-      ,success: function(){
-        
+      ,method: 'PUT'
+      ,success: function(res){
+        if (res.code == 0) {
+          layer.msg("添加成功",{time: 1000,icon: 1},function(){
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+              window.parent.location.reload();
+          });
+        } else {
+          layer.msg(res.msg, {icon: 5});
+        }
       }
-    });
-    */
-    return false;
+    }); 
+    return true;
   });
 
   //上传头像
@@ -138,15 +148,23 @@ layui.define(['form', 'upload'], function(exports){
     layer.msg(JSON.stringify(obj.field));
     
     //提交修改
-    /*
     admin.req({
-      url: ''
+      url: setter.remoteurl+'/systemadmin/password'
       ,data: obj.field
-      ,success: function(){
-        
+      ,method: 'PUT'
+      ,success: function(res){
+         if (res.code == 0) {
+          layer.msg("添加成功",{time: 1000,icon: 1},function(){
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+              window.parent.location.reload();
+          });
+        } else {
+          // layer.msg(res.msg, {icon: 5});
+        } 
       }
     });
-    */
+    
     return false;
   });
   
