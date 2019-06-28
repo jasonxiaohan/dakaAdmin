@@ -17,17 +17,15 @@
         <div class="layui-inline">
           角色筛选
         </div>
-        <div class="layui-inline">
-          <select name="rolename" lay-filter="LAY-user-adminrole-type">
-            <option value="-1">全部角色</option>
-            <option value="0">管理员</option>
-            <option value="1">超级管理员</option>
-            <option value="2">纠错员</option>
-            <option value="3">采购员</option>
-            <option value="4">推销员</option>
-            <option value="5">运营人员</option>
-            <option value="6">编辑</option>
-          </select>
+        <div class="layui-inline" id="layui-input-role">
+          <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-done="layui.data.done(d)">                
+            <select name="rolename" lay-verify="" lay-filter="LAY-user-adminrole-type">
+              <option value="-1">全部角色</option>
+              {{# layui.each(d.data,(i,row)=> { }}
+                  <option value="{{ row.roleId }}" {{# if(select == row.roleId){ }}selected{{# } }}>{{ row.roleName  }}</option>
+              {{# }); }}
+            </select> 
+          </script>
         </div>
       </div>
     </div>
@@ -53,6 +51,18 @@
   </div>
 </div>
 
+<script>  
+  var select = -1;
+  layui.data.done = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    laytpl($('#role').html()).render(d,(html)=>{
+      $('#layui-input-role').html(html);
+    });
+    form.render('select')
+  });
+  };
+</script>
+
 <script>
 layui.use('useradmin', layui.factory('useradmin')).use(['admin', 'useradmin', 'table'], function(){
   var $ = layui.$
@@ -68,7 +78,7 @@ layui.use('useradmin', layui.factory('useradmin')).use(['admin', 'useradmin', 't
     //执行重载
     table.reload('LAY-user-back-role', {
       where: {
-        role: data.value
+        role_id: data.value
       }
     });
   });
@@ -96,7 +106,7 @@ layui.use('useradmin', layui.factory('useradmin')).use(['admin', 'useradmin', 't
         layer.msg('已删除');
       });
     },
-    add: function(){
+    add: function(){      
       admin.popup({
         title: '添加新角色'
         ,area: ['500px', '480px']

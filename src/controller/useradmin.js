@@ -12,6 +12,7 @@ layui.define(['table', 'form'], function(exports){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
+  ,setter = layui.setter
   ,table = layui.table
   ,form = layui.form;
 
@@ -136,13 +137,16 @@ layui.define(['table', 'form'], function(exports){
   //角色管理
   table.render({
     elem: '#LAY-user-back-role'
-    ,url: './json/useradmin/role.js' //模拟接口
+    ,url: setter.remoteurl+'/systemrole/roles'
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token
+    }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', width: 80, title: 'ID', sort: true}
-      ,{field: 'rolename', title: '角色名'}
-      ,{field: 'limits', title: '拥有权限'}
-      ,{field: 'descr', title: '具体描述'}
+      ,{field: 'roleId', width: 80, title: 'ID', sort: true}
+      ,{field: 'roleName', title: '角色名'}
+      ,{field: 'rights', title: '拥有权限'}
+      ,{field: 'desc', title: '具体描述'}
       ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
     ]]
     ,text: '对不起，加载出现异常！'
@@ -163,7 +167,7 @@ layui.define(['table', 'form'], function(exports){
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
           view(this.id).render('user/administrators/roleform', data).done(function(){
-            form.render(null, 'layuiadmin-form-role');
+            // form.render(null, 'layuiadmin-form-role');
             
             //监听提交
             form.on('submit(LAY-user-role-submit)', function(data){

@@ -145,8 +145,6 @@ layui.define(['form', 'upload'], function(exports){
   
   //设置密码
   form.on('submit(setmypass)', function(obj){
-    layer.msg(JSON.stringify(obj.field));
-    
     //提交修改
     admin.req({
       url: setter.remoteurl+'/systemadmin/password'
@@ -154,7 +152,7 @@ layui.define(['form', 'upload'], function(exports){
       ,method: 'PUT'
       ,success: function(res){
          if (res.code == 0) {
-          layer.msg("添加成功",{time: 1000,icon: 1},function(){
+          layer.msg("密码修改成功",{time: 1000,icon: 1},function(){
               var index = parent.layer.getFrameIndex(window.name);
               parent.layer.close(index);
               window.parent.location.reload();

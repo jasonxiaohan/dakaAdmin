@@ -20,7 +20,7 @@
             <div class="layui-form-item">
               <label class="layui-form-label">我的角色</label>
               <div class="layui-input-inline" id="layui-input-role">
-                <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-type="post" lay-done="layui.data.done(d)">                
+                <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-done="layui.data.done(d)">                
                   <select name="role_id" lay-verify="">
                     {{# layui.each(d.data,(i,row)=> { }}
                         <option disabled="disabled" value="{{ row.roleId }}" {{# if(select == row.roleId){ }}selected{{# } }}>{{ row.roleName  }}</option>

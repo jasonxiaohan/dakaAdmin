@@ -390,10 +390,5 @@
         ,"title": "修改密码"
       }]
     }]
-  }, {
-    "name": "get"
-    ,"title": "授权"
-    ,"icon": "layui-icon-auz"
-    ,"jump": "system/get"
   }]
 }
