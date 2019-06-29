@@ -14,15 +14,23 @@
       </script>
     </div> -->
     <div class="layui-input-inline"> 
-      <input type="text" name="roleName" value="" autocomplete="off" class="layui-input"> 
+      <script type="text/html" template>
+        <input type="text" name="roleName" value="{{ d.params.roleName || '' }}" autocomplete="off" class="layui-input"> 
+      </script>
     </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">权限范围</label>
+    <script type="text/html" template>
+      <script type="text/javascript">
+        var rights = "{{d.params.rights}}";
+      </script>
+    </script>
     <div class="layui-input-block" id="layui-input-rights" lay-filter="layui-input-rights">
-      <script type="text/html" id="rights" template lay-url="{{ layui.setter.remoteurl }}/systemmenu/menus" lay-done="layui.data.rights(d)">
+      
+      <script type="text/html" template id="rights" template lay-url="{{ layui.setter.remoteurl }}/systemmenu/menus" lay-done="layui.data.rights(d)">
         {{#  layui.each(d.data, function(index, item){ }}
-            <input type="checkbox" name="rights[{{item.menuId}}]" lay-skin="primary" title="{{ item.title }}">  
+            <input type="checkbox" {{ rights.indexOf(item.title) != -1 ? 'checked' : '' }}  name="rights[{{item.menuId}}]" lay-skin="primary" title="{{ item.title }}">  
         {{# });}}
       </script>           
     </div>
@@ -31,7 +39,8 @@
     <label class="layui-form-label">具体描述</label>
     <div class="layui-input-block">
       <script type="text/html" template>
-        <textarea type="text" name="desc" lay-verify="required" autocomplete="off" class="layui-textarea">{{ d.params.descr || '' }}</textarea>
+        <textarea type="text" name="descr" lay-verify="required" autocomplete="off" class="layui-textarea">{{ d.params.descr || '' }}</textarea>
+        <input type="hidden" name="roleId" value="{{ d.params.roleId }}">
       </script>
     </div>
   </div>
@@ -44,7 +53,7 @@
 </div>
 
 <script>
-layui.use('role',layui.factory('role')).use(['admin', 'form','role'], function(){
+layui.use('useradmin',layui.factory('useradmin')).use(['admin', 'form'], function(){
   var $ = layui.$
   ,form = layui.form
   ,select = layui.select;
@@ -62,7 +71,6 @@ layui.use('role',layui.factory('role')).use(['admin', 'form','role'], function()
     form.render('select');
   });
   };
-
   layui.data.rights = function(d){
     layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
     laytpl($('#rights').html()).render(d,(html)=>{
