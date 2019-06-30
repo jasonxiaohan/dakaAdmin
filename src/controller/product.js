@@ -16,25 +16,26 @@ layui.define(['table', 'form'], function(exports){
   ,table = layui.table
   ,form = layui.form;
 
-  //用户管理
+  //网红项目管理
   table.render({
-    elem: '#LAY-user-manage'
-    ,url: './json/useradmin/webuser.js' //模拟接口
+    elem: '#LAY-product-manage'
+    ,url: setter.remoteurl+'/product/products' //模拟接口
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+    }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', width: 100, title: 'ID', sort: true}
-      ,{field: 'username', title: '用户名', minWidth: 100}
-      ,{field: 'avatar', title: '头像', width: 100, templet: '#imgTpl'}
-      ,{field: 'phone', title: '手机'}
-      ,{field: 'email', title: '邮箱'}
-      ,{field: 'sex', width: 80, title: '性别'}
-      ,{field: 'ip', title: 'IP'}
-      ,{field: 'jointime', title: '加入时间', sort: true}
-      ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-useradmin-webuser'}
+      ,{field: 'productId', width: 100, title: 'ID', sort: true}
+      ,{field: 'username', title: '商户名称', width: 100}
+      ,{field: 'name', title: '项目名称', minWidth: 100}
+      ,{field: 'price', title: '票价', width: 100}
+      ,{field: 'img', title: '相片', width: 100, templet: '#imgTpl'}
+      // ,{field: 'jointime', title: '加入时间', sort: true}
+      ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-product-webuser'}
     ]]
     ,page: true
     ,limit: 30
-    ,height: 'full-320'
+    // ,height: 'full-320'
     ,text: {
         none: '暂无数据'
       }
@@ -101,7 +102,7 @@ layui.define(['table', 'form'], function(exports){
       // layer.closeAll();
     }
     ,text: {
-        none: '暂无数据'
+        none: '暂无相关数据'
       }
   });
   
@@ -191,7 +192,7 @@ layui.define(['table', 'form'], function(exports){
       ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
     ]]
     ,text: {
-        none: '暂无数据'
+        none: '暂无相关数据'
       }
   });
   
@@ -275,5 +276,5 @@ layui.define(['table', 'form'], function(exports){
     }
   });
 
-  exports('useradmin', {})
+  exports('product', {})
 });

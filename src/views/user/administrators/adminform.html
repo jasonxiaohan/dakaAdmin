@@ -25,6 +25,14 @@
       </script>
     </div>
   </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">地址</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="address" value="{{ d.params.address || '' }}" lay-verify="address" placeholder="请输入地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
   <div class="layui-form-item">
     <label class="layui-form-label">角色</label>
     <div class="layui-input-inline" lay-filter="layui-input-roles">

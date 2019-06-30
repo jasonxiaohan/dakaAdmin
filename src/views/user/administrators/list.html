@@ -35,7 +35,7 @@
         <div class="layui-inline">
           <label class="layui-form-label">角色</label>
           <div class="layui-input-block">
-            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles">                
+            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-done="layui.data.roles(d)">               
             <select name="roleId" lay-verify="" lay-filter="LAY-user-adminrole-type">
                 <option value="-1">全部角色</option>
                 {{# layui.each(d.data,(i,row)=> { }}
@@ -175,4 +175,12 @@ layui.use('useradmin', layui.factory('useradmin')).use(['admin', 'useradmin', 't
     active[type] ? active[type].call(this) : '';
   });
 });
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
 </script>
