@@ -8,12 +8,13 @@
  */
 
 
-layui.define(['table', 'form'], function(exports){
+layui.define(['table', 'form','util'], function(exports){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
   ,setter = layui.setter
   ,table = layui.table
+  ,util = layui.util
   ,form = layui.form;
 
   //用户管理
@@ -94,6 +95,7 @@ layui.define(['table', 'form'], function(exports){
       ,{field: 'email', title: '邮箱'}
       ,{field: 'roleName', title: '角色'}
       ,{field: 'address', title: '地址'}
+      ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
       ,{field: 'isDel', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
       ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
     ]]

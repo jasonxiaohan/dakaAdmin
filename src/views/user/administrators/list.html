@@ -39,7 +39,7 @@
             <select name="roleId" lay-verify="" lay-filter="LAY-user-adminrole-type">
                 <option value="-1">全部角色</option>
                 {{# layui.each(d.data,(i,row)=> { }}
-                    <option value="{{ row.roleId }}" >{{ row.roleName  }}</option>
+                    <option value="{{ row.roleId }}" {{# if(d.params.roleId == row.roleId){ }}selected{{# } }}>{{ row.roleName  }}</option>
                 {{# }); }}
               </select> 
             </script>
