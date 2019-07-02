@@ -66,6 +66,7 @@
       </script>
       <script type="text/html" id="table-product-webuser">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
       </script>
     </div>
@@ -126,7 +127,7 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
     ,add: function(){
       admin.popup({
         title: '添加网红项目'
-        ,area: ['500px', '450px']
+        ,area: ['600px', '550px']
         ,id: 'LAY-popup-product-add'
         ,success: function(layero, index){
           view(this.id).render('product/product').done(function(){

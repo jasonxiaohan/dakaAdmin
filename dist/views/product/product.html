@@ -18,14 +18,6 @@
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">销售数量</label>
-    <div class="layui-input-inline">
-      <script type="text/html" template>
-        <input type="text" name="num" value="{{ d.params.salesNum || '' }}" lay-verify="required|number" placeholder="0" autocomplete="off" class="layui-input">
-      </script>
-    </div>
-  </div>
-  <div class="layui-form-item">
     <label class="layui-form-label">商户</label>
     <div class="layui-input-inline" lay-filter="layui-input-roles">
       <script type="text/html" id="roles" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.roles(d)">                
@@ -46,14 +38,6 @@
       </script>
     </div>
     <button style="float: left;" type="button" class="layui-btn" id="layuiadmin-upload-product">上传图片</button> 
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">项目描述</label>
-    <div class="layui-input-inline">
-      <script type="text/html" template>
-        <textarea name="descr" lay-verify="" placeholder="请输入项目描述" autocomplete="off" class="layui-textarea">{{ d.params.descr || '' }}</textarea>
-      </script>
-    </div>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">项目状态</label>

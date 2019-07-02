@@ -57,8 +57,7 @@
         </a>
       </li>
       <li class="layui-nav-item" lay-unselect>
-        <script type="text/html" template lay-url="./json/user/session.js" 
-        lay-done="layui.element.render('nav', 'layadmin-layout-right');">
+        <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/users" lay-done="layui.element.render('nav', 'layadmin-layout-right');">
           <a href="javascript:;">
             <cite>{{ d.data.username }}</cite>
           </a>
@@ -71,19 +70,19 @@
         </script>
       </li>
       
-      <li class="layui-nav-item layui-hide-xs" lay-unselect>
+      <!-- <li class="layui-nav-item layui-hide-xs" lay-unselect>
         <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
       </li>
       <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
         <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
-      </li>
+      </li> -->
     </ul>
   </div>
   
   <!-- 侧边菜单 -->
   <div class="layui-side layui-side-menu">
     <div class="layui-side-scroll">
-      <script type="text/html" template lay-url="./json/menu.js?v={{ layui.admin.v }}" 
+      <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemmenu/menu" 
       lay-done="layui.element.render('nav', 'layadmin-system-side-menu');" id="TPL_layout">
       
         <div class="layui-logo" lay-href="">

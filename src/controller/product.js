@@ -26,12 +26,14 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'productId', width: 100, title: 'ID', sort: true}
-      ,{field: 'username', title: '商户名称', width: 200}
-      ,{field: 'name', title: '项目名称', minWidth: 100}
+      ,{field: 'name', title: '项目名称', width: 300}
       ,{field: 'price', title: '票价', width: 100}
-      ,{field: 'img', title: '相片', width: 100, templet: '#imgTpl'}
+      ,{field: 'salesNum', title: '销售数量', width: 100}
+      ,{field: 'username', title: '商户名称', width: 200}
+      ,{field: 'img', title: '相片', width: 120, templet: '#imgTpl'}
+      ,{field: 'descr', title: '描述', minWidth: 100}
       ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 150, align: 'center'}
-      ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-product-webuser'}
+      ,{title: '操作', width: 250, align:'center', fixed: 'right', toolbar: '#table-product-webuser'}
     ]]
     ,page: true
     ,limit: 30
@@ -75,7 +77,7 @@ layui.define(['table', 'form'], function(exports){
     } else if(obj.event === 'edit'){
       admin.popup({
         title: '编辑网红项目'
-        ,area: ['500px', '450px']
+        ,area: ['600px', '550px']
         ,id: 'LAY-popup-product-add'
         ,success: function(layero, index){
           view(this.id).render('product/product', data).done(function(){
@@ -110,6 +112,8 @@ layui.define(['table', 'form'], function(exports){
           });
         }
       });
+    }else if(obj.event === 'download') {
+      alert("下载图片");
     }
   });
 

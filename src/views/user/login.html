@@ -28,7 +28,6 @@
           </div>
           <div class="layui-col-xs5">
             <div style="margin-left: 10px;">
-              <!-- <img src="http://127.0.0.1:8080/dakalogin/getVerify" class="layadmin-user-login-codeimg" id="LAY-user-get-vercode"> -->
               <canvas id="canvas" width="135" height="43"></canvas>
             </div>
           </div>
@@ -94,11 +93,10 @@ layui.use(['admin', 'form', 'user', 'jquery'], function(){
     var vercode = obj.field.vercode.toLowerCase();
     var num = show_num.join("");
     if(vercode==''){
-       layer.msg('请输入验证码');
+      layer.msg('请输入验证码');
       return;
     }else if(vercode != num){
-       // alert('验证码错误！请重新输入！');
-       layer.msg('验证码错误！请重新输入！');
+       layer.msg('验证码错误');
         $("#LAY-user-login-vercode").val('');
         draw(show_num);
         return;

@@ -3,7 +3,7 @@
  @Name：全局配置
  @Author：贤心
  @Site：http://www.layui.com/admin/
- @License：LPPL（layui付费产品协议）
+ @License：LPPL
     
  */
  
@@ -16,13 +16,13 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
     ,engine: '.html' //视图文件后缀名
     ,pageTabs: false //是否开启页面选项卡功能。单页版不推荐开启
     
-    ,name: 'layuiAdmin Pro'
-    ,tableName: 'layuiAdmin' //本地存储表名
+    ,name: '哒卡运营端'
+    ,tableName: 'dakaAdmin' //本地存储表名
     ,MOD_NAME: 'admin' //模块事件名
     
-    ,debug: true //是否开启调试模式。如开启，接口异常时会抛出异常 URL 等信息
+    ,debug: false //是否开启调试模式。如开启，接口异常时会抛出异常 URL 等信息
     
-    ,interceptor: false //是否开启未登入拦截
+    ,interceptor: true //是否开启未登入拦截
     
     //自定义请求字段
     ,request: {
@@ -39,6 +39,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       ,msgName: 'msg' //状态信息的字段名称
       ,dataName: 'data' //数据详情的字段名称
     }
+    ,remoteurl:"https://api.tiyushiyanshi.com"
     
     //独立页面路由，可随意添加（无需写参数）
     ,indPage: [
