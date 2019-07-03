@@ -1,0 +1,60 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商户ID号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="merchId" value="{{ d.params.merchId || '' }}" lay-verify="required" placeholder="请输入微信商户ID号" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商户APPID号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="appid" value="{{ d.params.appid || '' }}" lay-verify="required" placeholder="请输入微信商户APPID号" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商户KEY密钥</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="appsecret" value="{{ d.params.appsecret || '' }}" lay-verify="required" placeholder="请输入微信商户密钥" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>  
+  <div class="layui-form-item">
+    <label class="layui-form-label">开启状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
+        <input type="hidden" name="adminId" value="{{ d.params.adminId }}">
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+  form.render();
+});
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

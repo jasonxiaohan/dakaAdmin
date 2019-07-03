@@ -55,7 +55,7 @@
     
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
-        <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button>
+        <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
         <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加</button>
       </div>
       
@@ -68,6 +68,7 @@
         {{#  } }}
       </script>
       <script type="text/html" id="table-useradmin-admin">
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1"></i>支付</a>
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
         {{#  if(d.roleName == '超级管理员'){ }}
           <a class="layui-btn layui-btn-disabled layui-btn-xs"><i class="layui-icon layui-icon-delete"></i>删除</a>

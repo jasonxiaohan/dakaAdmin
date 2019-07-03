@@ -1,10 +1,5 @@
 /**
-
- @Name：layuiAdmin 用户管理 管理员管理 角色管理
- @Author：star1029
- @Site：http://www.layui.com/admin/
- @License：LPPL
-    
+ @Name： 用户管理 管理员管理 角色管理
  */
 
 
@@ -20,22 +15,33 @@ layui.define(['table', 'form','util'], function(exports){
   //用户管理
   table.render({
     elem: '#LAY-user-manage'
-    ,url: './json/useradmin/webuser.js' //模拟接口
+    ,url: setter.remoteurl+'/user/users'
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+    }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', width: 100, title: 'ID', sort: true}
-      ,{field: 'username', title: '用户名', minWidth: 100}
-      ,{field: 'avatar', title: '头像', width: 100, templet: '#imgTpl'}
-      ,{field: 'phone', title: '手机'}
-      ,{field: 'email', title: '邮箱'}
-      ,{field: 'sex', width: 80, title: '性别'}
+      ,{field: 'userId', width: 100, title: 'ID', sort: true}
+      ,{field: 'nickName', title: '用户名', minWidth: 100}
+      ,{field: 'username', title: '商户名称'}
+      ,{field: 'avatarUrl', title: '头像', width: 100, templet: '#imgTpl'}
+      ,{field: 'phoneNumber', title: '手机'}
+      ,{field: 'gender', width: 80, title: '性别', templet:function(d){
+        if (d.gender == 0) {
+          return '未知';
+        } else if(d.gender == 1) {
+          return '男';
+        } else {
+          return '女';
+        }
+      }}
       ,{field: 'ip', title: 'IP'}
-      ,{field: 'jointime', title: '加入时间', sort: true}
-      ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-useradmin-webuser'}
+      ,{field: 'regTime', title: '加入时间', sort: true,templet:function(d){return util.toDateString(d.regTime, "yyyy-MM-dd HH:mm:ss");}}
+      // ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table-useradmin-webuser'}
     ]]
     ,page: true
     ,limit: 30
-    ,height: 'full-320'
+    // ,height: 'full-320'
     ,text: {
         none: '暂无数据'
       }
@@ -97,7 +103,7 @@ layui.define(['table', 'form','util'], function(exports){
       ,{field: 'address', title: '地址'}
       ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
       ,{field: 'isDel', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
-      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
+      ,{title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
     ]]
     ,done: function(res, curr, count) {
       // layer.closeAll();
@@ -154,6 +160,60 @@ layui.define(['table', 'form','util'], function(exports){
               admin.req({
                 url: setter.remoteurl+'/systemadmin/users'
                 ,method: 'PUT'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+
+              layui.table.reload('LAY-user-back-manage'); //重载表格
+              layer.close(index); //执行关闭 
+            });
+          });
+        }
+      });
+    } else if (obj.event === 'add') {
+      console.log(data.adminId);
+      admin.req({
+        url: setter.remoteurl+"/merchant/payments"        
+        ,method: 'GET'
+        ,data: {
+          adminId: data.adminId
+        }
+        ,success: function(res){
+          if (res.code == 0 && res.data != null) {
+            data.merchId = res.data.merchId;
+            data.appid = res.data.appid;
+            data.appsecret = res.data.appsecret;
+            data.enabled = res.data.enabled;
+          }
+        }
+      });
+
+      admin.popup({
+        title: '添加支付信息'
+        ,area: ['420px', '450px']
+        ,id: 'LAY-popup-user-payment-add'
+        ,success: function(layero, index){
+          view(this.id).render('user/administrators/payment', data).done(function(){
+            form.render(null, 'layuiadmin-form-admin');
+            
+            //监听提交
+            form.on('submit(LAY-user-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
+
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              admin.req({
+                url: setter.remoteurl+'/merchant/payments'
+                ,method: 'POST'
                 ,data: field
                 ,success: function(res){
                   if (res.code == 0) {
