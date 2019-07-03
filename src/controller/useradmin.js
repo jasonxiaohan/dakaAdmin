@@ -181,7 +181,6 @@ layui.define(['table', 'form','util'], function(exports){
         }
       });
     } else if (obj.event === 'add') {
-      console.log(data.adminId);
       admin.req({
         url: setter.remoteurl+"/merchant/payments"        
         ,method: 'GET'
