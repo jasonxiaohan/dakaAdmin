@@ -9,7 +9,6 @@ layui.define(function(exports){
     下面通过 layui.use 分段加载不同的模块，实现不同区域的同时渲染，从而保证视图的快速呈现
   */
   
-  
   //区块轮播切换
   layui.use(['admin', 'carousel'], function(){
     var $ = layui.$
@@ -41,12 +40,14 @@ layui.define(function(exports){
     var $ = layui.$
     ,carousel = layui.carousel
     ,echarts = layui.echarts;
+
+    // 请求数据
     
     var echartsApp = [], options = [
-      //今日流量趋势
+      //今日订单趋势
       {
         title: {
-          text: '今日流量趋势',
+          text: '今日订单趋势',
           x: 'center',
           textStyle: {
             fontSize: 14

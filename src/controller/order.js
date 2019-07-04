@@ -10,26 +10,40 @@ layui.define(['table', 'form'], function(exports){
   ,view = layui.view
   ,setter = layui.setter
   ,table = layui.table
+  ,util = layui.util
   ,form = layui.form;
 
-  //网红项目管理
+  // 订单管理
   table.render({
-    elem: '#LAY-product-manage'
-    ,url: setter.remoteurl+'/product/products' //模拟接口
+    elem: '#LAY-order-manage'
+    ,url: setter.remoteurl+'/order/orders' //模拟接口
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'productId', width: 100, title: 'ID', sort: true}
-      ,{field: 'name', title: '项目名称', width: 300}
-      ,{field: 'price', title: '票价', width: 100}
-      ,{field: 'salesNum', title: '销售数量', width: 100}
+      ,{field: 'orderNo', width: 200, title: '订单号', sort: true}
+      ,{field: 'nickName', title: '用户名', width: 150}
       ,{field: 'username', title: '商户名称', width: 200}
-      ,{field: 'img', title: '相片', width: 120, templet: '#imgTpl'}
-      ,{field: 'descr', title: '描述', minWidth: 100}
-      ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 150, align: 'center'}
-      ,{title: '操作', width: 250, align:'center', fixed: 'right', toolbar: '#table-product-webuser'}
+      ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
+        return '￥'+d.realAmount;
+      }}
+      ,{field: 'payableAmount', title: '应付金额', width: 100, templet: function(d) {
+          return '￥'+d.payableAmount; 
+      }}
+      ,{field: 'discount', title: '折扣优惠', width: 100, templet: function(d) {
+        return '￥'+d.discount;
+      }}
+      ,{field: 'ticketNums', title: '购票数量', width: 100}
+      ,{field: 'payStatus', title: '支付状态', width: 100, templet:function(d) {
+        if (d.payStatus == 0) {
+          return '未付款';
+        } 
+        return '已付款';
+      }}
+      ,{field: 'consumeStatus', title: '消费状态', width: 100, templet: '#buttonTpl', width: 150, align: 'center'}
+      ,{field: 'createTime', title: '下单时间', sort: true,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+      ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
     ]]
     ,page: true
     ,limit: 30
@@ -40,7 +54,7 @@ layui.define(['table', 'form'], function(exports){
   });
   
   //监听工具条
-  table.on('tool(LAY-product-manage)', function(obj){
+  table.on('tool(LAY-order-manage)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
       layer.prompt({
@@ -72,21 +86,21 @@ layui.define(['table', 'form'], function(exports){
       });
     } else if(obj.event === 'edit'){
       admin.popup({
-        title: '编辑网红项目'
+        title: '订单详情页'
         ,area: ['600px', '550px']
-        ,id: 'LAY-popup-product-add'
+        ,id: 'LAY-popup-order-add'
         ,success: function(layero, index){
-          view(this.id).render('product/product', data).done(function(){
-            form.render(null, 'layuiadmin-form-product');
+          view(this.id).render('order/order', data).done(function(){
+            form.render(null, 'layuiadmin-form-order');
             
             //监听提交
-            form.on('submit(LAY-product-back-submit)', function(data){
+            form.on('submit(LAY-order-back-submit)', function(data){
               var field = data.field; //获取提交的字段
 
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});
               admin.req({
-                url: setter.remoteurl+'/product/products'
+                url: setter.remoteurl+'/order/orders'
                 ,method: 'PUT'
                 ,data: field
                 ,success: function(res){
@@ -102,7 +116,7 @@ layui.define(['table', 'form'], function(exports){
                 }
               }); 
 
-              layui.table.reload('LAY-product-manage'); //重载表格
+              layui.table.reload('LAY-order-manage'); //重载表格
               layer.close(index); //执行关闭 
             });
           });
@@ -209,5 +223,5 @@ layui.define(['table', 'form'], function(exports){
     }
   });
 
-  exports('product', {})
+  exports('order', {})
 });
