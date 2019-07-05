@@ -12,7 +12,7 @@
                 <div carousel-item>
 
                   <ul class="layui-row layui-col-space10" id="layui-input-base">
-                    <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/order/base-order" lay-done="layui.data.done(d)">                  
+                    <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/order/base-order">                  
                     <li class="layui-col-xs4">
                       <a class="layadmin-backlog-body">
                         <h3>销售金额</h3>
@@ -64,8 +64,8 @@
               <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">
                 <div carousel-item id="LAY-index-dataview">
                   <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
-                  <div></div>
-                  <div></div>
+                  <!-- <div></div> -->
+                  <!-- <div></div> -->
                 </div>
               </div>
               
@@ -97,16 +97,4 @@
 
 <script>
 layui.use('console', layui.factory('console'));
-</script>
-
-<script>  
-  layui.data.done = function(d){
-    console.log(d.currdata[0].realAmount);
-    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
-    laytpl($('#role').html()).render(d,(html)=>{
-      $('#layui-input-base').html(html);
-    });
-    form.render('select')
-  });
-  };
 </script>

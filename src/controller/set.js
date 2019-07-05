@@ -80,13 +80,33 @@ layui.define(['form', 'upload'], function(exports){
     */
     return false;
   });
+
+  // 优惠活动
+  form.on('submit(set_system_active)',function(obj){
+
+    admin.req({
+      url: setter.remoteurl+'/active/actives'
+      ,data: obj.field
+      ,method: 'POST'
+      ,success: function(res){
+        if (res.code == 0) {
+          layer.msg("添加成功",{time: 1000,icon: 1},function(){
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+              window.parent.location.reload();
+          });
+        } else {
+          layer.msg(res.msg, {icon: 5});
+        }
+      }
+    }); 
+
+  });
   
   
   //设置我的资料
   form.on('submit(setmyinfo)', function(obj){
-    // layer.msg(JSON.stringify(obj.field));
     obj.field.admin_id=1;
-    console.log(obj);
     
     //提交修改
     
