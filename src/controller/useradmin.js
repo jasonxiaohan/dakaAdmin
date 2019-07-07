@@ -15,7 +15,7 @@ layui.define(['table', 'form','util'], function(exports){
   //用户管理
   table.render({
     elem: '#LAY-user-manage'
-    ,url: setter.remoteurl+'/user/users'
+    ,url: setter.remoteurl+'/mini-user/users'
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
     }
@@ -146,7 +146,7 @@ layui.define(['table', 'form','util'], function(exports){
     }else if(obj.event === 'edit'){
       admin.popup({
         title: '编辑管理员'
-        ,area: ['420px', '450px']
+        ,area: ['520px', '600px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
           view(this.id).render('user/administrators/adminform', data).done(function(){

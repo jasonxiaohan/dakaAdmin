@@ -10,6 +10,14 @@
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="password" value="" placeholder="请输入密码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">手机</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
@@ -30,6 +38,20 @@
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="text" name="address" value="{{ d.params.address || '' }}" lay-verify="address" placeholder="请输入地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">坐标</label>
+       <script type="text/html" template>
+      <div class="layui-input-inline" style="width: 100px;">
+        <input type="text" name="longitude" value="{{ d.params.longitude || '' }}" placeholder="经度" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-mid">-</div>
+      <div class="layui-input-inline" style="width: 100px;">
+        <input type="text" name="latitude" value="{{ d.params.latitude || '' }}" placeholder="纬度" autocomplete="off" class="layui-input">
+      </div>
       </script>
     </div>
   </div>

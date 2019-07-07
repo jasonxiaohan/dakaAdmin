@@ -5,25 +5,19 @@
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
-    <a><cite>项目</cite></a>
-    <a><cite>网红项目</cite></a>
+    <a><cite>设置</cite></a>
+    <a><cite>扫码人员</cite></a>
   </div>
 </div>
 
 <div class="layui-fluid">
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-product-front-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-scan-front-formlist">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label">ID</label>
+          <label class="layui-form-label">姓名</label>
           <div class="layui-input-block">
-            <input type="text" name="productId" placeholder="请输入" autocomplete="off" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">项目名称</label>
-          <div class="layui-input-block">
-            <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+            <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
           </div>
         </div>
         <div class="layui-inline">
@@ -40,7 +34,7 @@
           </div>
         </div>
         <div class="layui-inline">
-          <button class="layui-btn layuiadmin-btn-product" lay-submit lay-filter="LAY-product-front-search">
+          <button class="layui-btn layuiadmin-btn-scan" lay-submit lay-filter="LAY-scan-front-search">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
           </button>
         </div>
@@ -49,24 +43,23 @@
     
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
-        <!-- <button class="layui-btn layuiadmin-btn-product" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-product" data-type="add">添加</button>
+        <!-- <button class="layui-btn layuiadmin-btn-scan" data-type="batchdel">删除</button> -->
+        <button class="layui-btn layuiadmin-btn-scan" data-type="add">添加</button>
       </div>
       
-      <table id="LAY-product-manage" lay-filter="LAY-product-manage"></table>
+      <table id="LAY-scan-manage" lay-filter="LAY-scan-manage"></table>
       <script type="text/html" id="imgTpl"> 
         <img style="display: inline-block;" src= {{ d.img }}>
       </script> 
       <script type="text/html" id="buttonTpl">
         {{#  if(d.enabled == true){ }}
-          <button class="layui-btn layui-btn-xs">上架</button>
+          <button class="layui-btn layui-btn-xs">有效</button>
         {{#  } else { }}
-          <button class="layui-btn layui-btn-primary layui-btn-xs">下架</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs">无效</button>
         {{#  } }}
       </script>
-      <script type="text/html" id="table-product-webuser">
+      <script type="text/html" id="table-scan-webuser">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
       </script>
     </div>
@@ -74,7 +67,7 @@
 </div>
 
 <script>
-layui.use('product', layui.factory('product')).use(['admin', 'table'], function(){
+layui.use('scan', layui.factory('scan')).use(['admin', 'table'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
@@ -82,14 +75,14 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
   ,setter = layui.setter
   ,form = layui.form;
   
-  form.render(null, 'layadmin-product-front-formlist');
+  form.render(null, 'layadmin-scan-front-formlist');
   
   //监听搜索
-  form.on('submit(LAY-product-front-search)', function(data){
+  form.on('submit(LAY-scan-front-search)', function(data){
     var field = data.field;
     
     //执行重载
-    table.reload('LAY-product-manage', {
+    table.reload('LAY-scan-manage', {
       where: field
     });
   });
@@ -97,7 +90,7 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
   //事件
   var active = {
     batchdel: function(){
-      var checkStatus = table.checkStatus('LAY-product-manage')
+      var checkStatus = table.checkStatus('LAY-scan-manage')
       ,checkData = checkStatus.data; //得到选中的数据
 
       if(checkData.length === 0){
@@ -126,20 +119,20 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
     }
     ,add: function(){
       admin.popup({
-        title: '添加网红项目'
-        ,area: ['550px', '620px']
-        ,id: 'LAY-popup-product-add'
+        title: '添加扫码人员'
+        ,area: ['420px', '450px']
+        ,id: 'LAY-popup-scan-add'
         ,success: function(layero, index){
-          view(this.id).render('product/product').done(function(){
-            form.render(null, 'layuiadmin-form-product');
+          view(this.id).render('set/system/scan').done(function(){
+            form.render(null, 'layuiadmin-form-scan');
             //监听提交
-            form.on('submit(LAY-product-back-submit)', function(data){
+            form.on('submit(LAY-scan-back-submit)', function(data){
               var field = data.field; //获取提交的字段
               
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});
               admin.req({
-                url: setter.remoteurl+'/product/products'
+                url: setter.remoteurl+'/scan/scans'
                 ,method: 'POST'
                 ,data: field
                 ,success: function(res){
@@ -155,7 +148,7 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
                 }
               }); 
 
-              layui.table.reload('LAY-product-manage'); //重载表格
+              layui.table.reload('LAY-scan-manage'); //重载表格
               layer.close(index); //执行关闭 
             });
           });
@@ -164,7 +157,7 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
     }
   };
   
-  $('.layui-btn.layuiadmin-btn-product').on('click', function(){
+  $('.layui-btn.layuiadmin-btn-scan').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
   });
