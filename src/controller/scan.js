@@ -30,7 +30,7 @@ layui.define(['table', 'form'], function(exports){
       ,{field: 'time', title: '添加时间',templet: '#buttonTpl', width: 250, align: 'center', templet:function(d){
         return util.toDateString(d.time, "yyyy-MM-dd HH:mm:ss");
       }}
-      ,{title: '操作', align:'center', fixed: 'right', toolbar: '#table-scan-webuser'}
+      ,{title: '操作', align:'center', fixed: 'right',width: 150, toolbar: '#table-scan-webuser'}
     ]]
     ,page: true
     ,limit: 30

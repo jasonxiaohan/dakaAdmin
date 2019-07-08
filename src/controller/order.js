@@ -43,7 +43,7 @@ layui.define(['table', 'form'], function(exports){
       }}
       ,{field: 'consumeStatus', title: '消费状态', width: 100, templet: '#buttonTpl', width: 150, align: 'center'}
       ,{field: 'createTime', title: '下单时间', sort: true,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
-      ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
+      ,{title: '操作', width: 90, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
     ]]
     ,page: true
     ,limit: 30
