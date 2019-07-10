@@ -39,7 +39,7 @@ layui.define(['laytpl', 'layer', 'element', 'util'], function(exports){
       ,msgName: 'msg' //状态信息的字段名称
       ,dataName: 'data' //数据详情的字段名称
     }
-    // ,remoteurl:"https://api.tiyushiyanshi.com"
+    ,remoteurl:"https://api.tiyushiyanshi.com"
     ,remoteurl:"http://127.0.0.1:8080"
     
     //独立页面路由，可随意添加（无需写参数）

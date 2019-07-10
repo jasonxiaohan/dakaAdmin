@@ -110,7 +110,26 @@ layui.define(['table', 'form'], function(exports){
         }
       });
     }else if(obj.event === 'download') {
-      alert("下载图片");
+      /*console.log(obj.data);
+      admin.req({
+        url: setter.remoteurl+'/product/down-qrcode'
+        ,method: 'GET'
+        ,data: {
+          'qrcode': obj.data.qrcode,
+          'name': obj.data.name
+        }
+        ,success: function(res){
+          if (res.code == 0) {
+            layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
+          } else {
+            layer.msg(res.msg, {icon: 5});
+          }
+        }
+      }); */
     }
   });
 

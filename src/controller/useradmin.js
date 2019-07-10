@@ -21,7 +21,7 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'userId', width: 100, title: 'ID', sort: true}
+      // ,{field: 'userId', width: 100, title: 'ID', sort: true}
       ,{field: 'nickName', title: '用户名', minWidth: 100}
       ,{field: 'username', title: '商户名称'}
       ,{field: 'avatarUrl', title: '头像', width: 100, templet: '#imgTpl'}
