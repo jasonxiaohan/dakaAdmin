@@ -21,7 +21,7 @@ layui.define(['table', 'form'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'productId', width: 100, title: 'ID', sort: true}
+      // ,{field: 'productId', width: 100, title: 'ID', sort: true}
       ,{field: 'name', title: '项目名称', width: 300}
       ,{field: 'price', title: '票价', width: 100}
       ,{field: 'playTime', title: '时长(分钟)', width: 100}
@@ -30,7 +30,7 @@ layui.define(['table', 'form'], function(exports){
       ,{field: 'img', title: '相片', width: 120, templet: '#imgTpl'}
       ,{field: 'descr', title: '描述', minWidth: 100}
       ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 150, align: 'center'}
-      ,{title: '操作', align:'center', fixed: 'right',width: 200, toolbar: '#table-product-webuser'}
+      ,{title: '操作', align:'center', fixed: 'right',width: 210, toolbar: '#table-product-webuser'}
     ]]
     ,page: true
     ,limit: 30

@@ -87,7 +87,7 @@ layui.define(['table', 'form'], function(exports){
     } else if(obj.event === 'edit'){
       admin.popup({
         title: '订单详情页'
-        ,area: ['600px', '550px']
+        ,area: ['600px', '580px']
         ,id: 'LAY-popup-order-add'
         ,success: function(layero, index){
           view(this.id).render('order/order', data).done(function(){

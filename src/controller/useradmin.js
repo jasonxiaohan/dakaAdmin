@@ -95,7 +95,7 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'adminId', width: 80, title: 'ID', sort: false}
+      // ,{field: 'adminId', width: 80, title: 'ID', sort: false}
       ,{field: 'username', title: '登录名'}
       ,{field: 'cellphone', title: '手机'}
       ,{field: 'email', title: '邮箱'}
@@ -103,7 +103,7 @@ layui.define(['table', 'form','util'], function(exports){
       ,{field: 'address', title: '地址'}
       ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
       ,{field: 'isDel', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
-      ,{title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
+      ,{title: '操作', width: 210, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
     ]]
     ,done: function(res, curr, count) {
       // layer.closeAll();

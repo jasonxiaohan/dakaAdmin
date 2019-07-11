@@ -26,6 +26,16 @@
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">二维码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        {{# if(d.params.qrcode != null && d.params.qrcode !=""){ }}
+        <img src="{{d.params.qrcode}}" height="160px" width="160px">
+        {{# } }}
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">支付状态</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
