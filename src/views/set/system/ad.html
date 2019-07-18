@@ -1,0 +1,90 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-ad" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">广告名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="title" value="{{ d.params.title || '' }}" lay-verify="required" placeholder="请输入广告名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">跳转链接</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="link" value="{{ d.params.link || '' }}" lay-verify="required" placeholder="请输入跳转的链接地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">展示位置</label>
+    <div class="layui-input-inline" lay-filter="layui-input-roles">
+      <script type="text/html" template>
+        <select name="position" >
+            <option value="1" {{# if(d.params.position == 1){ }}selected{{# } }}>首页</option>
+            <option value="2" {{# if(d.params.position == 2){ }}selected{{# } }}>支付成功页</option>
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">图片</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="img" value="{{ d.params.img || '' }}" lay-verify="required" placeholder="请上传图片" autocomplete="off" class="layui-input" >
+      </script>
+    </div>
+    <button style="float: left;" type="button" class="layui-btn" id="layuiadmin-upload-ad">上传图片</button> 
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">广告状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="上架|下架">
+        <input type="hidden" name="advert_id" value="{{ d.params.id }}">
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-ad-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+
+<script>
+layui.use(['admin', 'form', 'upload'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,upload = layui.upload;
+  form.render();
+  //上传图片
+  upload.render({
+    elem: '#layuiadmin-upload-ad'
+    ,url: setter.remoteurl+'/upload/upload?access_token='+layui.data(setter.tableName).access_token
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+    }
+    ,accept: 'images'
+    ,method: 'POST'
+    ,acceptMime: 'image/*'
+    ,done: function(res){
+      $(this.item).prev("div").children("input").val(res.data.src)
+    }
+  });
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>
