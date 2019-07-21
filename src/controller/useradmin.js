@@ -181,22 +181,6 @@ layui.define(['table', 'form','util'], function(exports){
         }
       });
     } else if (obj.event === 'add') {
-      admin.req({
-        url: setter.remoteurl+"/merchant/payments"        
-        ,method: 'GET'
-        ,data: {
-          adminId: data.adminId
-        }
-        ,success: function(res){
-          if (res.code == 0 && res.data != null) {
-            data.merchId = res.data.merchId;
-            data.appid = res.data.appid;
-            data.appsecret = res.data.appsecret;
-            data.enabled = res.data.enabled;
-          }
-        }
-      });
-
       admin.popup({
         title: '添加支付信息'
         ,area: ['420px', '450px']
@@ -204,7 +188,6 @@ layui.define(['table', 'form','util'], function(exports){
         ,success: function(layero, index){
           view(this.id).render('user/administrators/payment', data).done(function(){
             form.render(null, 'layuiadmin-form-admin');
-            
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
