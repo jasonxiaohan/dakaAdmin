@@ -1,4 +1,9 @@
-
+ <style>
+    #container {
+      width: 420%;
+      height: 600%;
+    }
+</style>
 
 <div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
   <div class="layui-form-item">
@@ -37,7 +42,7 @@
     <label class="layui-form-label">地址</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
-        <input type="text" name="address" value="{{ d.params.address || '' }}" lay-verify="address" placeholder="请输入地址" autocomplete="off" class="layui-input">
+        <input type="text" id="address" name="address" value="{{ d.params.address || '' }}" lay-verify="address" placeholder="请输入地址" autocomplete="off" class="layui-input">
       </script>
     </div>
   </div>
@@ -46,15 +51,24 @@
       <label class="layui-form-label">坐标</label>
        <script type="text/html" template>
       <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="longitude" value="{{ d.params.longitude || '' }}" placeholder="经度" autocomplete="off" class="layui-input">
+        <input type="text" id="longitude" name="longitude" value="{{ d.params.longitude || '' }}" placeholder="经度" autocomplete="off" class="layui-input">
       </div>
       <div class="layui-form-mid">-</div>
       <div class="layui-input-inline" style="width: 100px;">
-        <input type="text" name="latitude" value="{{ d.params.latitude || '' }}" placeholder="纬度" autocomplete="off" class="layui-input">
+        <input type="text" id="latitude" name="latitude" value="{{ d.params.latitude || '' }}" placeholder="纬度" autocomplete="off" class="layui-input">
       </div>
       </script>
+
+      
     </div>
   </div>
+  <div class="layui-form-item" style="margin-bottom: 180px">
+    <div class="layui-inline">
+      <label class="layui-form-label">坐标</label>
+      <div id="container"></div>
+    </div>
+  </div>
+  <br>
   <div class="layui-form-item">
     <label class="layui-form-label">角色</label>
     <div class="layui-input-inline" lay-filter="layui-input-roles">
@@ -94,10 +108,93 @@ layui.use(['admin', 'form'], function(){
 });
 </script>
 
+
 <script type="text/javascript">
   layui.data.roles = function(d){
     layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
     form.render();
   });
   };
+</script>
+
+
+<script type="text/javascript">
+    //地图加载
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });
+    //输入提示
+    var autoOptions = {
+        input: "tipinput"
+    };
+    var auto = new AMap.Autocomplete(autoOptions);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    alert("{{d.params.address}}");
+    // placeSearch.search(address, function (status, result) {
+    //    // 查询成功时，result即对应匹配的POI信息
+    //    var pois = result.poiList.pois;
+    //     for(var i = 0; i < 1; i++){
+    //         var poi = pois[i];
+    //         var marker = [];
+    //         marker[i] = new AMap.Marker({
+    //             position: poi.location,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+    //             title: poi.name
+    //         });
+    //         // 将创建的点标记添加到已有的地图实例：
+    //         map.add(marker[i]);
+    //     }
+    //     map.setFitView();
+
+    // });
+    AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        // placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+
+    var geocoder,marker;
+    function regeoCode(longlat) {
+        if(!geocoder){
+            geocoder = new AMap.Geocoder({
+                city: "010", //城市设为北京，默认：“全国”
+                radius: 1000 //范围，默认：500
+            });
+        }
+        var lnglat  = longlat.split(',');
+         if(!marker){
+            marker = new AMap.Marker();
+            map.add(marker);
+        }
+        marker.setPosition(lnglat);
+        
+        geocoder.getAddress(lnglat, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                var address = result.regeocode.formattedAddress;
+                document.getElementById("address").value = address;
+            }else{
+                log.error('根据经纬度查询地址失败')
+            }
+        });
+    }
+
+    function showInfoClick(e){
+        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
+        regeoCode(e.lnglat.getLng()+","+e.lnglat.getLat());
+        // document.querySelector("#text").innerText = text;
+        document.getElementById("longitude").value = e.lnglat.getLng();
+        document.getElementById("latitude").value = e.lnglat.getLat();
+    }
+    function showInfoDbClick(e){
+        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置双击了地图！'
+        regeoCode(e.lnglat.getLng()+","+e.lnglat.getLat());
+        document.getElementById("longitude").value = e.lnglat.getLng();
+        document.getElementById("latitude").value = e.lnglat.getLat();
+        // document.querySelector("#text").innerText = text;
+    }
+    
+    // 绑定事件
+    map.on('click', showInfoClick);
+    map.on('dblclick', showInfoDbClick);
 </script>

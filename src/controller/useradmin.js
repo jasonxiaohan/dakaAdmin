@@ -146,7 +146,7 @@ layui.define(['table', 'form','util'], function(exports){
     }else if(obj.event === 'edit'){
       admin.popup({
         title: '编辑管理员'
-        ,area: ['520px', '600px']
+        ,area: ['520px', '700px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
           view(this.id).render('user/administrators/adminform', data).done(function(){
