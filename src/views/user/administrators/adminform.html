@@ -91,6 +91,9 @@
       </script>
     </div>
   </div>
+
+  <script type="text/html" id="address" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/address?address={{d.params.address}}" lay-done="layui.data.sendParams(d)">
+  </script>
   
   <div class="layui-form-item">
     <label class="layui-form-label"></label>
@@ -117,8 +120,8 @@ layui.use(['admin', 'form'], function(){
   };
 </script>
 
-
 <script type="text/javascript">
+  layui.data.sendParams = function(d) {
     //地图加载
     var map = new AMap.Map("container", {
         resizeEnable: true
@@ -131,23 +134,25 @@ layui.use(['admin', 'form'], function(){
     var placeSearch = new AMap.PlaceSearch({
         map: map
     });  //构造地点查询类
-    alert("{{d.params.address}}");
-    // placeSearch.search(address, function (status, result) {
-    //    // 查询成功时，result即对应匹配的POI信息
-    //    var pois = result.poiList.pois;
-    //     for(var i = 0; i < 1; i++){
-    //         var poi = pois[i];
-    //         var marker = [];
-    //         marker[i] = new AMap.Marker({
-    //             position: poi.location,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-    //             title: poi.name
-    //         });
-    //         // 将创建的点标记添加到已有的地图实例：
-    //         map.add(marker[i]);
-    //     }
-    //     map.setFitView();
+    if (d.data != "undefined") {
+      placeSearch.search(d.data, function (status, result) {
+         // 查询成功时，result即对应匹配的POI信息
+         var pois = result.poiList.pois;
+          for(var i = 0; i < 1; i++){
+              var poi = pois[i];
+              var marker = [];
+              marker[i] = new AMap.Marker({
+                  position: poi.location,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                  title: poi.name
+              });
+              // 将创建的点标记添加到已有的地图实例：
+              map.add(marker[i]);
+          }
+          map.setFitView();
 
-    // });
+      });
+    }
+
     AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
     function select(e) {
         placeSearch.setCity(e.poi.adcode);
@@ -197,4 +202,10 @@ layui.use(['admin', 'form'], function(){
     // 绑定事件
     map.on('click', showInfoClick);
     map.on('dblclick', showInfoDbClick);
+  }
+</script>
+
+<script>
+  
+    
 </script>
