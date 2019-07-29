@@ -102,6 +102,28 @@ layui.define(['form', 'upload'], function(exports){
     }); 
 
   });
+
+  // 创建微信自定义菜单
+  form.on('submit(set_system_menu)',function(obj){
+
+    admin.req({
+      url: setter.remoteurl+'/wechat/menu/create'
+      ,data: obj.field
+      ,method: 'POST'
+      ,success: function(res){
+        if (res.code == 0) {
+          layer.msg("添加成功",{time: 1000,icon: 1},function(){
+              var index = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(index);
+              window.parent.location.reload();
+          });
+        } else {
+          layer.msg(res.msg, {icon: 5});
+        }
+      }
+    }); 
+
+  });
   
   
   //设置我的资料
