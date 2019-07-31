@@ -183,7 +183,7 @@ layui.define(['table', 'form','util'], function(exports){
     } else if (obj.event === 'add') {
       admin.popup({
         title: '添加支付信息'
-        ,area: ['420px', '450px']
+        ,area: ['420px', '400px']
         ,id: 'LAY-popup-user-payment-add'
         ,success: function(layero, index){
           view(this.id).render('user/administrators/payment', data).done(function(){

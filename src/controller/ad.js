@@ -24,18 +24,18 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       // ,{field: 'adId', width: 100, title: 'ID', sort: true}
-      ,{field: 'title', title: '项目名称', width: 220}
+      ,{field: 'title', title: '项目名称', width: 200}
+      ,{field: 'enabled', title: '状态',templet: '#buttonTpl',align: 'center',width: 100}
       ,{field: 'position', title: '显示位置', width: 150, templet:function(d) {
         if (d.position == 1) {
-          return '首页';
+          return '验票页';
         } else if(d.position == 2) {
           return '支付成功页';
         }
       }}
-      ,{field: 'img', title: '相片', width: 150, templet: '#imgTpl'}
-      ,{field: 'link', title: '链接', width: 300}
-      ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 150, align: 'center'}
-      ,{title: '操作', align:'center', fixed: 'right',width: 210, toolbar: '#table-ad-webuser'}
+      ,{field: 'img', title: '相片', width: 200, templet: '#imgTpl'}
+      ,{field: 'link', title: '链接', width: 300}     
+      ,{title: '操作', align:'center', fixed: 'right',width: 150, toolbar: '#table-ad-webuser'}
     ]]
     ,page: true
     ,limit: 30
