@@ -18,6 +18,19 @@
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">商户名称</label>
+    <div class="layui-input-inline">
+      <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.data(d)">               
+      <select name="adminId" lay-verify="" lay-filter="LAY-user-admin-type">
+          <option value="-1">全部商户</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option name="adminId" value="{{ row.adminId }}" {{d.params.adminId == row.adminId ? 'selected' : ''}}>{{ row.username  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">人员状态</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
