@@ -1,0 +1,100 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-profit" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">接收方类型</label>
+    <div class="layui-input-inline" lay-filter="layui-input-roles">
+      <script type="text/html" template>
+        <select name="type" >
+            <option value="-1">请选择</option>
+            <option value="MERCHANT_ID" {{# if(d.params.type == 'MERCHANT_ID'){ }}selected{{# } }}>商户ID</option>
+            <option value="PERSONAL_WECHATID" {{# if(d.params.type == 'PERSONAL_WECHATID'){ }}selected{{# } }}>个人微信</option>
+            <option value="PERSONAL_OPENID" {{# if(d.params.type == 'PERSONAL_OPENID'){ }}selected{{# } }}>个人openid</option>
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">接收方账号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="account" value="{{ d.params.account || '' }}" lay-verify="required" placeholder="请输入分账接收方帐号" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">接收方全称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="name" value="{{ d.params.name || '' }}" lay-verify="required" placeholder="请输入分账接收方全称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">接收方关系类型</label>
+    <div class="layui-input-inline" lay-filter="layui-input-roles">
+      <script type="text/html" template>
+        <select name="relation_type" >
+            <option value="-1">请选择</option>
+            <option value="SERVICE_PROVIDER" {{# if(d.params.relation_type == 'SERVICE_PROVIDER'){ }}selected{{# } }}>服务商</option>
+            <option value="STORE" {{# if(d.params.relation_type == 'STORE'){ }}selected{{# } }}>门店</option>
+            <option value="STAFF" {{# if(d.params.relation_type == 'STAFF'){ }}selected{{# } }}>员工</option>
+            <option value="STORE_OWNER" {{# if(d.params.relation_type == 'STORE_OWNER'){ }}selected{{# } }}>店主</option>
+            <option value="PARTNER" {{# if(d.params.relation_type == 'PARTNER'){ }}selected{{# } }}>合作伙伴</option>
+            <option value="HEADQUARTER" {{# if(d.params.relation_type == 'HEADQUARTER'){ }}selected{{# } }}>总部</option>
+            <option value="BRAND" {{# if(d.params.relation_type == 'BRAND'){ }}selected{{# } }}>品牌方</option>
+            <option value="DISTRIBUTOR" {{# if(d.params.relation_type == 'DISTRIBUTOR'){ }}selected{{# } }}>分销商</option>
+            <option value="USER" {{# if(d.params.relation_type == 'USER'){ }}selected{{# } }}>用户</option>
+            <option value="SUPPLIER" {{# if(d.params.relation_type == 'SUPPLIER'){ }}selected{{# } }}>供应商</option>
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商户名称</label>
+    <div class="layui-input-inline">
+      <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.data(d)">               
+      <select name="adminId" lay-verify="" lay-filter="LAY-user-admin-type">
+          <option value="-1">全部商户</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option name="adminId" value="{{ row.adminId }}" {{d.params.adminId == row.adminId ? 'selected' : ''}}>{{ row.username  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>  
+   <div class="layui-form-item">
+    <label class="layui-form-label">分销状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="有效|无效">
+        <input type="hidden" name="profitId" value="{{ d.params.profitId }}">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-profit-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form', 'upload'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,upload = layui.upload;
+  form.render();
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>
