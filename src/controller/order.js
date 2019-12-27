@@ -46,7 +46,7 @@ layui.define(['table', 'form'], function(exports){
       ,{title: '操作', width: 90, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
     ]]
     ,page: true
-    ,limit: 30
+    ,limit: 10
     // ,height: 'full-320'
     ,text: {
         none: '暂无数据'

@@ -33,7 +33,7 @@ layui.define(['table', 'form'], function(exports){
       ,{title: '操作', align:'center', fixed: 'right',width: 210, toolbar: '#table-product-webuser'}
     ]]
     ,page: true
-    ,limit: 30
+    ,limit: 10
     // ,height: 'full-320'
     ,text: {
         none: '暂无数据'
