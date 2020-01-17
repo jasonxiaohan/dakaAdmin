@@ -120,7 +120,7 @@ layui.use('profit', layui.factory('profit')).use(['admin', 'table'], function(){
     ,add: function(){
       admin.popup({
         title: '添加分账人员'
-        ,area: ['450px', '550px']
+        ,area: ['450px', '600px']
         ,id: 'LAY-popup-profit-add'
         ,success: function(layero, index){
           view(this.id).render('set/system/profit').done(function(){

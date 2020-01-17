@@ -13,21 +13,21 @@
     <label class="layui-form-label">手机号</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
-        <input type="text" name="cellphone" value="{{ d.params.cellphone || '' }}" lay-verify="required|number" placeholder="请输入手机号码" autocomplete="off" class="layui-input">
+        <input type="text" name="cellphone" id="cellphone" value="{{ d.params.cellphone || '' }}" lay-verify="required|number" placeholder="请输入手机号码" autocomplete="off" class="layui-input">        
       </script>
     </div>
-  </div>
+  </div>  
   <div class="layui-form-item">
     <label class="layui-form-label">商户名称</label>
     <div class="layui-input-inline">
-      <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.data(d)">               
-      <select name="adminId" lay-verify="" lay-filter="LAY-user-admin-type">
-          <option value="-1">全部商户</option>
-          {{# layui.each(d.data,(i,row)=> { }}
-              <option name="adminId" value="{{ row.adminId }}" {{d.params.adminId == row.adminId ? 'selected' : ''}}>{{ row.username  }}</option>
-          {{# }); }}
-        </select> 
-      </script>
+      <select name="adminId" lay-verify="" lay-filter="merchant" id="js-select-merchant"></select> 
+    </div>    
+  </div>   
+  <div class="layui-form-item">
+    <label class="layui-form-label">扫码项目</label>
+    <div class="layui-input-inline">
+     <select name="productId" lay-verify="" lay-filter="product" id="js-select-product">
+     </select> 
     </div>
   </div>
   <div class="layui-form-item">
@@ -35,11 +35,13 @@
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="有效|无效">
-        <input type="hidden" name="scanId" value="{{ d.params.scanId }}">
+        <input type="hidden" name="scanId" value="{{ d.params.scanId }}">        
+        <input type="hidden" id="adminId" name="adminId" value="{{ d.params.adminId }}">
+        <input type="hidden" id="productId" name="productId" value="{{ d.params.productId }}">
       </script>
     </div>
-  </div>
-  
+  </div>    
+        
   <div class="layui-form-item">
     <label class="layui-form-label"></label>
     <div class="layui-input-inline">
@@ -53,9 +55,114 @@ layui.use(['admin', 'form', 'upload'], function(){
   var $ = layui.$
   ,form = layui.form
   ,setter = layui.setter
-  ,upload = layui.upload;
+  ,upload = layui.upload;  
+
+
+  // 监听商户选择
+  form.on('select(merchant)', function(data){
+    getProduct(data.value);
+    form.render('select');
+  })
+
+  $(function () {           
+     getMerchant(); //初始化加载商户信息
+     var adminId = $("#adminId").val();
+     
+     if (adminId != undefined) {
+       getProduct(adminId);
+     }
+     form.render('select');//重新渲染下拉框
+  });    
+
+   // 加载商户信息
+  function getMerchant() {
+    var merchantData = queryMerchant();
+    var adminId = $("#adminId").val();
+    if(merchantData.code == '0') {
+       var merchantHtml = '<option value="" selected>请选择</option>'
+       $.each(merchantData.data,function(index,val) {
+          if(adminId == val.adminId) {
+            merchantHtml += '<option value="'+val.adminId+'" selected>'+val.username+'</option>';
+          } else {
+            merchantHtml += '<option value="'+val.adminId+'">'+val.username+'</option>';
+          }
+       })
+       $('#js-select-merchant').append(merchantHtml);
+    }
+  }
+
+  function getProduct(adminId) {
+    var productData = queryProduct(adminId);
+    var productId = $("#productId").val();
+    if(productData.code == '0') {
+      $('#js-select-product').html('');      
+      var productHtml = '<option value="" selected>请选择</option>'
+       $.each(productData.data,function(index,val) {
+          if(productId == val.productId) {
+            productHtml += '<option value="'+val.productId+'" selected>'+val.name+'</option>';
+          } else {
+            productHtml += '<option value="'+val.productId+'">'+val.name+'</option>';
+          }
+       })
+       $('#js-select-product').append(productHtml);
+    }
+  }
+
+  /**
+   * AJAX查询商户信息
+   * @param  {[type]} adminId [description]
+   * @return {[type]}         [description]
+   */
+  function queryMerchant() {
+    var resData = '';
+      $.ajax({
+        url: setter.remoteurl+'/systemadmin/userlist',
+        type: 'GET',
+        dataType: 'JSON',
+        async: false,
+        data: {
+          access_token: layui.data(setter.tableName).access_token,          
+        },
+        success: function(res) {
+            resData = res;
+        },
+        error: function(error) {
+
+        }
+    });
+    return resData;
+  }
+
+   /**
+   * AJAX查询特定商户下的游乐项目信息
+   * @param  {[type]} adminId [description]
+   * @return {[type]}         [description]
+   */
+  function queryProduct(adminId) {
+    var resData = '';
+      $.ajax({
+        url: setter.remoteurl+'/product/products',
+        type: 'GET',
+        dataType: 'JSON',
+        async: false,
+        data: {
+          access_token: layui.data(setter.tableName).access_token,
+          adminId: adminId
+        },
+        success: function(res) {
+            resData = res;
+        },
+        error: function(error) {
+        }
+    });
+    return resData;
+  }
+
   form.render();
+
 });
+
+
  
 </script>
 

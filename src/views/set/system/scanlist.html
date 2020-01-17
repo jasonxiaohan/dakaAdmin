@@ -120,7 +120,7 @@ layui.use('scan', layui.factory('scan')).use(['admin', 'table'], function(){
     ,add: function(){
       admin.popup({
         title: '添加扫码人员'
-        ,area: ['420px', '450px']
+        ,area: ['450px', '550px']
         ,id: 'LAY-popup-scan-add'
         ,success: function(layero, index){
           view(this.id).render('set/system/scan').done(function(){

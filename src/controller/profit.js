@@ -29,7 +29,7 @@ layui.define(['table', 'form'], function(exports){
         } 
         return '个人openid';
       }}
-      ,{field: 'name', title: '姓名', width: 160}
+      ,{field: 'name', title: '姓名', width: 120}
       ,{field: 'account', title: '账号', width: 170}
       ,{field: 'relation_type', title: '关系类型', width: 200, templet:function(d) {
         if(d == 'SERVICE_PROVIDER') {
@@ -54,7 +54,8 @@ layui.define(['table', 'form'], function(exports){
           return '供应商';
         }
       }}
-      ,{field: 'merchname', title: '商户名称', width: 300}
+      ,{field: 'merchname', title: '商户名称', width: 200}
+      ,{field: 'productname', title: '分账项目名称', width: 200}
       ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 200, align: 'center'}
       ,{field: 'time', title: '添加时间',templet: '#buttonTpl', align: 'center', templet:function(d){
         return util.toDateString(d.time, "yyyy-MM-dd HH:mm:ss");

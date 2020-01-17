@@ -23,9 +23,10 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
     {type: 'checkbox', fixed: 'left'}
       // ,{field: 'scanId', width: 100, title: 'ID', sort: true}
-      ,{field: 'username', title: '姓名', width: 250}
-      ,{field: 'cellphone', title: '手机号', width: 350}
-      ,{field: 'merchname', title: '商户名称', width: 350}
+      ,{field: 'username', title: '姓名', width: 230}
+      ,{field: 'cellphone', title: '手机号', width: 200}
+      ,{field: 'merchname', title: '商户名称', width: 200}
+      ,{field: 'productname', title: '扫码项目', width: 350}
       ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 200, align: 'center'}
       ,{field: 'time', title: '添加时间',templet: '#buttonTpl', width: 250, align: 'center', templet:function(d){
         return util.toDateString(d.time, "yyyy-MM-dd HH:mm:ss");
@@ -75,14 +76,14 @@ layui.define(['table', 'form'], function(exports){
       admin.popup({
         title: '编辑扫码人员'
         ,area: ['420px', '450px']
-        ,id: 'LAY-popup-scan-edit'
+        ,id: 'LAY-popup-scan-edit'        
         ,success: function(layero, index){
           view(this.id).render('set/system/scan', data).done(function(){
             form.render(null, 'layuiadmin-form-scan');
             
             //监听提交
             form.on('submit(LAY-scan-back-submit)', function(data){
-              var field = data.field; //获取提交的字段
+              var field = data.field; //获取提交的字段              
 
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});
@@ -104,8 +105,8 @@ layui.define(['table', 'form'], function(exports){
               }); 
 
               layui.table.reload('LAY-scan-manage'); //重载表格
-              layer.close(index); //执行关闭 
-            });
+              layer.close(index); //执行关闭                         
+            });            
           });
         }
       });
