@@ -112,7 +112,7 @@ layui.define(['table', 'form'], function(exports){
       });
     }else if(obj.event === 'download') {
       alert("下载图片");
-    }
+    } 
   });
 
 

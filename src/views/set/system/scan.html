@@ -61,8 +61,13 @@ layui.use(['admin', 'form', 'upload'], function(){
   // 监听商户选择
   form.on('select(merchant)', function(data){
     getProduct(data.value);
+    $("#adminId").attr("value", $("#js-select-merchant").val());
     form.render('select');
-  })
+  });
+
+  form.on('select(product)', function(data){
+    $("#productId").attr("value", $("#js-select-product").val());
+  });
 
   $(function () {           
      getMerchant(); //初始化加载商户信息
@@ -78,10 +83,12 @@ layui.use(['admin', 'form', 'upload'], function(){
   function getMerchant() {
     var merchantData = queryMerchant();
     var adminId = $("#adminId").val();
+    var selAdminId;
     if(merchantData.code == '0') {
        var merchantHtml = '<option value="" selected>请选择</option>'
        $.each(merchantData.data,function(index,val) {
           if(adminId == val.adminId) {
+            $('#adminId').attr("value", val.adminId);
             merchantHtml += '<option value="'+val.adminId+'" selected>'+val.username+'</option>';
           } else {
             merchantHtml += '<option value="'+val.adminId+'">'+val.username+'</option>';
@@ -99,6 +106,7 @@ layui.use(['admin', 'form', 'upload'], function(){
       var productHtml = '<option value="" selected>请选择</option>'
        $.each(productData.data,function(index,val) {
           if(productId == val.productId) {
+            $('#productId').attr("value", val.productId);
             productHtml += '<option value="'+val.productId+'" selected>'+val.name+'</option>';
           } else {
             productHtml += '<option value="'+val.productId+'">'+val.name+'</option>';

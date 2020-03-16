@@ -150,18 +150,20 @@ layui.use('scan', layui.factory('scan')).use(['admin', 'table'], function(){
 
               layui.table.reload('LAY-scan-manage'); //重载表格
               layer.close(index); //执行关闭 
-            });
+            })
           });
         }
       });
-    }
+    },
   };
   
   $('.layui-btn.layuiadmin-btn-scan').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
   });
+  
 });
+
 </script>
 
 <script type="text/javascript">

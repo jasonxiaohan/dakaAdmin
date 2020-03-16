@@ -31,6 +31,9 @@ layui.define(['table', 'form'], function(exports){
       }}
       ,{field: 'name', title: '姓名', width: 120}
       ,{field: 'account', title: '账号', width: 170}
+      ,{field: 'percentage', title: '分账比例', width: 90, templet:function(d) {
+        return d.percentage+"%";
+      }}
       ,{field: 'relation_type', title: '关系类型', width: 200, templet:function(d) {
         if(d == 'SERVICE_PROVIDER') {
           return '服务商';
@@ -56,7 +59,7 @@ layui.define(['table', 'form'], function(exports){
       }}
       ,{field: 'merchname', title: '商户名称', width: 200}
       ,{field: 'productname', title: '分账项目名称', width: 200}
-      ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 200, align: 'center'}
+      ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 180, align: 'center'}
       ,{field: 'time', title: '添加时间',templet: '#buttonTpl', align: 'center', templet:function(d){
         return util.toDateString(d.time, "yyyy-MM-dd HH:mm:ss");
       }}

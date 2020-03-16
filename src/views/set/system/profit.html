@@ -50,6 +50,14 @@
       </script>
     </div>
   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">分账比例(总额30%)</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="percentage" value="{{ d.params.percentage || '' }}" lay-verify="required" placeholder="请输入分账百分比" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
    <!-- <div class="layui-form-item">
     <label class="layui-form-label">商户名称</label>
     <div class="layui-input-inline">
