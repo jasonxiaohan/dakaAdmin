@@ -108,6 +108,41 @@
     </div>
   </div>
 
+   <div class="layui-form-item">
+      <label class="layui-form-label">购票满</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <input type="text" name="ticketNums" value="{{ d.params.ticketNums || '' }}" placeholder="请输入购票张数"  class="layui-input"> 
+        </script>
+      </div>
+      <div class="layui-form-mid layui-word-aux">时规则生效</div>
+    </div>            
+    <div class="layui-form-item">
+      <label class="layui-form-label">活动奖励</label>
+      <div class="layui-input-inline">
+        <select name="ruleId">
+          <option value="1">当购票张数满M张时，优惠N%</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">优惠百分比</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <input type="text" name="discount" value="{{ d.params.discount || '' }}" autocomplete="off" class="layui-input">
+        </script>
+      </div>
+      <div class="layui-form-mid layui-word-aux">%</div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">活动状态</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <input type="checkbox" lay-filter="switch" name="active_enabled" {{ d.params.activeEnabled ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
+        </script>
+      </div>
+    </div>
+
   <script type="text/html" id="address" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/address?address={{d.params.address}}" lay-done="layui.data.sendParams(d)">
   </script>
   
