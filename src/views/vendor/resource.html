@@ -7,7 +7,23 @@
 
 <div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
   <div class="layui-form-item">
-    <label class="layui-form-label">登录名</label>
+    <label class="layui-form-label">合作方账户</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="partner_name" value="{{ d.params.partner_name || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">联系人</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="contract" value="{{ d.params.contract || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">登录账号</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="text" name="username" value="{{ d.params.username || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
@@ -70,20 +86,7 @@
   </div>
   <br>
   <div class="layui-form-item">
-    <label class="layui-form-label">角色</label>
-    <div class="layui-input-inline" lay-filter="layui-input-roles">
-      <script type="text/html" id="roles" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-done="layui.data.roles(d)">                
-      <select name="roleId" lay-verify="" lay-filter="LAY-user-adminrole-type">
-          <option value="-1">全部角色</option>
-          {{# layui.each(d.data,(i,row)=> { }}
-              <option value="{{ row.roleId }}" {{# if(d.params.roleId == row.roleId){ }}selected{{# } }} >{{ row.roleName  }}</option>
-          {{# }); }}
-        </select> 
-      </script>
-    </div>
-  </div>
-  <div class="layui-form-item">
-    <label class="layui-form-label">审核状态</label>
+    <label class="layui-form-label">账号状态</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="通过|待审核">

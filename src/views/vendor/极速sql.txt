@@ -1,0 +1,23 @@
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `level` int(8) NULL DEFAULT 0 COMMENT '当前用户所处深度' AFTER `admin_id`,
+ADD COLUMN `parent_id` int(11) NULL DEFAULT 0 COMMENT '上级用户id' AFTER `level`,
+MODIFY COLUMN `access_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '登录token' AFTER `enabled`,
+MODIFY COLUMN `update_time` datetime(0) NULL DEFAULT NULL COMMENT '更新时间' AFTER `access_token`;
+
+
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `resources` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '景区资源' AFTER `email`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `partner_name` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '合作方账户' AFTER `username`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `contract` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '联系人' AFTER `partner_name`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+MODIFY COLUMN `username` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录用户名' AFTER `parent_id`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+CHANGE COLUMN `is_del` `is_delete` tinyint(1) NULL DEFAULT 1 COMMENT '删除状态 1正常,0删除' AFTER `last_time`;
+
+update `db_daka`.`da_admin`  set is_delete = 0 where is_delete = 1;

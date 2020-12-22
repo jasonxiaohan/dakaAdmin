@@ -102,8 +102,8 @@ layui.define(['table', 'form','util'], function(exports){
       ,{field: 'roleName', title: '角色'}
       ,{field: 'address', title: '地址'}
       ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
-      ,{field: 'isDel', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
-      ,{title: '操作', width: 210, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
+      ,{field: 'enabled', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
+      ,{title: '操作', width: 210, align: 'center', fixed: 'right', toolbar: '#table-resources-manager'}
     ]]
     ,done: function(res, curr, count) {
       // layer.closeAll();
@@ -123,15 +123,15 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      // ,{field: 'adminId', width: 80, title: 'ID', sort: false}
-      ,{field: 'username', title: '登录名'}
-      ,{field: 'cellphone', title: '手机'}
-      ,{field: 'email', title: '邮箱'}
-      ,{field: 'roleName', title: '角色', width: 60,}
-      ,{field: 'address', title: '地址'}
-      ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+      ,{field: 'partner_name', title: '合作方账号'}
+      ,{field: 'resources', title: '景区资源'}
+      ,{field: 'contract', title: '联系人',templet:function(d) {
+        return d.contract+" "+d.cellphone; 
+      }}
+      ,{field: 'username', title: '登录账号'}
+      ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd");}}
       ,{field: 'isDel', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
-      ,{title: '操作', width: 210, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
+      ,{title: '操作', width: 210, align: 'center', fixed: 'right', toolbar: '#table-resources-manager'}
     ]]
     ,done: function(res, curr, count) {
       // layer.closeAll();
@@ -142,7 +142,7 @@ layui.define(['table', 'form','util'], function(exports){
   });
   
   //监听工具条
-  table.on('tool(LAY-user-back-manage)', function(obj){
+  table.on('tool(LAY-recourselist-manage)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
       layer.prompt({
@@ -173,11 +173,11 @@ layui.define(['table', 'form','util'], function(exports){
       });
     }else if(obj.event === 'edit'){
       admin.popup({
-        title: '编辑管理员'
+        title: '编辑资源方'
         ,area: ['520px', '700px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
-          view(this.id).render('user/administrators/adminform', data).done(function(){
+          view(this.id).render('vendor/resource', data).done(function(){
             form.render(null, 'layuiadmin-form-admin');
             
             //监听提交
@@ -260,7 +260,7 @@ layui.define(['table', 'form','util'], function(exports){
       ,{field: 'roleName', title: '角色名'}
       ,{field: 'rights', title: '拥有权限'}
       ,{field: 'descr', title: '具体描述'}
-      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-useradmin-admin'}
+      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-resources-manager'}
     ]]
     ,text: {
         none: '暂无数据'
@@ -347,5 +347,5 @@ layui.define(['table', 'form','util'], function(exports){
     }
   });
 
-  exports('useradmin', {})
+  exports('resources', {})
 });
