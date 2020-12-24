@@ -6,13 +6,13 @@
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
     <a><cite>资源方</cite></a>
-    <a><cite>景区资源</cite></a>
+    <a><cite>系统资源</cite></a>
   </div>
 </div>
 
 <div class="layui-fluid">   
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-resources-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-systemresources-formlist">
       <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">登录名</label>
@@ -56,7 +56,7 @@
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
         <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建景区资源</i></button>
+        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建对接</i></button>
       </div>
       
       <table id="LAY-recourselist-manage" lay-filter="LAY-recourselist-manage"></table>  
@@ -80,7 +80,7 @@
 </div>
 
 <script>
-layui.use('resources', layui.factory('resources')).use(['admin', 'resources', 'table'], function(){
+layui.use('resources', layui.factory('resources')).use(['admin', 'system-resources', 'table'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
@@ -88,7 +88,7 @@ layui.use('resources', layui.factory('resources')).use(['admin', 'resources', 't
   ,setter = layui.setter
   ,form = layui.form;
   
-  form.render(null, 'layadmin-resources-formlist');
+  form.render(null, 'layadmin-systemresources-formlist');
   
   //监听搜索
   form.on('submit(LAY-recourse-back-search)', function(data){
@@ -124,11 +124,11 @@ layui.use('resources', layui.factory('resources')).use(['admin', 'resources', 't
     }
     ,add: function(){
       admin.popup({
-        title: '创建景区资源'
+        title: '创建资源对接商户'
         ,area: ['520px', '600px']
         ,id: 'LAY-popup-useradmin-add'
         ,success: function(layero, index){
-          view(this.id).render('vendor/resource').done(function(){
+          view(this.id).render('vendor/system-resource').done(function(){
             form.render(null, 'layuiadmin-form-admin');
             
             //监听提交

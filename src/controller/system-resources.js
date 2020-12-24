@@ -121,7 +121,7 @@ layui.define(['table', 'form','util'], function(exports){
       access_token: layui.data(setter.tableName).access_token,
       level: 1,
       is_resource: 1,
-      partner_type: 1,
+      partner_type: 2,
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
@@ -351,5 +351,5 @@ layui.define(['table', 'form','util'], function(exports){
     }
   });
 
-  exports('resources', {})
+  exports('system-resources', {})
 });

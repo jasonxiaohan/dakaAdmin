@@ -21,3 +21,18 @@ ALTER TABLE `db_daka`.`da_admin`
 CHANGE COLUMN `is_del` `is_delete` tinyint(1) NULL DEFAULT 1 COMMENT '删除状态 1正常,0删除' AFTER `last_time`;
 
 update `db_daka`.`da_admin`  set is_delete = 0 where is_delete = 1;
+
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `is_resource` tinyint(1) NULL DEFAULT 0 COMMENT '是否是资源账户 0:否，1:是' AFTER `enabled`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `partner_type` int(4) NULL DEFAULT 0 COMMENT '资源类型，1:景区资源，2:系统资源' AFTER `is_resource`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+MODIFY COLUMN `is_delete` tinyint(1) NULL DEFAULT 0 COMMENT '删除状态 0正常,1删除' AFTER `last_time`;
+
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `number` bigint(20) NULL DEFAULT 0 COMMENT '商户编号' AFTER `admin_id`;
+
+da_merchant
+da_merchant_category
