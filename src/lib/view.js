@@ -44,6 +44,10 @@ layui.define(['laytpl', 'layer'], function(exports){
       key: setter.request.tokenName
       ,remove: true
     });
+    layui.data(setter.tableName, {
+      key: 'role_id'
+      ,remove: true
+    });
     
     //跳转到登入页
     location.hash = '/user/login'; 
@@ -116,8 +120,9 @@ layui.define(['laytpl', 'layer'], function(exports){
           ,debug()
         ].join('');
         view.error(error);
-        
+
         typeof error === 'function' && error(res);
+        // location.hash = '/user/login'; 
       }
     }, options));
   };

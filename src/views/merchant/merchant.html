@@ -1,0 +1,197 @@
+ <style>
+    #container {
+      width: 420%;
+      height: 600%;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-merchant" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商家名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="merchant_name" value="{{ d.params.merchant_name || '' }}" lay-verify="required" placeholder="请输入商家名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商家类型</label>
+    <div class="layui-input-inline" lay-filter="layui-input-categorys">
+      <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/merchant-category/list?category_type=1" lay-done="layui.data.categorys(d)">                
+      <select name="category_id" lay-verify="" lay-filter="LAY-merchant-category-type">
+          <option value="-1">全部类型</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option value="{{ row.categoryId }}" {{# if(d.params.category_id == row.categoryId){ }}selected{{# } }}>{{ row.categoryName  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">主资源方</label>
+    <div class="layui-input-inline" lay-filter="layui-input-categorys">
+      <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/resource-list?is_resource=1&partner_type=1" lay-done="layui.data.categorys(d)">                
+      <select name="resource_id" lay-verify="" lay-filter="LAY-merchant-category-type">
+          <option value="-1">全部资源</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option value="{{ row.adminId }}" {{# if(d.params.resource_id == row.adminId){ }}selected{{# } }}>{{ row.partner_name  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item" id="area-picker">
+    <label class="layui-form-label">所属省市</label>
+      <script type="text/html" template>
+        <input type="hidden" name="hide_province" value="{{ d.params.province_name || '' }}">
+        <input type="hidden" name="hide_city" value="{{ d.params.city_name || '' }}">
+        <input type="hidden" name="hide_area" value="{{ d.params.area_name || '' }}">
+      </script>
+      <div class="layui-input-inline" style="width: 110px;">
+          <select id="province" name="province" class="province-selector" data-value="" lay-filter="province">
+              <option value="">请选择省</option>
+          </select>
+      </div>
+      <div class="layui-input-inline" style="width: 110px;">
+          <select id="city" name="city" class="city-selector" data-value="" lay-filter="city-1">
+              <option value="">请选择市</option>
+          </select>
+      </div>
+      <div class="layui-input-inline" style="width: 110px;">
+          <select id="county" name="county" class="county-selector" data-value="" lay-filter="county-1">
+              <option value="">请选择区</option>
+          </select>
+      </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">换票凭证</label>
+    <div class="layui-input-block" id="lay_ticket_mode">
+      
+        <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/system-ticket/list" lay-done="layui.data.ticketModes(d)">
+          <input type="hidden" name="ticketModeRes" value="{{ d.params.ticket_mode }}">
+           {{# layui.each(d.data,(i,row)=> { }}
+              <input type="checkbox" name="ticketMode" id="ticketMode" value="{{ row.modeId }}" data="{{ row.modeName }}" lay-skin="primary" title="{{ row.modeName }}" >
+           {{# }); }}
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">咨询电话</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="hot_line" value="{{ d.params.hot_line || '' }}" placeholder="请输入咨询电话" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div> 
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">购票出码短信</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template id="outSmsEnabled">
+          <input type="checkbox" lay-filter="switchOutSms" name="out_sms_enabled" {{ d.params.out_sms_template_id ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
+          <input type="text" id="out_sms_template" name="out_sms_template" value="{{ d.params.out_sms_template || '' }}" placeholder="请输入购票出码短信模版" autocomplete="off" class="layui-input" {{ d.params.out_sms_template_id ? 'style="width: 450px;"' : 'style="display: none; width: 450px;"' }}>
+          <label id="out_sms_systemplate" {{ d.params.out_sms_template_id ? 'style="width: 300px;white-space:nowrap!important;"' : 'style="display: none;width: 300px;white-space:nowrap!important;"' }} >当前系统模版:您已成功订购#商品名##数量#张!预定时间#预定时间#，祝您旅游愉快。</label>
+          <label id="out_sms_constant" style="display: none;width: 300px;white-space:nowrap!important;">可用变量:#订单号# #票码# #商品名# #预定时间#</label>
+        </script>
+      </div>
+
+    </div> 
+
+  <div class="layui-form-item">
+      <label class="layui-form-label">验票通知短信</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <input type="checkbox" lay-filter="switchNoticeSms" name="notice_sms_enabled" {{ d.params.notice_sms_template_id ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
+           <input type="text" id="notice_sms_template" name="notice_sms_template" value="{{ d.params.notice_sms_template || '' }}" placeholder="请输入验票通知短信模版" autocomplete="off" class="layui-input" {{ d.params.notice_sms_template_id ? 'style=" width: 450px;"' : 'style="display: none; width: 450px;"'  }} >
+           <label id="notice_sms_systemplate" {{ d.params.notice_sms_template_id ? 'style="width: 300px;white-space:nowrap!important;"' : 'style="display: none;width: 300px;white-space:nowrap!important;"'  }}>当前系统模版:验证码#票码#已验证成功，祝您游玩愉快。</label>
+           <label id="notice_sms_constant" style="display: none;width: 300px;white-space:nowrap!important;">可用变量:#票码#</label>
+           <input type="hidden" name="merchant_id" value="{{ d.params.merchant_id }}">
+        </script>
+      </div>
+    </div> 
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+//配置插件目录
+layui.config({
+    base: './mods/'
+    , version: '1.2'
+});
+
+layui.use(['admin', 'form','layarea'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,layarea = layui.layarea;
+
+  layarea.render({
+    elem: '#area-picker',
+    data: {
+        province: $("input[name='hide_province']").val(),
+        city: $("input[name='hide_city']").val(),
+        county: $("input[name='hide_area']").val(),
+      },
+      change: function (res) {
+
+      },
+  });
+
+
+   //监听指定开关
+  form.on('switch(switchOutSms)', function(data){
+     if (this.checked) {
+        $("#out_sms_template").show();
+        $("#out_sms_constant").show();
+        $("#out_sms_systemplate").show();
+     } else {
+        $("#out_sms_template").hide();
+        $("#out_sms_constant").hide();
+        $("#out_sms_systemplate").hide();
+     }
+  });
+
+  form.on('switch(switchNoticeSms)', function(data){
+     if (this.checked) {
+        $("#notice_sms_template").show();
+        $("#notice_sms_constant").show();
+        $("#notice_sms_systemplate").show();
+     } else {
+        $("#notice_sms_template").hide();
+        $("#notice_sms_constant").hide();
+        $("#notice_sms_systemplate").hide();
+     }
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  
+  layui.data.categorys = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+  layui.data.ticketModes = function(d){
+
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+
+      var ticketModeRes = $("input[name='ticketModeRes']").val();
+      var ticketModArr = ticketModeRes.split('|');
+      $.each($("input[name='ticketMode']"),function (val,e){
+        for (var i = ticketModArr.length - 1; i >= 0; i--) {
+            if ($(this).attr("data") == ticketModArr[i]) {
+              $(e).prop("checked", true);
+            } 
+        }
+        form.render();
+      })
+    form.render();
+  });
+  };
+</script>

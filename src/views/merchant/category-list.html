@@ -1,0 +1,129 @@
+
+
+<title>景区资源</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>商户</cite></a>
+    <a><cite>分类列表</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">   
+  <div class="layui-card">
+    
+    <div class="layui-card-body">
+      <div style="padding-bottom: 10px;">
+        <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
+        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建类别</i></button>
+      </div>
+      
+      <table id="LAY-category-manage" lay-filter="LAY-category-manage"></table>  
+      <script type="text/html" id="table-category-manager">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        {{#  if(layui.data(layui.setter.tableName).role_id == '1'){ }}
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        {{#  } }}
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use('merchant-category', layui.factory('merchant-category')).use(['admin', 'merchant-category', 'table'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,setter = layui.setter
+  ,form = layui.form;
+  
+  form.render(null, 'layadmin-merchantCategory-formlist');
+  
+  //监听搜索
+  form.on('submit(LAY-recourse-back-search)', function(data){
+    var field = data.field;
+    
+    //执行重载
+    table.reload('LAY-merchantCategory-manage', {
+      where: field
+    });
+  });
+
+  //事件
+  var active = {
+    batchdel: function(){
+      var checkStatus = table.checkStatus('LAY-merchantCategory-manage')
+      ,checkData = checkStatus.data; //得到选中的数据
+
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('确定删除吗？', function(index) {
+          table.reload('LAY-merchantCategory-manage');
+          layer.msg('已删除');
+        });
+      }); 
+    }
+    ,add: function(){
+      admin.popup({
+        title: '添加类别'
+        ,area: ['420px', '400px']
+        ,id: 'LAY-popup-merchantCategory-add'
+        ,success: function(layero, index){
+          view(this.id).render('merchant/category').done(function(){
+            form.render(null, 'layuiadmin-form-admin');
+            
+            //监听提交
+            form.on('submit(LAY-user-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
+
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              //$.ajax({});
+              admin.req({
+                url: setter.remoteurl+'/merchant-category/category'
+                ,method: 'POST'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("添加成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+
+              layui.table.reload('LAY-recourselist-manage'); //重载表格
+              layer.close(index); //执行关闭 
+            });
+          });
+        }
+      });
+    }
+  }  
+  $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

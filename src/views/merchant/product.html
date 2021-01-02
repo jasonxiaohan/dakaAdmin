@@ -1,0 +1,262 @@
+ <style>
+    #container {
+      width: 420%;
+      height: 600%;
+    }
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-merchant" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="product_name" value="{{ d.params.product_name || '' }}" lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品类型</label>
+    <div class="layui-input-inline" lay-filter="layui-input-categorys">
+      <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/merchant-category/list?category_type=2" lay-done="layui.data.categorys(d)">                
+      <select name="category_id" lay-verify="" lay-filter="LAY-merchant-category-type">
+          <option value="-1">全部类型</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option value="{{ row.categoryId }}" {{# if(d.params.category_id == row.categoryId){ }}selected{{# } }}>{{ row.categoryName  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">所属商家</label>
+    <div class="layui-input-inline" lay-filter="layui-input-categorys">
+      <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/system-merchant/merchants" lay-done="layui.data.categorys(d)">                
+      <select name="resource_id" lay-verify="" lay-filter="LAY-merchant-category-type">
+          <option value="-1">全部商家</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option value="{{ row.merchant_id }}" {{# if(d.params.merchant_id == row.merchant_id){ }}selected{{# } }}>{{ row.merchant_name  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品原价</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="original_price" value="{{ d.params.original_price || '' }}" lay-verify="required" placeholder="请输入商品原价" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品售价</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="sell_price" value="{{ d.params.sell_price || '' }}" lay-verify="required" placeholder="请输入商品售价" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品图片</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="img" value="{{ d.params.img || '' }}" lay-verify="required" placeholder="请上传图片" autocomplete="off" class="layui-input" >
+      </script>
+    </div>
+    <button style="float: left;" type="button" class="layui-btn" id="layuiadmin-upload-product">上传图片</button> 
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">项目描述</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <textarea name="product_intro" lay-verify="" placeholder="请输入项目描述" autocomplete="off" class="layui-textarea">{{ d.params.product_intro || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">入园方式</label>
+    <div class="layui-input-block">
+      <input type="radio" name="enter_type" value="1" title="一单一票据" {{# if(d.params.enter_type == 1){ }}checked=""{{# } }}>
+      <input type="radio" name="enter_type" value="2" title="每人一个凭据" {{# if(d.params.enter_type == 2){ }}checked=""{{# } }}>
+      <input type="radio" name="enter_type" value="3" title="身份证" {{# if(d.params.enter_type == 3){ }}checked=""{{# } }}> 
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label">有效期方式</label>
+    <div class="layui-input-block">
+      <input lay-filter="switchInvalid" type="radio" name="invalid_type" value="1" title="指定日期方式" {{# if(d.params.invalid_type == 1){ }}checked=""{{# } }}>
+      <input lay-filter="switchInvalid" type="radio" name="invalid_type" value="2" title="游客选定日期当天有效" {{# if(d.params.invalid_type == 2){ }}checked=""{{# } }}>
+    </div>
+  </div>
+
+  <div class="layui-form-item" id="layui-form-invalid_time" style="display: none;">
+    <label class="layui-form-label">有效日期</label>
+    <div class="layui-input-inline">
+      <input type="text" class="layui-input" name="invalidTime" id="invalidTime" placeholder="yyyy-MM-dd" placeholder=" - ">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">地域限购</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <input type="text" name="limit_id_number" lay-verify="" placeholder="身份证前缀,多个以‘,’分隔" autocomplete="off" class="layui-input">{{ d.params.limit_id_number || '' }}</input>
+        <input type="radio" name="invalid_type" value="1" title="仅含" {{# if(d.params.invalid_type == 1){ }}checked=""{{# } }}>
+        <input type="radio" name="invalid_type" value="1" title="排除" {{# if(d.params.invalid_type == 1){ }}checked=""{{# } }}>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">预定需提前</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="advance_hour" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="{{ d.params.advance_hour || 0 }}"></input>
+      </script>
+    </div>
+    <div class="layui-form-mid">小时，在</div>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" class="layui-input" id="advance_time" name="advance_time" placeholder="HH:mm:ss">
+      </script>
+    </div>
+    <div class="layui-form-mid layui-word-aux">之前</div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">最小预定量</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="limit_min_amount" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="{{ d.params.limit_min_amount || 1 }}"></input>
+      </script>
+    </div>
+    <div class="layui-form-mid">最大预定量</div>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" class="layui-input" id="limit_max_amount" name="limit_max_amount" placeholder="" value="{{ d.params.limit_min_amount || 0 }}"></input>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">必填信息</label>
+    <div class="layui-input-block" id="lay_ticket_mode">
+        <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/system-ticket/list" lay-done="layui.data.ticketModes(d)">
+          <input type="checkbox" name="required" value="1" data="姓名" lay-skin="primary" title="姓名" >
+          <input type="checkbox" name="required" value="2" data="手机号" lay-skin="primary" title="手机号" >
+          <input type="checkbox" name="required" value="3" data="身份证" lay-skin="primary" title="身份证" >             
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">退款说明</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="refund_desc" value="{{ d.params.refund_desc || '' }}" placeholder="请输入退款说明" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+//配置插件目录
+layui.config({
+    base: './mods/'
+    , version: '1.2'
+});
+
+layui.use(['admin', 'form','layarea', 'upload', 'laydate'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,layarea = layui.layarea
+  ,setter = layui.setter
+  ,laydate = layui.laydate
+  ,upload = layui.upload;
+  form.render();
+
+  layarea.render({
+    elem: '#area-picker',
+    data: {
+        province: $("input[name='hide_province']").val(),
+        city: $("input[name='hide_city']").val(),
+        county: $("input[name='hide_area']").val(),
+      },
+      change: function (res) {
+
+      },
+  });
+
+  //上传图片
+  upload.render({
+    elem: '#layuiadmin-upload-product'
+    ,url: setter.remoteurl+'/upload/upload?access_token='+layui.data(setter.tableName).access_token
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+    }
+    ,accept: 'images'
+    ,method: 'POST'
+    ,acceptMime: 'image/*'
+    ,done: function(res){
+      $(this.item).prev("div").children("input").val(res.data.src)
+    }
+  });
+
+
+   //监听指定开关
+  form.on('radio(switchInvalid)', function(data){
+    // 指定日期方式
+    if (data.value == 1) {
+        $("#layui-form-invalid_time").show();
+    } else {
+      $("#layui-form-invalid_time").hide();
+    }
+  });
+
+  laydate.render({
+    elem: '#invalidTime'
+    ,type: 'date'
+    ,range: true
+  });
+
+  //限定可选时间
+  laydate.render({
+    elem: '#advance_time'
+    ,type: 'time'
+    //,min: '09:30:00'
+    //,max: '17:30:00'
+    ,btns: ['clear', 'confirm']
+  });
+
+});
+</script>
+
+<script type="text/javascript">
+  
+  layui.data.categorys = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+  layui.data.ticketModes = function(d){
+
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+
+      var ticketModeRes = $("input[name='ticketModeRes']").val();
+      var ticketModArr = ticketModeRes.split('|');
+      $.each($("input[name='ticketMode']"),function (val,e){
+        for (var i = ticketModArr.length - 1; i >= 0; i--) {
+            if ($(this).attr("data") == ticketModArr[i]) {
+              $(e).prop("checked", true);
+            } 
+        }
+        form.render();
+      })
+    form.render();
+  });
+  };
+</script>
