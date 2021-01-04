@@ -178,9 +178,7 @@ layui.use(['admin', 'form','layarea'], function(){
   });
   };
   layui.data.ticketModes = function(d){
-
     layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
-
       var ticketModeRes = $("input[name='ticketModeRes']").val();
       var ticketModArr = ticketModeRes.split('|');
       $.each($("input[name='ticketMode']"),function (val,e){

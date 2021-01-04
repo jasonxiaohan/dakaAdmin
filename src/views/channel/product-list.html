@@ -1,0 +1,147 @@
+
+
+<title>景区资源</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>商户</cite></a>
+    <a><cite>分类列表</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">   
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-protocol-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">搜索产品</label>
+          <div class="layui-input-block">
+            <input type="text" name="product_name" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">搜索商户</label>
+          <div class="layui-input-block">
+            <input type="text" name="merchant_name" placeholder="请输入" autocomplete="off" class="layui-input">
+          </div>
+        </div>     
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-recourse-back-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script type="text/html" id="toolbarProduct">
+      <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="setProductData">保存当前授权修改</button>
+      </div>
+    </script>
+    <div class="layui-card-body">
+      <table id="LAY-channel-product-manage" lay-filter="LAY-channel-product-manage"></table>
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use('channel-product', layui.factory('channel-product')).use(['admin', 'channel-product', 'table'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,setter = layui.setter
+  ,form = layui.form;
+  console.log(layui)
+  
+  form.render(null, 'layadmin-protocol-formlist');
+  
+  //监听搜索
+  form.on('submit(LAY-recourse-back-search)', function(data){
+    var field = data.field;
+
+    //执行重载
+    table.reload('LAY-channel-product-manage', {
+      where: field
+    });
+  });
+
+  table.on('edit(LAY-channel-product-manage)', function(obj){
+       var value = obj.value ,
+       data = obj.data //得到所在行所有键值
+      ,field = obj.field; //得到修改后的值
+      obj.update({
+        author_price: ''
+      });
+      var access_token = layui.data(setter.tableName).access_token;
+      data.access_token = access_token;
+      data.float_price = value;
+      admin.req({
+        url: setter.remoteurl+'/system-merchant-product/product'
+        ,method: 'PUT'
+        ,data: data
+        ,success: function(res){
+          if (res.code == 0) {
+            layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
+          } else {
+            layer.msg(res.msg, {icon: 5});
+          }
+        }
+      }); 
+  });
+
+   //工具栏事件
+  table.on('toolbar(LAY-channel-product-manage)', function(obj){
+    var checkStatus = table.checkStatus(obj.config.id);
+    switch(obj.event){
+      case 'setProductData':
+        var data = checkStatus.data;
+
+      break;
+      case 'getCheckLength':
+        var data = checkStatus.data;
+        layer.msg('选中了：'+ data.length + ' 个');
+      break;
+      case 'isAll':
+        layer.msg(checkStatus.isAll ? '全选': '未全选')
+      break;
+    };
+  });
+
+  //事件
+  var active = {
+    batchdel: function(){
+      var checkStatus = table.checkStatus('LAY-merchant-product-manage')
+      ,checkData = checkStatus.data; //得到选中的数据
+
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('确定删除吗？', function(index) {
+          table.reload('LAY-merchant-manage');
+          layer.msg('已删除');
+        });
+      }); 
+    }
+  }  
+  $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+
+<script type="text/javascript">
+  
+</script>

@@ -34,5 +34,10 @@ MODIFY COLUMN `is_delete` tinyint(1) NULL DEFAULT 0 COMMENT '删除状态 0正�
 ALTER TABLE `db_daka`.`da_admin` 
 ADD COLUMN `number` bigint(20) NULL DEFAULT 0 COMMENT '商户编号' AFTER `admin_id`;
 
+ALTER TABLE `db_daka`.`da_admin` 
+ADD COLUMN `protocol_id` int(11) NULL DEFAULT 0 COMMENT '价格协议编号' AFTER `balance`,
+ADD COLUMN `margin` decimal(15, 2) NULL DEFAULT 0.00 COMMENT '商户保证金' AFTER `protocol_id`,
+ADD COLUMN `authority` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '功能授权' AFTER `margin`;
+
 da_merchant
 da_merchant_category

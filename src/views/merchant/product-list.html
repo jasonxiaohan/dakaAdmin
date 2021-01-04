@@ -79,7 +79,7 @@ layui.use('merchant-product', layui.factory('merchant-product')).use(['admin', '
     }
     ,add: function(){
       admin.popup({
-        title: '添加商品'
+        title: '添加商家商品'
         ,area: ['750px', '750px']
         ,id: 'LAY-popup-merchant-product-add'
         ,success: function(layero, index){
@@ -89,15 +89,16 @@ layui.use('merchant-product', layui.factory('merchant-product')).use(['admin', '
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
-              var ticketMode= new Array();
-              $("input[name='ticketMode']:checked").each(function(){
-                  ticketMode.push($(this).val());
+              var required= new Array();
+              $("input[name='required']:checked").each(function(){
+                  required.push($(this).val());
               });
-              field.ticketMode = ticketMode.join(',');
+              field.required = required.join(',');
+
               //提交 Ajax 成功后，关闭当前弹层并重载表格
-              //$.ajax({});
+              $.ajax({});
               admin.req({
-                url: setter.remoteurl+'/system-merchant/product'
+                url: setter.remoteurl+'/system-merchant-product/product'
                 ,method: 'POST'
                 ,data: field
                 ,success: function(res){

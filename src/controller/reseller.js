@@ -11,36 +11,30 @@ layui.define(['table', 'form','util'], function(exports){
   ,util = layui.util
   ,form = layui.form;
 
-
-  var router = layui.router();
-  var merchant_id = router.search.merchant_id;
-
-  //管理员管理
+  //分销商列表
   table.render({
-    elem: '#LAY-merchant-product-manage'
-    ,url: setter.remoteurl+'/system-merchant-product/products'
+    elem: '#LAY-reseller-manage'
+    ,url: setter.remoteurl+'/systemadmin/resource-list'
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
-      merchant_id: merchant_id,
+      level: 1,
+      is_resource: 1,
+      partner_type: 3,
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'product_name', title: '商品名称', width: 150}
-      ,{field: 'ticket_source', title: '出码来源', width: 150, templet:function(d){
-        if (d.ticket_source == 1) {
-          return '极速部落出码';
-        } else if(d.ticket_source == 2) {
-          return '票付通';
-        }
+      ,{field: 'partner_name', title: '分销商账号'}
+      ,{field: 'protocol_name', title: '价格协议', width: 250}
+      ,{field: 'contract', title: '联系人', width: 160,templet:function(d) {
+        return d.contract+" "+d.cellphone; 
       }}
-      ,{field: 'ticket_code', title: '票源代码', width: 150}
-      ,{field: 'sell_price', title: '售价', width: 70}
-      ,{field: 'merchant_name', title: '商家名称', width: 150}
-      ,{field: 'category_name', title: '商家类型', width: 150}
-      ,{title: '操作', width: 300, align: 'center', fixed: 'right', toolbar: '#table-merchant-product-manager'}
+      ,{field: 'username', title: '登录账号'}
+      ,{field: 'createTime', title: '创建时间',templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd");}}
+      ,{field: 'isDel', title:'审核状态', templet: '#buttonTpl', minWidth: 80, align: 'center'}
+      ,{title: '操作', width: 210, align: 'center', fixed: 'right', toolbar: '#table-reseller-manager'}
     ]]
     ,done: function(res, curr, count) {
-      layer.closeAll();
+      // layer.closeAll();
     }
     ,page: true
     ,limit: 10
@@ -50,7 +44,7 @@ layui.define(['table', 'form','util'], function(exports){
   });
   
   //监听工具条
-  table.on('tool(LAY-merchant-product-manage)', function(obj){
+  table.on('tool(LAY-reseller-manage)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
       layer.prompt({
@@ -58,11 +52,11 @@ layui.define(['table', 'form','util'], function(exports){
         ,title: '敏感操作，请验证口令'
       }, function(value, index){
         layer.close(index);
-        layer.confirm('确定删除此商品？', function(index){
+        layer.confirm('确定删除此类别？', function(index){
            admin.req({
-            url: setter.remoteurl+'/system-merchant-product/product'
+            url: setter.remoteurl+'/system-merchant/merchant'
             ,method: 'DELETE'
-            ,data: {product_id: data.product_id}
+            ,data: {merchant_id: data.merchant_id}
             ,success: function(res){
               if (res.code == 0) {
                 layer.msg("删除成功",{time: 1000,icon: 1},function(){
@@ -81,25 +75,25 @@ layui.define(['table', 'form','util'], function(exports){
       });
     }else if(obj.event === 'edit'){ 
       admin.popup({
-        title: '编辑商家商品'
-        ,area: ['750px', '750px']
+        title: '编辑商家'
+        ,area: ['700px', '620px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
-          view(this.id).render('merchant/product', data).done(function(){
-            form.render(null, 'layuiadmin-form-product');
+          view(this.id).render('channel/reseller', data).done(function(){
+            form.render(null, 'layuiadmin-form-merchant');
                      
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
-              var required= new Array();
-              $("input[name='required']:checked").each(function(){
-                  required.push($(this).val());
+              var authority = new Array();
+              $("input[name='authority']:checked").each(function(){
+                  authority.push($(this).val());
               });
-              field.required = required.join(',');
+              field.authority = authority.join(',');
 
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               admin.req({
-                url: setter.remoteurl+'/system-merchant-product/product'
+                url: setter.remoteurl+'/systemadmin/users'
                 ,method: 'PUT'
                 ,data: field
                 ,success: function(res){
@@ -126,5 +120,5 @@ layui.define(['table', 'form','util'], function(exports){
     } 
   });
 
-  exports('merchant-product', {})
+  exports('reseller', {})
 });
