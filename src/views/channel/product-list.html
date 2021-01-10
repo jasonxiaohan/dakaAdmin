@@ -26,6 +26,7 @@
             <input type="text" name="merchant_name" placeholder="请输入" autocomplete="off" class="layui-input">
           </div>
         </div>     
+        
         <div class="layui-inline">
           <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-recourse-back-search">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
@@ -37,6 +38,8 @@
       <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="setProductData">保存当前授权修改</button>
       </div>
+    </script>
+    <script type="text/html" template lay-done="layui.data.sendParams(d)">
     </script>
     <div class="layui-card-body">
       <table id="LAY-channel-product-manage" lay-filter="LAY-channel-product-manage"></table>
@@ -52,7 +55,6 @@ layui.use('channel-product', layui.factory('channel-product')).use(['admin', 'ch
   ,table = layui.table
   ,setter = layui.setter
   ,form = layui.form;
-  console.log(layui)
   
   form.render(null, 'layadmin-protocol-formlist');
   
@@ -143,5 +145,7 @@ layui.use('channel-product', layui.factory('channel-product')).use(['admin', 'ch
 </script>
 
 <script type="text/javascript">
-  
+  layui.data.sendParams = function (params) {
+    console.log(params);
+  }; 
 </script>

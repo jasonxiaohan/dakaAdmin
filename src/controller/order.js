@@ -22,9 +22,9 @@ layui.define(['table', 'form'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'orderNo', width: 200, title: '订单号', sort: true}
-      ,{field: 'nickName', title: '用户名', width: 150}
-      ,{field: 'username', title: '商户名称', width: 200}
+      ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
+      ,{field: 'nickName', title: '用户名', width: 120}
+      ,{field: 'username', title: '商户名称', width: 180}
       ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
         return '￥'+d.realAmount;
       }}
@@ -40,10 +40,11 @@ layui.define(['table', 'form'], function(exports){
           return '未付款';
         } 
         return '已付款';
-      }}
-      ,{field: 'consumeStatus', title: '消费状态', width: 100, templet: '#buttonTpl', width: 150, align: 'center'}
+      }} 
+      ,{field: 'consumeStatus', title: '消费状态', width: 90, templet: '#buttonTpl', align: 'center'}
+      ,{field: 'refundStatus', title: '退款状态', width: 90, templet: '#refundTpl', align: 'center'}
       ,{field: 'createTime', title: '下单时间', sort: true,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
-      ,{title: '操作', width: 90, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
+      ,{title: '操作', width: 160, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
     ]]
     ,page: true
     ,limit: 10
@@ -122,7 +123,35 @@ layui.define(['table', 'form'], function(exports){
           });
         }
       });
-    }else if(obj.event === 'download') {
+    } else if(obj.event === 'refund'){
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('真的退款么?', function(index){
+          admin.req({
+            url: setter.remoteurl+'/order/refund-order'
+            ,method: 'PUT'
+            ,data: {order_no: data.orderNo}
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("退款成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
+          obj.del();
+          layer.close(index);
+        });
+      });
+    } else if(obj.event === 'download') {
       alert("下载图片");
     }
   });

@@ -33,7 +33,17 @@
                 <option value="0">未消费</option>
               </select>
             </div>
-        </div>         
+        </div>    
+        <div class="layui-inline">
+            <label class="layui-form-label">退款状态</label>
+            <div class="layui-input-block">
+              <select name="refundStatus">
+                <option value="-1">全部</option>
+                <option value="1">已退款</option>
+                <option value="0">未退款</option>
+              </select>
+            </div>
+        </div>     
         <div class="layui-inline">
           <label class="layui-form-label">商户名称</label>
           <div class="layui-input-block">
@@ -73,9 +83,21 @@
           <button class="layui-btn layui-btn-danger layui-btn-xs">未消费</button>
         {{#  } }}
       </script>
+      <script type="text/html" id="refundTpl">
+        {{#  if(d.refundStatus == true){ }}
+          <button class="layui-btn layui-btn-xs">已退款</button>
+        {{#  } else { }}
+          <button class="layui-btn layui-btn-danger layui-btn-xs">未退款</button>
+        {{#  } }}
+      </script>
       <script type="text/html" id="table-order-webuser">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a> -->
+        {{#  if(d.refundStatus == true){ }}
+          <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="refund"><i class="layui-icon layui-icon-delete"></i>退款</a>  
+        {{#  } else { }}
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund"><i class="layui-icon layui-icon-delete"></i>退款</a>
+        {{#  } }}
+        
       </script>
     </div>
   </div>
