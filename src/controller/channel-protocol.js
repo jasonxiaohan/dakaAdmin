@@ -31,7 +31,7 @@ layui.define(['table', 'form','util'], function(exports){
       }}
       ,{field: 'merchant_num', title: '授权商户', width: 100}
       ,{field: 'protocol_remark', title: '备注', width: 300}
-      ,{title: '操作', width: 300, align: 'center', fixed: 'right', toolbar: '#table-protocol-manager'}
+      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-protocol-manager'}
     ]]
     ,done: function(res, curr, count) {
       layer.closeAll();
@@ -79,7 +79,7 @@ layui.define(['table', 'form','util'], function(exports){
         ,area: ['420px', '400px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
-          view(this.id).render('channel/product-list', data).done(function(){
+          view(this.id).render('channel/protocol', data).done(function(){
             form.render(null, 'layuiadmin-form-protocol');
                      
             //监听提交
@@ -120,10 +120,12 @@ layui.define(['table', 'form','util'], function(exports){
         title: '授权产品'
         ,area: ['920px', '700px']
         ,id: 'LAY-popup-user-add'
+        ,type: 1
         ,success: function(layero, index){
-          view(this.id).render('channel/product-list', data).done(function(){
+          view(this.id).render('channel/product-list', {id: '1'}).done(function(){
+
             form.render(null, 'layuiadmin-form-protocol');
-                     
+
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
