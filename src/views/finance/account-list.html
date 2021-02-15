@@ -1,52 +1,30 @@
 
 
-<title>景区资源</title>
+<title>资金账户</title>
   
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
-    <a><cite>渠道管理</cite></a>
-    <a><cite>分销商</cite></a>
+    <a><cite>资金</cite></a>
+    <a><cite>资金账户</cite></a>
   </div>
 </div>
 
 <div class="layui-fluid">   
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-reseller-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-finance-formlist">
       <div class="layui-form-item">
+        
         <div class="layui-inline">
-          <label class="layui-form-label">登录名</label>
-          <div class="layui-input-block">
-            <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">手机</label>
-          <div class="layui-input-block">
-            <input type="text" name="cellphone" placeholder="请输入" autocomplete="off" class="layui-input">
-          </div>
-        </div>
-        <div class="layui-inline">
-          <label class="layui-form-label">邮箱</label>
-          <div class="layui-input-block">
-            <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input">
-          </div>
-        </div>        
-        <div class="layui-inline">
-          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-recourse-back-search">
+          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-account-back-search">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
           </button>
         </div>
       </div>
     </div>
     
-    <div class="layui-card-body">
-      <div style="padding-bottom: 10px;">
-        <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建分销商</i></button>
-      </div>
-      
-      <table id="LAY-reseller-manage" lay-filter="LAY-reseller-manage"></table>  
+    <div class="layui-card-body">    
+      <table id="LAY-financelist-manage" lay-filter="LAY-financelist-manage"></table>  
       <script type="text/html" id="buttonTpl">
         {{#  if(d.enabled == true){ }}
           <button class="layui-btn layui-btn-xs">已审核</button>
@@ -54,16 +32,19 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs">未审核</button>
         {{#  } }}
       </script>
-      <script type="text/html" id="table-reseller-manager">
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-xs" lay-event="merchant-product-list"><i class="layui-icon layui-icon-edit"></i>对接</a>
+      <script type="text/html" id="table-finance-manager">
+        <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="look"><i class="layui-icon layui-icon"></i>查看</a>
+        {{#  if(layui.data(layui.setter.tableName).role_id == '1'){ }}
+          <a class="layui-btn layui-btn-sm" lay-event="recharge"><i class="layui-icon"></i>充值</a>
+          <a class="layui-btn layui-btn-sm" lay-event="credit"><i class="layui-icon"></i>授信</a>
+        {{#  } }}
       </script>
     </div>
   </div>
 </div>
 
 <script>
-layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'table'], function(){
+layui.use('finance', layui.factory('finance')).use(['admin', 'finance', 'table'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
@@ -71,14 +52,14 @@ layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'tabl
   ,setter = layui.setter
   ,form = layui.form;
   
-  form.render(null, 'layadmin-reseller-formlist');
+  form.render(null, 'layadmin-finance-formlist');
   
   //监听搜索
-  form.on('submit(LAY-recourse-back-search)', function(data){
+  form.on('submit(LAY-account-back-search)', function(data){
     var field = data.field;
     
     //执行重载
-    table.reload('LAY-reseller-manage', {
+    table.reload('LAY-financelist-manage', {
       where: field
     });
   });
@@ -107,22 +88,16 @@ layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'tabl
     }
     ,add: function(){
       admin.popup({
-        title: '创建代理商'
+        title: '创建景区资源'
         ,area: ['520px', '600px']
         ,id: 'LAY-popup-useradmin-add'
         ,success: function(layero, index){
-          view(this.id).render('channel/reseller').done(function(){
+          view(this.id).render('vendor/resource').done(function(){
             form.render(null, 'layuiadmin-form-admin');
             
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
-
-              var authority = new Array();
-              $("input[name='authority']:checked").each(function(){
-                  authority.push($(this).val());
-              });
-              field.authority = authority.join(',');
 
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});

@@ -1,0 +1,210 @@
+
+
+<title>分销商充值记录</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>资金</cite></a>
+    <a><cite>充值明细</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">   
+  <div class="layui-card">
+
+
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-finance-formlist">
+      <div class="layui-form-item">
+        <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/getUserById?admin_id={{ layui.router().search.admin_id }}" lay-done="layui.data.data(d)">      
+        <div class="layui-inline">
+          <label class="layui-form-label">账户可用</label>
+          <div class="layui-input-block">
+              ¥ {{ d.data.available_margin }}
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">账户结余</label>
+          <div class="layui-input-block">
+              ¥ {{ d.data.available_margin }}
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">账期限额</label>
+          <div class="layui-input-block">
+              ¥ {{ d.data.credit_amount }} 
+          </div>
+        </div>
+        </script>
+      </div>
+    </div>
+
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-finance-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">类型</label>
+          <div class="layui-input-block">
+            <select name="operate_code">
+                <option value="-1">全部</option>
+                <option value="1">充值</option>
+                <option value="2">补差</option>
+                <option value="3">冲正</option>
+                <option value="4">扣款</option>
+              </select>  
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">支付方式</label>
+          <div class="layui-input-block">
+            <select name="pay_type">
+                <option value="-1">全部</option>
+                <option value="1">现金</option>
+                <option value="2">汇款</option>
+                <option value="3">授信</option>
+              </select>  
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">支付状态</label>
+          <div class="layui-input-block">
+            <select name="pay_status">
+                <option value="-1">全部</option>
+                <option value="0">成功</option>
+                <option value="1">失败</option>
+              </select>  
+          </div>
+        </div>
+        <div class="layui-inline">
+          <label class="layui-form-label">下单时间</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="createTime" id="createTime" placeholder=" - ">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-rechargelist-back-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layui-card-body">    
+      <table class="layui-hide" id="LAY-rechargelist-manage" lay-filter="LAY-rechargelist-manage"></table>  
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use('finance', layui.factory('finance')).use(['admin', 'finance', 'table', 'laydate'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,setter = layui.setter
+  ,laydate = layui.laydate
+  ,layer = layui.layer
+  ,router = layui.router
+  ,form = layui.form;
+  
+  form.render(null, 'layadmin-finance-formlist');
+  var router = layui.router();
+  // console.log(router.search.admin_id);
+
+  laydate.render({
+    elem: '#createTime'
+    ,type: 'datetime'
+    ,range: true
+  });
+  
+  //监听搜索
+  form.on('submit(LAY-rechargelist-back-search)', function(data){
+    var field = data.field;
+    
+    //执行重载
+    table.reload('LAY-rechargelist-manage', {
+      where: field
+    });
+  });
+
+  //事件
+  var active = {
+    batchdel: function(){
+      var checkStatus = table.checkStatus('LAY-recourselist-manage')
+      ,checkData = checkStatus.data; //得到选中的数据
+
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('确定删除吗？', function(index) {
+          table.reload('LAY-recourselist-manage');
+          layer.msg('已删除');
+        });
+      }); 
+    }
+    ,add: function(){
+      admin.popup({
+        title: '创建景区资源'
+        ,area: ['520px', '600px']
+        ,id: 'LAY-popup-useradmin-add'
+        ,success: function(layero, index){
+          view(this.id).render('vendor/resource').done(function(){
+            form.render(null, 'layuiadmin-form-admin');
+            
+            //监听提交
+            form.on('submit(LAY-user-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
+
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              //$.ajax({});
+              admin.req({
+                url: setter.remoteurl+'/systemadmin/users'
+                ,method: 'POST'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("添加成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+
+              layui.table.reload('LAY-recourselist-manage'); //重载表格
+              layer.close(index); //执行关闭 
+            });
+          });
+        }
+      });
+    }
+  }  
+  $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+
+  layui.data.data = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

@@ -1,0 +1,67 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商户名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="hidden" name="admin_id" value="{{ d.params.adminId }}">
+        <input type="text" name="partner_name" value="{{ d.params.partner_name || '' }}" lay-verify="required" placeholder="请输入商户名称" autocomplete="off" class="layui-input" readonly="readonly">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">操作类型</label>
+    <div class="layui-input-inline">
+      <input type="text"  lay-verify="required" value="授信" autocomplete="off" class="layui-input" readonly="readonly">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">金额</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="amount" value="0" lay-verify="required|number"  placeholder="请输入充值金额" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-inline">
+    <label class="layui-form-label">授信方式</label>
+    <div class="layui-input-block">
+      <select name="pay_type">
+          <option value="3">授信</option>
+        </select>  
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">备注</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <textarea name="note" lay-verify="" placeholder="请输入备注内容" autocomplete="off" class="layui-textarea">{{ d.params.note
+         || '' }}</textarea>
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+  form.render();
+});
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

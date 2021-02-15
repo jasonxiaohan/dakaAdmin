@@ -1,18 +1,18 @@
 
 
-<title>景区资源</title>
+<title>后台管理员</title>
   
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
-    <a><cite>渠道管理</cite></a>
-    <a><cite>分销商</cite></a>
+    <a><cite>用户</cite></a>
+    <a><cite>后台管理员</cite></a>
   </div>
 </div>
 
 <div class="layui-fluid">   
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-reseller-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-account-formlist">
       <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">登录名</label>
@@ -31,9 +31,22 @@
           <div class="layui-input-block">
             <input type="text" name="email" placeholder="请输入" autocomplete="off" class="layui-input">
           </div>
-        </div>        
+        </div>
         <div class="layui-inline">
-          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-recourse-back-search">
+          <label class="layui-form-label">部门岗位</label>
+          <div class="layui-input-block">
+            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-done="layui.data.roles(d)">               
+            <select name="roleId" lay-verify="" lay-filter="LAY-user-adminrole-type">
+                <option value="-1">全部岗位</option>
+                {{# layui.each(d.data,(i,row)=> { }}
+                    <option value="{{ row.roleId }}" {{# if(d.params.roleId == row.roleId){ }}selected{{# } }}>{{ row.roleName  }}</option>
+                {{# }); }}
+              </select> 
+            </script>
+          </div>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
           </button>
         </div>
@@ -43,10 +56,10 @@
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
         <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建分销商</i></button>
+        <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加</button>
       </div>
       
-      <table id="LAY-reseller-manage" lay-filter="LAY-reseller-manage"></table>  
+      <table id="LAY-user-back-manage" lay-filter="LAY-user-back-manage"></table>  
       <script type="text/html" id="buttonTpl">
         {{#  if(d.enabled == true){ }}
           <button class="layui-btn layui-btn-xs">已审核</button>
@@ -54,16 +67,20 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs">未审核</button>
         {{#  } }}
       </script>
-      <script type="text/html" id="table-reseller-manager">
+      <script type="text/html" id="table-account-admin">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-xs" lay-event="merchant-product-list"><i class="layui-icon layui-icon-edit"></i>对接</a>
+        {{#  if(d.roleName == '超级管理员'){ }}
+          <a class="layui-btn layui-btn-disabled layui-btn-xs"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        {{#  } else { }}
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        {{#  } }}
       </script>
     </div>
   </div>
 </div>
 
 <script>
-layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'table'], function(){
+layui.use('account', layui.factory('account')).use(['admin', 'account', 'table'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
@@ -71,14 +88,14 @@ layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'tabl
   ,setter = layui.setter
   ,form = layui.form;
   
-  form.render(null, 'layadmin-reseller-formlist');
+  form.render(null, 'layadmin-account-formlist');
   
   //监听搜索
-  form.on('submit(LAY-recourse-back-search)', function(data){
+  form.on('submit(LAY-user-back-search)', function(data){
     var field = data.field;
     
     //执行重载
-    table.reload('LAY-reseller-manage', {
+    table.reload('LAY-user-back-manage', {
       where: field
     });
   });
@@ -86,13 +103,13 @@ layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'tabl
   //事件
   var active = {
     batchdel: function(){
-      var checkStatus = table.checkStatus('LAY-recourselist-manage')
+      var checkStatus = table.checkStatus('LAY-user-back-manage')
       ,checkData = checkStatus.data; //得到选中的数据
 
       if(checkData.length === 0){
         return layer.msg('请选择数据');
       }
-
+      
       layer.prompt({
         formType: 1
         ,title: '敏感操作，请验证口令'
@@ -100,29 +117,31 @@ layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'tabl
         layer.close(index);
         
         layer.confirm('确定删除吗？', function(index) {
-          table.reload('LAY-recourselist-manage');
+          
+          //执行 Ajax 后重载
+          /*
+          admin.req({
+            url: 'xxx'
+            //,……
+          });
+          */
+          table.reload('LAY-user-back-manage');
           layer.msg('已删除');
         });
       }); 
     }
     ,add: function(){
       admin.popup({
-        title: '创建代理商'
+        title: '添加管理员'
         ,area: ['520px', '600px']
-        ,id: 'LAY-popup-useradmin-add'
+        ,id: 'LAY-popup-account-add'
         ,success: function(layero, index){
-          view(this.id).render('channel/reseller').done(function(){
+          view(this.id).render('user/administrators/adminform').done(function(){
             form.render(null, 'layuiadmin-form-admin');
             
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
-
-              var authority = new Array();
-              $("input[name='authority']:checked").each(function(){
-                  authority.push($(this).val());
-              });
-              field.authority = authority.join(',');
 
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});
@@ -143,7 +162,7 @@ layui.use('reseller', layui.factory('reseller')).use(['admin', 'reseller', 'tabl
                 }
               }); 
 
-              layui.table.reload('LAY-recourselist-manage'); //重载表格
+              layui.table.reload('LAY-user-back-manage'); //重载表格
               layer.close(index); //执行关闭 
             });
           });

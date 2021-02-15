@@ -1,0 +1,154 @@
+
+
+<title>角色管理</title>
+  
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>业务账户</cite></a>
+    <a><cite>部门岗位</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">   
+  <div class="layui-card">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-useradminrole-formlist">
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          岗位筛选
+        </div>
+        <div class="layui-inline" id="layui-input-role">
+          <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemrole/roles" lay-done="layui.data.done(d)">                
+            <select name="rolename" lay-verify="" lay-filter="LAY-department-adminrole-type">
+              <option value="-1">全部角色</option>
+              {{# layui.each(d.data,(i,row)=> { }}
+                  <option value="{{ row.roleId }}" {{# if(select == row.roleId){ }}selected{{# } }}>{{ row.roleName  }}</option>
+              {{# }); }}
+            </select> 
+          </script>
+        </div>
+      </div>
+    </div>
+    <div class="layui-card-body">
+      <div style="padding-bottom: 10px;">
+        <button class="layui-btn layuiadmin-btn-role" data-type="batchdel" lay-event="delete">删除</button>
+        <button class="layui-btn layuiadmin-btn-role" data-type="add" lay-event="add">添加</button>
+      </div>
+    
+      <table id="LAY-department-back-role" lay-filter="LAY-department-back-role"></table>  
+      <script type="text/html" id="buttonTpl">
+        {{#  if(d.check == true){ }}
+          <button class="layui-btn layui-btn-xs">已审核</button>
+        {{#  } else { }}
+          <button class="layui-btn layui-btn-primary layui-btn-xs">未审核</button>
+        {{#  } }}
+      </script>
+      <script type="text/html" id="table-useradmin-admin">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        {{#  if(d.roleId == 1){ }}
+        <a class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-xs"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        {{#  } else{ }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        {{#  } }}
+      </script>
+    </div>
+  </div>
+</div>
+
+<script>  
+  var select = -1;
+  layui.data.done = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    laytpl($('#role').html()).render(d,(html)=>{
+      $('#layui-input-role').html(html);
+    });
+    form.render('select')
+  });
+  };
+</script>
+
+<script>
+layui.use('department', layui.factory('department')).use(['admin', 'department', 'table'], function(){
+  var $ = layui.$
+  ,admin = layui.admin
+  ,view = layui.view
+  ,table = layui.table
+  ,setter = layui.setter
+  ,form = layui.form;
+  
+  form.render(null, 'layadmin-useradminrole-formlist');
+  
+  //搜索角色
+  form.on('select(LAY-department-adminrole-type)', function(data){
+    //执行重载
+    table.reload('LAY-department-back-role', {
+      where: {
+        role_id: data.value
+      }
+    });
+  });
+
+  //事件
+  var active = {
+    batchdel: function(){
+      var checkStatus = table.checkStatus('LAY-department-back-role')
+      ,checkData = checkStatus.data; //得到选中的数据
+      if(checkData.length === 0){
+        return layer.msg('请选择数据');
+      }
+      
+      layer.confirm('确定删除吗？', function(index) {
+        //执行 Ajax 后重载
+        /*
+        admin.req({
+          url: 'xxx'
+          //,……
+        });
+        */
+        table.reload('LAY-department-back-role');
+        layer.msg('已删除');
+      });
+    },
+    add: function(){      
+      admin.popup({
+        title: '添加新岗位'
+        ,area: ['500px', '480px']
+        ,id: 'LAY-popup-department-add'
+        ,success: function(layero, index){
+          view(this.id).render('department/roleform').done(function(){
+            form.render(null, 'layuiadmin-form-role');
+            //监听提交
+            form.on('submit(LAY-department-role-submit)', function(data){
+              var field = data.field; //获取提交的字段
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              //$.ajax({});
+               admin.req({
+                url: setter.remoteurl+'/systemrole/roles'
+                ,method: 'POST'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("添加成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+              layui.table.reload('LAY-department-back-role'); //重载表格
+              layer.close(index); //执行关闭 
+            });
+          });
+        }
+      });
+    }
+  }  
+  $('.layui-btn.layuiadmin-btn-role').on('click', function(){
+    var type = $(this).data('type');
+    active[type] ? active[type].call(this) : '';
+  });
+});
+</script>

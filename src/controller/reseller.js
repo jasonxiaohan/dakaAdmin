@@ -116,7 +116,8 @@ layui.define(['table', 'form','util'], function(exports){
         }
       });
     } else if(obj.event === 'merchant-product-list'){ 
-      location.href = '#/merchant/product-list/merchant_id='+data.merchant_id;
+      console.log(data);
+      location.href = '#/merchant/product-list/merchant_id='+data.adminId;
     } 
   });
 
