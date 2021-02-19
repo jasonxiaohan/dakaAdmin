@@ -50,8 +50,8 @@
       </script>
       <script type="text/html" id="table-protocol-manager">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" onclick="selectSingle('{{d.protocol_id}}')" lay-event="author_product"><i class="layui-icon layui-icon-edit"></i>授权产品</a>
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="author_merchant"><i class="layui-icon layui-icon-edit"></i>授权商户</a> -->
+        <a class="layui-btn layui-btn-normal layui-btn-xs" onclick="selectSingle('{{d.protocol_id}}')" lay-event="author_product"><i class="layui-icon layui-icon-edit"></i>授权产品</a>
+        <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="author_merchant"><i class="layui-icon layui-icon-edit"></i>授权商户</a> -->
         
       </script>
     </div>
@@ -156,6 +156,6 @@ layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', '
   };
 
   function selectSingle(id) {
-    console.log(id);
+    
   }
 </script>

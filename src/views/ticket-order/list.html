@@ -44,7 +44,7 @@
               </select>
             </div>
         </div>     
-        <div class="layui-inline">
+        <!-- <div class="layui-inline">
           <label class="layui-form-label">商户名称</label>
           <div class="layui-input-block">
             <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.data(d)">               
@@ -56,7 +56,7 @@
               </select> 
             </script>
           </div>
-        </div>
+        </div> -->
         <div class="layui-inline">
           <label class="layui-form-label">分销商名称</label>
           <div class="layui-input-block">
@@ -123,7 +123,7 @@
 </div>
 
 <script>
-layui.use('order', layui.factory('order')).use(['admin', 'table', 'laydate'], function(){
+layui.use('ticket-order', layui.factory('ticket-order')).use(['admin', 'table', 'laydate'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view

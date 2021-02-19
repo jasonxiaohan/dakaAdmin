@@ -1,6 +1,6 @@
 /**
 
- @Name： 退单记录管理 
+ @Name： 订单管理 
  */
 
 
@@ -15,8 +15,8 @@ layui.define(['table', 'form'], function(exports){
 
   // 订单管理
   table.render({
-    elem: '#LAY-refund-manage'
-    ,url: setter.remoteurl+'/refund/refunds' //模拟接口
+    elem: '#LAY-order-manage'
+    ,url: setter.remoteurl+'/order/merchant-orders' //模拟接口
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
       source: 1,
@@ -24,16 +24,28 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
-      ,{field: 'nickName', title: '用户名', width: 120}
-      ,{field: 'merchantName', title: '分销商', width: 180}
-      ,{field: 'cellPhone', title: '手机号', width: 120}
+      // ,{field: 'nickName', title: '用户名', width: 120}
+      ,{field: 'merchantName', title: '分销商名称', width: 180}
       ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
         return '￥'+d.realAmount;
       }}
+      ,{field: 'payableAmount', title: '应付金额', width: 100, templet: function(d) {
+          return '￥'+d.payableAmount; 
+      }}
+      ,{field: 'discount', title: '折扣优惠', width: 100, templet: function(d) {
+        return '￥'+d.discount;
+      }}
       ,{field: 'ticketNums', title: '购票数量', width: 100}
+      ,{field: 'payStatus', title: '支付状态', width: 100, templet:function(d) {
+        if (d.payStatus == 0) {
+          return '未付款';
+        } 
+        return '已付款';
+      }} 
+      ,{field: 'consumeStatus', title: '消费状态', width: 90, templet: '#buttonTpl', align: 'center'}
       ,{field: 'refundStatus', title: '退款状态', width: 90, templet: '#refundTpl', align: 'center'}
-      ,{field: 'createTime', title: '申请时间', sort: true,templet:function(d){return util.toDateString(d.updateTime, "yyyy-MM-dd HH:mm:ss");}}
-      ,{title: '操作', width: 160, align:'center', fixed: 'right', toolbar: '#table-refund-webuser'}
+      ,{field: 'createTime', title: '下单时间', sort: true,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+      ,{title: '操作', width: 160, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
     ]]
     ,page: true
     ,limit: 10
@@ -44,7 +56,7 @@ layui.define(['table', 'form'], function(exports){
   });
   
   //监听工具条
-  table.on('tool(LAY-refund-manage)', function(obj){
+  table.on('tool(LAY-order-manage)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
       layer.prompt({
@@ -74,16 +86,41 @@ layui.define(['table', 'form'], function(exports){
           layer.close(index);
         });
       });
-    } else if(obj.event === 'view'){
+    } else if(obj.event === 'edit'){
       admin.popup({
-        title: '退单记录'
+        title: '订单详情页'
         ,area: ['600px', '580px']
-        ,id: 'LAY-popup-refund-add'
+        ,id: 'LAY-popup-order-add'
         ,success: function(layero, index){
-          view(this.id).render('order/refund-order', data).done(function(){
+          view(this.id).render('order/order', data).done(function(){
             form.render(null, 'layuiadmin-form-order');
             
+            //监听提交
+            form.on('submit(LAY-order-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
 
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              //$.ajax({});
+              admin.req({
+                url: setter.remoteurl+'/order/orders'
+                ,method: 'PUT'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+
+              layui.table.reload('LAY-order-manage'); //重载表格
+              layer.close(index); //执行关闭 
+            });
           });
         }
       });
@@ -176,9 +213,9 @@ layui.define(['table', 'form'], function(exports){
           layer.close(index);
         });
       });
-    }else if(obj.event === 'view'){
+    }else if(obj.event === 'edit'){
       admin.popup({
-        title: '退单记录'
+        title: '编辑管理员'
         ,area: ['420px', '450px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
@@ -216,5 +253,5 @@ layui.define(['table', 'form'], function(exports){
     }
   });
 
-  exports('refund', {})
+  exports('ticket-order', {})
 });

@@ -31,7 +31,7 @@ layui.define(['table', 'form','util'], function(exports){
       }}
       ,{field: 'merchant_num', title: '授权商户', width: 100}
       ,{field: 'protocol_remark', title: '备注', width: 300}
-      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-protocol-manager'}
+      ,{title: '操作', width: 350, align: 'center', fixed: 'right', toolbar: '#table-protocol-manager'}
     ]]
     ,done: function(res, curr, count) {
       layer.closeAll();

@@ -1,0 +1,87 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-order" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">产品名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 90px;">{{ d.params.title }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">订单编号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label">{{ d.params.orderNo }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">退单编号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label">{{ d.params.refund_no }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">申退数量</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 20px;">{{ d.params.ticketNums }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">退款金额</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 10px;">¥ {{ d.params.realAmount }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">申请时间</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 135px;">{{layui.util.toDateString(d.params.refund_time, 'yyyy-MM-dd HH:mm:ss') }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">退单状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 50px;">{{ d.params.refundStatus == 1 ? '已退款' : '未退款' }}</label>
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-order-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form', 'upload'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,upload = layui.upload;
+  form.render();
+  
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

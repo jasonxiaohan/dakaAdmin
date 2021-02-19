@@ -12,7 +12,28 @@
 
 <div class="layui-fluid">   
   <div class="layui-card">
-    
+
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-refund-front-formlist">
+      <div class="layui-form-item">
+        <label class="layui-form-label">出码来源</label>
+        <div class="layui-input-inline" lay-filter="layui-input-categorys">
+          <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/system-channel/channel-list" lay-done="layui.data.categorys(d)">                
+          <select name="ticket_source" lay-verify="" lay-filter="LAY-merchant-category-type">
+              <option value="-1">请选择来源</option>
+              {{# layui.each(d.data,(i,row)=> { }}
+                  <option value="{{ row.channelId }}" {{# if(d.params.ticket_source == row.channelId){ }}selected{{# } }}>{{ row.channelName  }}</option>
+              {{# }); }}
+            </select> 
+          </script>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-product" lay-submit lay-filter="LAY-product-back-search">
+            <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
         <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
@@ -45,7 +66,7 @@ layui.use('merchant-product', layui.factory('merchant-product')).use(['admin', '
   form.render(null, 'layadmin-merchant-formlist');
   
   //监听搜索
-  form.on('submit(LAY-recourse-back-search)', function(data){
+  form.on('submit(LAY-product-back-search)', function(data){
     var field = data.field;
     field.merchant_id = merchant_id;
     
@@ -134,5 +155,11 @@ layui.use('merchant-product', layui.factory('merchant-product')).use(['admin', '
     layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
     form.render();
   });
+  };
+
+  layui.data.categorys = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+      form.render();
+    });
   };
 </script>
