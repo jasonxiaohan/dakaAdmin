@@ -8,7 +8,7 @@
 <div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
   <div class="layui-form-item">
     <label class="layui-form-label">协议名称</label>
-    <div class="layui-input-inline">
+    <div class="layui-input-inline" style="width: 290px;">
       <script type="text/html" template>
          <input type="hidden" name="protocol_id" value="{{ d.params.protocol_id || '' }}" >
         <input type="text" name="protocol_name" value="{{ d.params.protocol_name || '' }}" lay-verify="required" placeholder="请输入协议名称" autocomplete="off" class="layui-input">
@@ -17,9 +17,10 @@
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">备注</label>
-    <div class="layui-input-inline">
+    <div class="layui-input-inline" style="width: 290px;">
       <script type="text/html" template>
-        <input type="text" name="protocol_remark" value="{{ d.params.protocol_remark || '' }}" placeholder="请输入备注" autocomplete="off" class="layui-input">
+        <!-- <input type="text" name="protocol_remark" value="{{ d.params.protocol_remark || '' }}" placeholder="请输入备注" autocomplete="off" class="layui-input"> -->
+        <textarea placeholder="请输入内容" class="layui-textarea" name="protocol_remark">{{ d.params.protocol_remark || '' }}</textarea>
       </script>
     </div>
   </div>
@@ -135,9 +136,4 @@ layui.use(['admin', 'form'], function(){
     map.on('click', showInfoClick);
     map.on('dblclick', showInfoDbClick);
   }
-</script>
-
-<script>
-  
-    
 </script>

@@ -12,7 +12,7 @@
 
 <div class="layui-fluid">   
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-protocol-formlist">
+    <!-- <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-protocol-formlist">
       <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">搜索产品</label>
@@ -32,7 +32,7 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
     
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
@@ -50,7 +50,7 @@
       </script>
       <script type="text/html" id="table-protocol-manager">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-normal layui-btn-xs" onclick="selectSingle('{{d.protocol_id}}')" lay-event="author_product"><i class="layui-icon layui-icon-edit"></i>授权产品</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="author"><i class="layui-icon layui-icon-edit"></i>授权产品</a>
         <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="author_merchant"><i class="layui-icon layui-icon-edit"></i>授权商户</a> -->
         
       </script>
@@ -156,6 +156,6 @@ layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', '
   };
 
   function selectSingle(id) {
-    
+    console.log(id);
   }
 </script>

@@ -24,14 +24,14 @@ layui.define(['table', 'form','util'], function(exports){
       merchant_id: merchant_id,
     }
     ,cols: [[
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'protocol_name', title: '协议名称', width: 150}
-      ,{field: 'product_num', title: '授权商品', width: 150, templet:function(d){
+      // {type: 'checkbox', fixed: 'left'}
+      {field: 'protocol_name', title: '协议名称', width: 180}
+      ,{field: 'product_num', title: '授权商品', width: 180, templet:function(d){
         return '票 '+d.product_num;
       }}
-      ,{field: 'merchant_num', title: '授权商户', width: 100}
-      ,{field: 'protocol_remark', title: '备注', width: 300}
-      ,{title: '操作', width: 350, align: 'center', fixed: 'right', toolbar: '#table-protocol-manager'}
+      ,{field: 'merchant_num', title: '授权商户', width: 150}
+      ,{field: 'protocol_remark', title: '备注', width: 350}
+      ,{title: '操作', width: 250, align: 'center', fixed: 'right', toolbar: '#table-protocol-manager'}
     ]]
     ,done: function(res, curr, count) {
       layer.closeAll();
@@ -76,7 +76,7 @@ layui.define(['table', 'form','util'], function(exports){
     }else if(obj.event === 'edit'){ 
       admin.popup({
         title: '编辑价格协议'
-        ,area: ['420px', '400px']
+        ,area: ['500px', '450px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
           view(this.id).render('channel/protocol', data).done(function(){
@@ -115,16 +115,15 @@ layui.define(['table', 'form','util'], function(exports){
           });
         }
       });
-    } else if(obj.event === 'author_product'){ 
-      admin.popup({
+    } else if(obj.event === 'author'){ 
+      layer.open({
         title: '授权产品'
         ,area: ['920px', '700px']
         ,id: 'LAY-popup-user-add'
-        ,type: 1
         ,success: function(layero, index){
-          view(this.id).render('channel/product-list', {id: '1'}).done(function(){
+          view(this.id).render('channel/product-list', data).done(function(){
 
-            form.render(null, 'layuiadmin-form-protocol');
+            form.render(null, 'layuiadmin-form-product');
 
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
@@ -157,6 +156,12 @@ layui.define(['table', 'form','util'], function(exports){
               layer.close(index); //执行关闭 
             });
           });
+        },
+        cancel: function(){
+          // 右上角关闭事件的逻辑
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+          window.parent.location.reload();
         }
       });
     } 

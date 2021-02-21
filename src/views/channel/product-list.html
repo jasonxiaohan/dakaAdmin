@@ -12,7 +12,7 @@
 
 <div class="layui-fluid">   
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-protocol-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layuiadmin-form-product" id="layuiadmin-form-product">
       <div class="layui-form-item">
         <div class="layui-inline">
           <label class="layui-form-label">搜索产品</label>
@@ -21,11 +21,18 @@
           </div>
         </div>
         <div class="layui-inline">
-          <label class="layui-form-label">搜索商户</label>
+          <label class="layui-form-label">分销商名称</label>
           <div class="layui-input-block">
-            <input type="text" name="merchant_name" placeholder="请输入" autocomplete="off" class="layui-input">
+            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/system-merchant/merchants?size=100" lay-done="layui.data.data(d)">               
+            <select name="merchant_id" lay-verify="" lay-filter="LAY-user-admin-type">
+                <option value="-1">全部商户</option>
+                {{# layui.each(d.data,(i,row)=> { }}
+                    <option value="{{ row.merchant_id }}" >{{ row.merchant_name  }}</option>
+                {{# }); }}
+              </select> 
+            </script>
           </div>
-        </div>     
+        </div>   
         
         <div class="layui-inline">
           <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-recourse-back-search">
@@ -33,14 +40,16 @@
           </button>
         </div>
       </div>
+      <script type="text/html" template>
+        <input type="hidden" id="protocol_id" name="protocol_id" value="{{ d.params.protocol_id || 0 }}">
+      </script>
     </div>
     <script type="text/html" id="toolbarProduct">
       <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="setProductData">保存当前授权修改</button>
       </div>
     </script>
-    <script type="text/html" template lay-done="layui.data.sendParams(d.params)">
-    </script>
+
     <div class="layui-card-body">
       <table id="LAY-channel-product-manage" lay-filter="LAY-channel-product-manage"></table>
     </div>
@@ -56,7 +65,7 @@ layui.use('channel-product', layui.factory('channel-product')).use(['admin', 'ch
   ,setter = layui.setter
   ,form = layui.form;
   
-  form.render(null, 'layadmin-protocol-formlist');
+  form.render(null, 'layuiadmin-form-product');
   
   //监听搜索
   form.on('submit(LAY-recourse-back-search)', function(data){
@@ -98,11 +107,44 @@ layui.use('channel-product', layui.factory('channel-product')).use(['admin', 'ch
 
    //工具栏事件
   table.on('toolbar(LAY-channel-product-manage)', function(obj){
+    var protocolId = $("#protocol_id").val();
+    var productIds = "";
     var checkStatus = table.checkStatus(obj.config.id);
     switch(obj.event){
       case 'setProductData':
-        var data = checkStatus.data;
-        console.log(data);
+        var list = checkStatus.data;
+        for(var k in list) {
+          if (k != list.length - 1) {
+            productIds += list[k].product_id+",";
+          } else {
+            productIds += list[k].product_id;
+          }
+        }
+        var access_token = layui.data(setter.tableName).access_token;
+        var data = {};
+        data.product_ids = productIds;
+        data.protocol_id = protocolId;
+        data.access_token = access_token;
+        //console.log(data);
+
+        if (protocolId != "" && productIds != "") {
+          admin.req({
+            url: setter.remoteurl+'/system-protocol/protocol-product'
+            ,method: 'PUT'
+            ,data: data
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
+        }
       break;
       case 'getCheckLength':
         var data = checkStatus.data;
@@ -145,7 +187,9 @@ layui.use('channel-product', layui.factory('channel-product')).use(['admin', 'ch
 </script>
 
 <script type="text/javascript">
-  layui.data.sendParams = function (params) {
-    console.log(params);
-  }; 
+  layui.data.data = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
 </script>

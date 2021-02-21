@@ -15,17 +15,18 @@ layui.define(['table', 'form'], function(exports){
   // 订单管理
   table.render({
     elem: '#LAY-consume-manage'
-    ,url: setter.remoteurl+'/order/orders' //模拟接口
+    ,url: setter.remoteurl+'/order/merchant-orders' //模拟接口
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
       payStatus: 1,
       consumeStatus: 1,
+      source: 1,
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'orderNo', width: 230, title: '订单号', sort: true}
       ,{field: 'nickName', title: '用户名', width: 120}
-      ,{field: 'username', title: '商户名称', width: 180}
+      ,{field: 'merchantName', title: '分销商名称', width: 180}
       ,{field: 'cellPhone', title: '手机号', width: 120}
       ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
         return '￥'+d.realAmount;

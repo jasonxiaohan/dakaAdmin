@@ -14,6 +14,13 @@ layui.define(['table', 'form','util'], function(exports){
 
   var router = layui.router();
   var protocol_id = router.search.protocol_id;
+  /*var d = {};
+  var t = $('#layuiadmin-form-product [name]').serializeArray();
+  $.each(t, function() {
+      d[this.name] = this.value;
+  });
+  data = JSON.stringify(d);*/
+
 
   // 价格协议列表
   table.render({
@@ -21,6 +28,7 @@ layui.define(['table', 'form','util'], function(exports){
     ,url: setter.remoteurl+'/system-merchant-product/products'
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
+      protocol_id: $('#protocol_id').val(),
     }
      ,toolbar: '#toolbarProduct'
     ,cols: [[
@@ -58,7 +66,7 @@ layui.define(['table', 'form','util'], function(exports){
   });
   
   //监听工具条
-  table.on('tool(LAY-protocol-manage)', function(obj){
+  table.on('tool(LAY-product-manage)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
       layer.prompt({
@@ -88,7 +96,7 @@ layui.define(['table', 'form','util'], function(exports){
         });
       });
     }else if(obj.event === 'edit'){ 
-      admin.popup({
+      /*admin.popup({
         title: '编辑价格协议'
         ,area: ['420px', '400px']
         ,id: 'LAY-popup-user-add'
@@ -129,16 +137,19 @@ layui.define(['table', 'form','util'], function(exports){
             });
           });
         }
-      });
-    } else if(obj.event === 'author_product'){ 
-      admin.popup({
-        title: '编辑价格协议'
-        ,area: ['620px', '700px']
+      });*/
+    } /*else if(obj.event === 'author_product'){ 
+      layer.open({
+        title: '授权产品'
+        ,area: ['920px', '700px']
         ,id: 'LAY-popup-user-add'
+        ,btn :['保存', '取消']
+        ,type: 1
         ,success: function(layero, index){
           view(this.id).render('channel/product-list', data).done(function(){
+
             form.render(null, 'layuiadmin-form-protocol');
-                     
+
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
@@ -172,7 +183,7 @@ layui.define(['table', 'form','util'], function(exports){
           });
         }
       });
-    } 
+    } */
   });
 
   exports('channel-product', {})
