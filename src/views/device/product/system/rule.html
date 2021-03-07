@@ -1,0 +1,76 @@
+
+
+<title>优惠规则</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>设置</cite></a>
+    <a><cite>优惠规则</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">优惠规则</div>
+        <div class="layui-card-body">
+          
+          <div class="layui-form" wid100 lay-filter="">
+            <script type="text/html" template lay-url="{{ layui.setter.remoteurl }}/active/actives/id" lay-done="layui.data.data(d)">
+            <div class="layui-form-item">
+              <label class="layui-form-label">购票满</label>
+              <div class="layui-input-inline">
+                <input type="text" name="ticketNums" value="{{ d.data.ticketNums }}" placeholder="请输入购票张数" lay-verify="required|number" class="layui-input"> 
+              </div>
+              <div class="layui-form-mid layui-word-aux">时规则生效</div>
+            </div>            
+            <div class="layui-form-item">
+              <label class="layui-form-label">活动奖励</label>
+              <div class="layui-input-inline">
+                <select name="ruleId">
+                  <option value="1">当购票张数满M张时，优惠N%</option>
+                </select>
+              </div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">优惠百分比</label>
+              <div class="layui-input-inline">
+                <input type="text" name="discount" value="{{ d.data.discount }}" autocomplete="off" class="layui-input">
+              </div>
+              <div class="layui-form-mid layui-word-aux">%</div>
+            </div>
+            <div class="layui-form-item">
+              <label class="layui-form-label">活动状态</label>
+              <div class="layui-input-inline">
+                  <input type="checkbox" lay-filter="switch" name="enabled" {{ d.data.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
+              </div>
+            </div>
+            <input type="hidden" name="activeId" value="{{ d.data.activeId }}">
+
+            </script>
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="set_system_active">确认保存</button>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use('set', layui.factory('set'));
+</script>
+
+<script>
+  layui.data.data = function(d) {
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+      form.render();
+    });
+ };
+</script>

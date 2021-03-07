@@ -20,12 +20,13 @@ layui.define(['table', 'form'], function(exports){
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
     }
+    ,totalRow: true
     ,cols: [[
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
+      // {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+      {field: 'orderNo', width: 250, title: '订单号', sort: true, totalRowText: '合计'}
       ,{field: 'nickName', title: '用户名', width: 120}
       ,{field: 'username', title: '商户名称', width: 180}
-      ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
+      ,{field: 'realAmount', title: '实付金额', width: 100,templet: function(d) {
         return '￥'+d.realAmount;
       }}
       ,{field: 'payableAmount', title: '应付金额', width: 100, templet: function(d) {
@@ -51,7 +52,11 @@ layui.define(['table', 'form'], function(exports){
     // ,height: 'full-320'
     ,text: {
         none: '暂无数据'
-      }
+    },
+    done: function(res, curr, count){
+      console.log(res);
+      this.elem.next().find('.layui-table-total td[data-field="realAmount"] .layui-table-cell').text('¥'+res.total_amount.toFixed(2));
+    }
   });
   
   //监听工具条

@@ -1,0 +1,81 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-order" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">订单编号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="orderNo" value="{{ d.params.orderNo || '' }}" lay-verify="required" disabled="disabled" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">项目名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="title" value="{{ d.params.title || '' }}" lay-verify="required" disabled="disabled" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">实付金额</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="realAmount" value="{{ d.params.realAmount || '' }}" lay-verify="required|number" disabled="disabled" placeholder="￥" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">二维码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        {{# if(d.params.qrcode != null && d.params.qrcode !=""){ }}
+        <img src="{{d.params.qrcode}}" height="160px" width="160px">
+        {{# } }}
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">支付状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="payStatus" {{ d.params.payStatus ? 'checked' : '' }} lay-skin="switch" lay-text="已支付|未支付">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">消费状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="consumeStatus" {{ d.params.consumeStatus ? 'checked' : '' }} lay-skin="switch" lay-text="已消费|未消费">
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-order-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form', 'upload'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,upload = layui.upload;
+  form.render();
+  
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

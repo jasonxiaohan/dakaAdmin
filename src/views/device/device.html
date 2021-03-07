@@ -1,0 +1,98 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-device" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商户</label>
+    <div class="layui-input-inline" lay-filter="layui-input-roles">
+      <script type="text/html" id="roles" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.roles(d)">                
+      <select name="adminId" lay-verify="" lay-filter="LAY-user-adminrole-type">
+          <option value="-1">全部用户</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option value="{{ row.adminId }}" {{# if(d.params.admin_id == row.adminId){ }}selected{{# } }}>{{ row.username  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">设备名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="device_name" value="{{ d.params.device_name || '' }}" lay-verify="required" placeholder="请输入设备名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">设备编号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="device_uuid" value="{{ d.params.device_uuid || '' }}" lay-verify="required" placeholder="请输入设备编号" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">图片</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="device_image" value="{{ d.params.device_image || '' }}" placeholder="请上传图片" autocomplete="off" class="layui-input" >
+      </script>
+    </div>
+    <button style="float: left;" type="button" class="layui-btn" id="layuiadmin-upload-device">上传图片</button> 
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">设备状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <!-- <input type="option" name="status" value="1" lay-skin="primary" title="关机" >    
+          <input type="option" name="status" value="2" lay-skin="primary" title="开机" >    
+          <input type="option" name="status" value="3" lay-skin="primary" title="损坏" >   -->  
+          <select name="device_status" lay-filter="device_status">
+            <option value="0" {{# if(d.params.status == 0){ }}selected{{# } }}>关机</option>
+            <option value="1" {{# if(d.params.status == 1){ }}selected{{# } }}>开机</option>
+            <option value="2" {{# if(d.params.status == 2){ }}selected{{# } }}>损坏</option>
+          </select>
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-ad-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+
+<script>
+layui.use(['admin', 'form', 'upload'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,upload = layui.upload;
+  form.render();
+  //上传图片
+  upload.render({
+    elem: '#layuiadmin-upload-device'
+    ,url: setter.remoteurl+'/upload/upload?access_token='+layui.data(setter.tableName).access_token
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+    }
+    ,accept: 'images'
+    ,method: 'POST'
+    ,acceptMime: 'image/*'
+    ,done: function(res){
+      $(this.item).prev("div").children("input").val(res.data.src)
+    }
+  });
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

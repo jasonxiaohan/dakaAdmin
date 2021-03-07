@@ -5,8 +5,8 @@
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
-    <a><cite>共享娱乐项目</cite></a>
-    <a><cite>退单管理</cite></a>
+    <a><cite>订单管理</cite></a>
+    <a><cite>退单记录</cite></a>
   </div>
 </div>
 
@@ -24,26 +24,15 @@
               </select>
             </div>
         </div> 
+            
         <div class="layui-inline">
-            <label class="layui-form-label">退款状态</label>
-            <div class="layui-input-block">
-              <select name="refundStatus">
-                <option value="-1">全部</option>
-                <option value="1">已退款</option>
-                <option value="2">审核中</option>
-                <option value="3">已拒绝</option>
-                <option value="4">待处理</option>
-              </select>
-            </div>
-        </div>     
-        <div class="layui-inline">
-          <label class="layui-form-label">商户名称</label>
+          <label class="layui-form-label">分销商名称</label>
           <div class="layui-input-block">
-            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.data(d)">               
-            <select name="adminId" lay-verify="" lay-filter="LAY-user-admin-type">
+            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/system-merchant/merchants?size=100" lay-done="layui.data.data(d)">               
+            <select name="merchantId" lay-verify="" lay-filter="LAY-user-admin-type">
                 <option value="-1">全部商户</option>
                 {{# layui.each(d.data,(i,row)=> { }}
-                    <option value="{{ row.adminId }}" >{{ row.username  }}</option>
+                    <option value="{{ row.merchant_id }}" >{{ row.merchant_name  }}</option>
                 {{# }); }}
               </select> 
             </script>
@@ -82,19 +71,14 @@
         {{#  } }}
       </script>
       <script type="text/html" id="table-refund-webuser">
-        {{#  if(d.refundStatus == 4){ }}
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="refund"><i class="layui-icon layui-icon-edit"></i>操作</a>
-        {{#  } else { }}
-        <a class="layui-btn layui-btn-disabled layui-btn-xs"><i class="layui-icon layui-icon-pause"></i>操作</a>
-        {{#  } }}
-          <a class="layui-btn  layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view"><i class="layui-icon"></i>查看</a>  
       </script>
     </div>
   </div>
 </div>
 
 <script>
-layui.use('device-refund', layui.factory('device-refund')).use(['admin', 'table', 'laydate'], function(){
+layui.use('refund', layui.factory('refund')).use(['admin', 'table', 'laydate'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view

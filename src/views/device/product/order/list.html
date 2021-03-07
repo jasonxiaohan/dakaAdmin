@@ -5,14 +5,14 @@
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
-    <a><cite>共享娱乐项目</cite></a>
-    <a><cite>退单管理</cite></a>
+    <a><cite>订单管理</cite></a>
+    <a><cite>订单列表</cite></a>
   </div>
 </div>
 
 <div class="layui-fluid">
   <div class="layui-card">
-    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-refund-front-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-order-front-formlist">
       <div class="layui-form-item">
        <div class="layui-inline">
             <label class="layui-form-label">支付状态</label>
@@ -25,14 +25,22 @@
             </div>
         </div> 
         <div class="layui-inline">
+            <label class="layui-form-label">消费状态</label>
+            <div class="layui-input-block">
+              <select name="consumeStatus">
+                <option value="-1">全部</option>
+                <option value="1">已消费</option>
+                <option value="0">未消费</option>
+              </select>
+            </div>
+        </div>    
+        <div class="layui-inline">
             <label class="layui-form-label">退款状态</label>
             <div class="layui-input-block">
               <select name="refundStatus">
                 <option value="-1">全部</option>
                 <option value="1">已退款</option>
-                <option value="2">审核中</option>
-                <option value="3">已拒绝</option>
-                <option value="4">待处理</option>
+                <option value="0">未退款</option>
               </select>
             </div>
         </div>     
@@ -50,13 +58,26 @@
           </div>
         </div>
         <div class="layui-inline">
-          <label class="layui-form-label">申请时间</label>
-          <div class="layui-input-inline">
-            <input type="text" class="layui-input" name="updateTime" id="createTime" placeholder=" - ">
+          <label class="layui-form-label">分销商名称</label>
+          <div class="layui-input-block">
+            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/system-merchant/merchants?size=100" lay-done="layui.data.data(d)">               
+            <select name="merchantId" lay-verify="" lay-filter="LAY-user-admin-type">
+                <option value="-1">全部商户</option>
+                {{# layui.each(d.data,(i,row)=> { }}
+                    <option value="{{ row.merchant_id }}" >{{ row.merchant_name  }}</option>
+                {{# }); }}
+              </select> 
+            </script>
           </div>
         </div>
         <div class="layui-inline">
-          <button class="layui-btn layuiadmin-btn-refund" lay-submit lay-filter="LAY-refund-front-search">
+          <label class="layui-form-label">下单时间</label>
+          <div class="layui-input-inline">
+            <input type="text" class="layui-input" name="createTime" id="createTime" placeholder=" - ">
+          </div>
+        </div>
+        <div class="layui-inline">
+          <button class="layui-btn layuiadmin-btn-order" lay-submit lay-filter="LAY-order-front-search">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
           </button>
         </div>
@@ -64,12 +85,19 @@
     </div>
     
     <div class="layui-card-body">
-      <table id="LAY-refund-manage" lay-filter="LAY-refund-manage"></table>
+      <table id="LAY-order-manage" lay-filter="LAY-order-manage"></table>
       <script type="text/html" id="imgTpl"> 
         <img style="display: inline-block;" src= {{ d.img }}>
       </script> 
+      <script type="text/html" id="buttonTpl">
+        {{#  if(d.consumeStatus == true){ }}
+          <button class="layui-btn layui-btn-xs">已消费</button>
+        {{#  } else { }}
+          <button class="layui-btn layui-btn-danger layui-btn-xs">未消费</button>
+        {{#  } }}
+      </script>
       <script type="text/html" id="refundTpl">
-        {{#  if(d.refundStatus == 1){ }}
+         {{#  if(d.refundStatus == 1){ }}
           <button class="layui-btn layui-btn-xs">已退款</button>
         {{#  } else if(d.refundStatus == 2){ }}
            <button class="layui-btn layui-btn-danger layui-btn-xs">审核中</button>
@@ -81,20 +109,21 @@
           <button class="layui-btn layui-btn-danger layui-btn-xs">未退款</button>
         {{#  } }}
       </script>
-      <script type="text/html" id="table-refund-webuser">
-        {{#  if(d.refundStatus == 4){ }}
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="refund"><i class="layui-icon layui-icon-edit"></i>操作</a>
+      <script type="text/html" id="table-order-webuser">
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+        {{#  if(d.refundStatus == true){ }}
+          <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="refund"><i class="layui-icon layui-icon-delete"></i>退款</a>  
         {{#  } else { }}
-        <a class="layui-btn layui-btn-disabled layui-btn-xs"><i class="layui-icon layui-icon-pause"></i>操作</a>
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="refund"><i class="layui-icon layui-icon-delete"></i>退款</a>
         {{#  } }}
-          <a class="layui-btn  layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+        
       </script>
     </div>
   </div>
 </div>
 
 <script>
-layui.use('device-refund', layui.factory('device-refund')).use(['admin', 'table', 'laydate'], function(){
+layui.use('order', layui.factory('order')).use(['admin', 'table', 'laydate'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
@@ -103,7 +132,7 @@ layui.use('device-refund', layui.factory('device-refund')).use(['admin', 'table'
   ,laydate = layui.laydate
   ,form = layui.form;
   
-  form.render(null, 'layadmin-refund-front-formlist');
+  form.render(null, 'layadmin-order-front-formlist');
 
   laydate.render({
     elem: '#createTime'
@@ -112,11 +141,11 @@ layui.use('device-refund', layui.factory('device-refund')).use(['admin', 'table'
   });
   
   //监听搜索
-  form.on('submit(LAY-refund-front-search)', function(data){
+  form.on('submit(LAY-order-front-search)', function(data){
     var field = data.field;
     
     //执行重载
-    table.reload('LAY-refund-manage', {
+    table.reload('LAY-order-manage', {
       where: field
     });
   });   

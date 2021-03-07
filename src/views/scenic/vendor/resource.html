@@ -1,0 +1,218 @@
+ <style>
+    #container {
+      width: 420%;
+      height: 600%;
+    }
+</style>
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">合作方账户</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="partner_name" value="{{ d.params.partner_name || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">联系人</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="contract" value="{{ d.params.contract || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">登录账号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="username" value="{{ d.params.username || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">密码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="password" value="" placeholder="请输入密码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">手机</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="cellphone" value="{{ d.params.cellphone || '' }}" lay-verify="phone" placeholder="请输入号码" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">邮箱</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="email" value="{{ d.params.email || '' }}" lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">地址</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" id="address" name="address" value="{{ d.params.address || '' }}" lay-verify="address" placeholder="请输入地址" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">坐标</label>
+       <script type="text/html" template>
+      <div class="layui-input-inline" style="width: 100px;">
+        <input type="text" id="longitude" name="longitude" value="{{ d.params.longitude || '' }}" placeholder="经度" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-mid">-</div>
+      <div class="layui-input-inline" style="width: 100px;">
+        <input type="text" id="latitude" name="latitude" value="{{ d.params.latitude || '' }}" placeholder="纬度" autocomplete="off" class="layui-input">
+      </div>
+      </script>
+
+      
+    </div>
+  </div>
+  <div class="layui-form-item" style="margin-bottom: 180px">
+    <div class="layui-inline">
+      <label class="layui-form-label">坐标</label>
+      <div id="container"></div>
+    </div>
+  </div>
+  <br>
+  <div class="layui-form-item">
+    <label class="layui-form-label">账号状态</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="通过|待审核">
+        <input type="hidden" name="adminId" value="{{ d.params.adminId }}">
+        <input type="hidden" name="is_resource" value="1">
+        <input type="hidden" name="partner_type" value="1">
+        <input type="hidden" name="roleId" value="2">
+        <input type="hidden" name="level" value="1">
+      </script>
+    </div>
+  </div>
+
+  <script type="text/html" id="address" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/address?address={{d.params.address}}" lay-done="layui.data.sendParams(d)">
+  </script>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+  form.render();
+});
+</script>
+
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>
+
+<script type="text/javascript">
+  layui.data.sendParams = function(d) {
+    //地图加载
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });
+    //输入提示
+    var autoOptions = {
+        input: "tipinput"
+    };
+    var auto = new AMap.Autocomplete(autoOptions);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    if (d.data != "undefined") {
+      placeSearch.search(d.data, function (status, result) {
+         // 查询成功时，result即对应匹配的POI信息
+         var pois = result.poiList.pois;
+          for(var i = 0; i < 1; i++){
+              var poi = pois[i];
+              var marker = [];
+              marker[i] = new AMap.Marker({
+                  position: poi.location,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                  title: poi.name
+              });
+              // 将创建的点标记添加到已有的地图实例：
+              map.add(marker[i]);
+          }
+          map.setFitView();
+
+      });
+    }
+
+    AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        // placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+
+    var geocoder,marker;
+    function regeoCode(longlat) {
+        if(!geocoder){
+            geocoder = new AMap.Geocoder({
+                city: "010", //城市设为北京，默认：“全国”
+                radius: 1000 //范围，默认：500
+            });
+        }
+        var lnglat  = longlat.split(',');
+         if(!marker){
+            marker = new AMap.Marker();
+            map.add(marker);
+        }
+        marker.setPosition(lnglat);
+        
+        geocoder.getAddress(lnglat, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                var address = result.regeocode.formattedAddress;
+                document.getElementById("address").value = address;
+            }else{
+                log.error('根据经纬度查询地址失败')
+            }
+        });
+    }
+
+    function showInfoClick(e){
+        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
+        regeoCode(e.lnglat.getLng()+","+e.lnglat.getLat());
+        // document.querySelector("#text").innerText = text;
+        document.getElementById("longitude").value = e.lnglat.getLng();
+        document.getElementById("latitude").value = e.lnglat.getLat();
+    }
+    function showInfoDbClick(e){
+        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置双击了地图！'
+        regeoCode(e.lnglat.getLng()+","+e.lnglat.getLat());
+        document.getElementById("longitude").value = e.lnglat.getLng();
+        document.getElementById("latitude").value = e.lnglat.getLat();
+        // document.querySelector("#text").innerText = text;
+    }
+    
+    // 绑定事件
+    map.on('click', showInfoClick);
+    map.on('dblclick', showInfoDbClick);
+  }
+</script>
+
+<script>
+  
+    
+</script>

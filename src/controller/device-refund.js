@@ -19,13 +19,13 @@ layui.define(['table', 'form'], function(exports){
     ,url: setter.remoteurl+'/refund/system-refunds' //模拟接口
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
-      source: 1,
+      source: 0,
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
       ,{field: 'nickName', title: '用户名', width: 120}
-      ,{field: 'merchantName', title: '分销商', width: 180}
+      ,{field: 'username', title: '分销商', width: 180}
       ,{field: 'cellPhone', title: '手机号', width: 120}
       ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
         return '￥'+d.realAmount;
@@ -80,7 +80,7 @@ layui.define(['table', 'form'], function(exports){
         ,area: ['600px', '580px']
         ,id: 'LAY-popup-refund-add'
         ,success: function(layero, index){
-          view(this.id).render('order/refund-order', data).done(function(){
+          view(this.id).render('device/product/order/refund-order', data).done(function(){
             form.render(null, 'layuiadmin-form-order');
             
 
@@ -216,5 +216,5 @@ layui.define(['table', 'form'], function(exports){
     }
   });
 
-  exports('refund', {})
+  exports('device-refund', {})
 });
