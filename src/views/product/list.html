@@ -48,7 +48,7 @@
     </div>
     
     <div class="layui-card-body">
-      <div style="padding-bottom: 10px;">
+      <div style="padding-bottom: 10px;" id="btn" name="btn">
         <!-- <button class="layui-btn layuiadmin-btn-product" data-type="batchdel">删除</button> -->
         <button class="layui-btn layuiadmin-btn-product" data-type="add">添加</button>
       </div>
@@ -89,6 +89,11 @@ layui.use('product', layui.factory('product')).use(['admin', 'table'], function(
   ,form = layui.form;
 
   form.render(null, 'layadmin-product-front-formlist');
+
+  let roleId = layui.data(setter.tableName).role_id;
+  if (roleId !== 1) {
+    $("#btn").hide();
+  }
   
   //监听搜索
   form.on('submit(LAY-product-front-search)', function(data){

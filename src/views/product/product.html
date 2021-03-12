@@ -32,6 +32,15 @@
     <label class="layui-form-label">单位：分钟</label>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">最大购买量</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="limitNum" value="{{ d.params.limitNum || '' }}" placeholder="0" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+    <label class="layui-form-label">单位：分钟</label>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">已售数量</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
@@ -51,6 +60,19 @@
         </select> 
       </script>
     </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">项目类型</label>
+    <div class="layui-input-inline" lay-filter="layui-input-roles">
+      <script type="text/html" template>
+          <select name="productType">
+            <option value="-1">请选择</option>
+            <option value=0 {{# if(d.params.productType == 0){ }}selected{{# } }}>网红项目</option> 
+            <option value=1 {{# if(d.params.productType == 1){ }}selected{{# } }}>自助扫码</option> 
+          </select>
+      </script>
+    </div>
+    <label class="layui-form-label">单位：分钟</label>
   </div>
   <div class="layui-form-item">
     <label class="layui-form-label">图片</label>
@@ -142,6 +164,14 @@
         </script>
       </div>
     </div>
+    <div class="layui-form-item" id="universal" name="universal">
+      <label class="layui-form-label">万能码</label>
+      <div class="layui-input-inline">
+        <script type="text/html" template>
+          <input type="checkbox" lay-filter="switch" name="is_universal" {{ d.params.isUniversal ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+        </script>
+      </div>
+    </div>
 
   <script type="text/html" id="address" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/address?address={{d.params.address}}" lay-done="layui.data.sendParams(d)">
   </script>
@@ -175,6 +205,16 @@ layui.use(['admin', 'form', 'upload'], function(){
       $(this.item).prev("div").children("input").val(res.data.src)
     }
   });
+  let roleId = layui.data(setter.tableName).role_id;
+  let name = $("#name").val();
+  if (roleId != 1) {
+    if (name != undefined && name != '') {
+      $("#universal").hide();
+      $("input[name='name']").attr('readonly', true);
+      $("input[name='limitNum']").attr('readonly', true);
+      $("input[name='productType']").attr('readonly', true);
+    }
+  }
 });
  
 </script>
@@ -270,4 +310,13 @@ layui.use(['admin', 'form', 'upload'], function(){
     map.on('click', showInfoClick);
     map.on('dblclick', showInfoDbClick);
   }
+</script>
+
+<script>
+  var select = 0;
+  var username = "";
+  var that = this;
+  layui.data.getUser = function(d) {
+    that.username = d.data.username;
+  };
 </script>

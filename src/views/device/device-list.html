@@ -17,8 +17,8 @@
     <div class="layui-card-body">     
 
       <div style="padding-bottom: 10px;">
-        <!-- <button class="layui-btn layuiadmin-btn-product" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-ad" data-type="add">添加</button>
+        <button class="layui-btn layui-btn-danger layuiadmin-btn-device" data-type="batchdel">删除</button>
+        <button class="layui-btn layuiadmin-btn-device" data-type="add">添加</button>
       </div>
       
       <table id="LAY-device-manage" lay-filter="LAY-device-manage"></table>
@@ -35,8 +35,10 @@
         {{#  } }}
       </script>
       <script type="text/html" id="table-ad-webuser">
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="open"><i class="layui-icon layui-icon-play"></i>开机</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="close"><i class="layui-icon layui-icon-close"></i>关机</a>
+        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="error"><i class="layui-icon layui-icon-delete"></i>损坏</a>
+        <!-- <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a> -->
       </script>
     </div>
   </div>
@@ -66,11 +68,19 @@ layui.use('device', layui.factory('device')).use(['admin', 'table'], function(){
   //事件
   var active = {
     batchdel: function(){
-      var checkStatus = table.checkStatus('LAY-device-manage')
-      ,checkData = checkStatus.data; //得到选中的数据
+      var checkStatus = table.checkStatus('LAY-device-manage');
+      checkData = checkStatus.data; //得到选中的数据
 
       if(checkData.length === 0){
         return layer.msg('请选择数据');
+      }
+      deList="";
+      checkData.forEach(function(n,i){
+        deList += n.id+",";
+      });
+      if (deList != "") {
+        let len = deList.length;
+        deList = deList.slice(0, len - 1);
       }
       
       layer.prompt({
@@ -80,14 +90,26 @@ layui.use('device', layui.factory('device')).use(['admin', 'table'], function(){
         layer.close(index);
         
         layer.confirm('确定删除吗？', function(index) {
-          
-          //执行 Ajax 后重载
-          /*
+          field = [];
+          field.id = deList;
+          field.access_token = layui.data(setter.tableName).access_token;
+
           admin.req({
-            url: 'xxx'
-            //,……
-          });
-          */
+            url: setter.remoteurl+'/system-device/device'
+            ,method: 'DELETE'
+            ,data: {"device_ids": deList,"access_token": layui.data(setter.tableName).access_token}
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("删除成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
           table.reload('LAY-device-manage');
           layer.msg('已删除');
         });
@@ -133,7 +155,7 @@ layui.use('device', layui.factory('device')).use(['admin', 'table'], function(){
     }
   };
   
-  $('.layui-btn.layuiadmin-btn-ad').on('click', function(){
+  $('.layui-btn.layuiadmin-btn-device').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
   });

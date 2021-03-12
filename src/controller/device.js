@@ -22,12 +22,12 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       // ,{field: 'adId', width: 100, title: 'ID', sort: true}
-      ,{field: 'device_name', title: '设备名称', width: 295}
-      ,{field: 'username', title: '商户名称', width: 285}
-      ,{field: 'device_uuid', title: '设备编号', width: 260}
+      ,{field: 'device_name', title: '设备名称', width: 265}
+      ,{field: 'username', title: '商户名称', width: 255}
+      ,{field: 'device_uuid', title: '设备编号', width: 230}
       ,{field: 'status', title: '状态',templet: '#buttonTpl',align: 'center',width: 100}
       // ,{field: 'img', title: '照片', width: 200, templet: '#imgTpl'}
-      ,{title: '操作', align:'center', fixed: 'right',width: 165, toolbar: '#table-ad-webuser'}
+      ,{title: '操作', align:'center', fixed: 'right', toolbar: '#table-ad-webuser'}
     ]]
     ,page: true
     ,limit: 30
@@ -49,7 +49,7 @@ layui.define(['table', 'form'], function(exports){
         
         layer.confirm('真的删除行么', function(index){
           admin.req({
-            url: setter.remoteurl+'/ad/adverts'
+            url: setter.remoteurl+'/system-device/devices'
             ,method: 'DELETE'
             ,data: {advert_id: data.id}
             ,success: function(res){
@@ -105,6 +105,90 @@ layui.define(['table', 'form'], function(exports){
             });
           });
         }
+      });
+    }else if(obj.event === 'open'){
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('真的删除行么', function(index){
+          admin.req({
+            url: setter.remoteurl+'/ad/adverts'
+            ,method: 'DELETE'
+            ,data: {advert_id: data.id}
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("删除成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
+          obj.del();
+          layer.close(index);
+        });
+      });
+    } else if(obj.event === 'close'){
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('真的删除行么', function(index){
+          admin.req({
+            url: setter.remoteurl+'/ad/adverts'
+            ,method: 'DELETE'
+            ,data: {advert_id: data.id}
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("删除成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
+          obj.del();
+          layer.close(index);
+        });
+      });
+    } else if(obj.event === 'error'){
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('真的删除行么', function(index){
+          admin.req({
+            url: setter.remoteurl+'/ad/adverts'
+            ,method: 'DELETE'
+            ,data: {advert_id: data.id}
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("删除成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
+          obj.del();
+          layer.close(index);
+        });
       });
     }
   });

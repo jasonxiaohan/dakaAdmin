@@ -21,6 +21,8 @@ layui.define(['table', 'form'], function(exports){
       access_token: layui.data(setter.tableName).access_token,
     }
     ,totalRow: true
+    ,toolbar: true
+    ,title: '订单数据表'
     ,cols: [[
       // {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
       {field: 'orderNo', width: 250, title: '订单号', sort: true, totalRowText: '合计'}
@@ -54,9 +56,32 @@ layui.define(['table', 'form'], function(exports){
         none: '暂无数据'
     },
     done: function(res, curr, count){
-      console.log(res);
       this.elem.next().find('.layui-table-total td[data-field="realAmount"] .layui-table-cell').text('¥'+res.total_amount.toFixed(2));
+      exportData = res.data;
     }
+  });
+
+  //导出按钮
+  $(".export").click(function(){
+        var ins1=table.render({
+        elem: '#LAY-order-manage',
+        url: setter.remoteurl+'/order/orders', //模拟接口
+        method: 'get',
+        title: '订单数据表',
+        where: {
+            access_token: layui.data(setter.tableName).access_token,
+            limit: 1000000,
+        },
+        limit: 10,
+        cols: [[
+            {field: 'id', title: 'ID'},
+            {field: 'name', title: '名字'},
+        ]],
+        done: function (res, curr, count) {
+            exportData = res.data;
+            table.exportFile('fdfdfd', exportData, 'xls');
+        }
+      });
   });
   
   //监听工具条

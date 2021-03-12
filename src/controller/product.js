@@ -30,7 +30,7 @@ layui.define(['table', 'form'], function(exports){
       ,{field: 'img', title: '相片', width: 120, templet: '#imgTpl'}
       ,{field: 'descr', title: '描述', minWidth: 100}
       ,{field: 'enabled', title: '状态',templet: '#buttonTpl', width: 150, align: 'center'}
-      ,{title: '操作', align:'center', fixed: 'right',width: 210, toolbar: '#table-product-webuser'}
+      ,{title: '操作', align:'center', fixed: 'right',width: 220, toolbar: '#table-product-webuser'}
     ]]
     ,page: true
     ,limit: 10
@@ -44,6 +44,10 @@ layui.define(['table', 'form'], function(exports){
   table.on('tool(LAY-product-manage)', function(obj){
     var data = obj.data;
     if(obj.event === 'del'){
+      if (layui.data(setter.tableName).role_id != 1) {
+          layer.msg('无删除权限', {icon: 5});
+          return;
+      }
       layer.prompt({
         formType: 1
         ,title: '敏感操作，请验证口令'
