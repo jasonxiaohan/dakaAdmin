@@ -14,14 +14,14 @@ layui.define(['table', 'form'], function(exports){
   ,form = layui.form;
 
   // 订单管理
-  table.render({
+  var ins1 = table.render({
     elem: '#LAY-order-manage'
     ,url: setter.remoteurl+'/order/orders' //模拟接口
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
     }
     ,totalRow: true
-    ,toolbar: true
+    // ,toolbar: true
     ,title: '订单数据表'
     ,cols: [[
       // {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
@@ -57,29 +57,54 @@ layui.define(['table', 'form'], function(exports){
     },
     done: function(res, curr, count){
       this.elem.next().find('.layui-table-total td[data-field="realAmount"] .layui-table-cell').text('¥'+res.total_amount.toFixed(2));
-      exportData = res.data;
+      //exportData = res.data;
     }
   });
+  /*$("#export").click(function(){
+    table.exportFile(ins1.config.id, exportData, 'xls');
+  })*/
 
   //导出按钮
-  $(".export").click(function(){
-        var ins1=table.render({
-        elem: '#LAY-order-manage',
+  $("#export").click(function(){
+        var ins2=table.render({
+        elem: '#LAY-order-manage1',
         url: setter.remoteurl+'/order/orders', //模拟接口
         method: 'get',
         title: '订单数据表',
         where: {
             access_token: layui.data(setter.tableName).access_token,
             limit: 1000000,
-        },
-        limit: 10,
-        cols: [[
-            {field: 'id', title: 'ID'},
-            {field: 'name', title: '名字'},
-        ]],
-        done: function (res, curr, count) {
-            exportData = res.data;
-            table.exportFile('fdfdfd', exportData, 'xls');
+        }
+        ,cols: [[
+          // {field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+          {field: 'orderNo', width: 250, title: '订单号', sort: true, templet: function(d) {
+              return d.orderNo + "\t";
+          }}
+          ,{field: 'nickName', title: '用户名', width: 120}
+          ,{field: 'username', title: '商户名称', width: 180}
+          ,{field: 'realAmount', title: '实付金额', width: 100,templet: function(d) {
+            return '￥'+d.realAmount;
+          }}
+          ,{field: 'payableAmount', title: '应付金额', width: 100, templet: function(d) {
+              return '￥'+d.payableAmount; 
+          }}
+          ,{field: 'discount', title: '折扣优惠', width: 100, templet: function(d) {
+            return '￥'+d.discount;
+          }}
+          ,{field: 'ticketNums', title: '购票数量', width: 100}
+          ,{field: 'payStatus', title: '支付状态', width: 100, templet:function(d) {
+            if (d.payStatus == 0) {
+              return '未付款';
+            } 
+            return '已付款';
+          }} 
+          ,{field: 'consumeStatus', title: '消费状态', width: 90, templet: '#buttonTpl', align: 'center'}
+          ,{field: 'refundStatus', title: '退款状态', width: 90, templet: '#refundTpl', align: 'center'}
+          ,{field: 'createTime', title: '下单时间', sort: true,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
+          ,{title: '操作', width: 160, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
+        ]]
+        ,done: function (res, curr, count) {
+            table.exportFile(ins2.config.id, res.data, 'xls');
         }
       });
   });

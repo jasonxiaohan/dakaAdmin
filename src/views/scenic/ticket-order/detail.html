@@ -1,0 +1,135 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-order" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">产品名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 150px;">{{ d.params.title }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">订单编号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label">{{ d.params.orderNo }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">分销商</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label">{{ d.params.merchantName }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">供应商</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 120px;">
+           {{#  if(d.params.enterType == 1){ }}
+            一单一个票据
+           {{#  } else if(d.params.enterType == 2){ }}
+            每人一个凭据
+           {{#  } else if(d.params.enterType == 3){ }}
+            实名制
+           {{# } }}
+        </label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">总金额</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label">¥ {{ d.params.payableAmount }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">应付金额</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label">¥ {{ d.params.realAmount }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">下单时间</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 150px;">{{layui.util.toDateString(d.params.createTime, 'yyyy-MM-dd HH:mm:ss') }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">支付时间</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 150px;">{{layui.util.toDateString(d.params.payTime, 'yyyy-MM-dd HH:mm:ss') }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">预定日期</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 150px;">{{layui.util.toDateString(d.params.scheduledTime, 'yyyy-MM-dd') }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">联系人手机号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 150px;">{{ d.params.cellPhone }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">联系人姓名</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 100px;">{{ d.params.userName }}</label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">身份证号码</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 135px;">{{d.params.idCard }}</label>
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-order-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form', 'upload'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,upload = layui.upload;
+  form.render();
+  
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>

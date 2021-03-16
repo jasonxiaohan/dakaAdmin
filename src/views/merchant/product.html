@@ -62,7 +62,7 @@
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">商品原价</label>
+    <label class="layui-form-label">商品成本价</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="text" name="original_price" value="{{ d.params.original_price || '' }}" lay-verify="required" placeholder="请输入商品原价" autocomplete="off" class="layui-input">
@@ -70,7 +70,7 @@
     </div>
   </div>
   <div class="layui-form-item">
-    <label class="layui-form-label">商品售价</label>
+    <label class="layui-form-label">建议售价</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="text" name="sell_price" value="{{ d.params.sell_price || '' }}" lay-verify="required" placeholder="请输入商品售价" autocomplete="off" class="layui-input">
@@ -121,7 +121,7 @@
     <label class="layui-form-label">有效日期</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
-        <input type="text" class="layui-input" name="invalidTime" id="invalidTime" placeholder="yyyy-MM-dd" placeholder=" - " value="{{ d.params.invalid_start_time }} - {{ d.params.invalid_end_time }}">
+        <input type="text" class="layui-input" name="invalidTime" id="invalidTime" placeholder="yyyy-MM-dd" value="{{ layui.util.toDateString(d.params.invalid_start_time, 'yyyy-MM-dd') }} - {{ layui.util.toDateString(d.params.invalid_end_time, 'yyyy-MM-dd') }}">
       </script>
     </div>
   </div>
@@ -131,7 +131,7 @@
       <script type="text/html" template>
         <input type="text" name="limit_id_number" lay-verify="" placeholder="身份证前缀,多个以‘,’分隔" autocomplete="off" class="layui-input" value="{{ d.params.limit_id_number || '' }}"></input>
         <input type="radio" name="limit_type" value="1" title="仅含" {{# if(d.params.limit_type == 1){ }}checked=""{{# } }}>
-        <input type="radio" name="limit_type" value="1" title="排除" {{# if(d.params.limit_type == 2){ }}checked=""{{# } }}>
+        <input type="radio" name="limit_type" value="2" title="排除" {{# if(d.params.limit_type == 2){ }}checked=""{{# } }}>
       </script>
     </div>
   </div>

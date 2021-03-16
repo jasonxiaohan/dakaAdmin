@@ -20,6 +20,7 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
+      ,{field: 'merchant_id', title: '#ID', width: 80}
       ,{field: 'merchant_name', title: '商家名称', width: 300}
       ,{field: 'category_name', title: '商家类型', width: 300}
       ,{field: 'hot_line', title: '咨询电话', width: 300}
@@ -72,7 +73,7 @@ layui.define(['table', 'form','util'], function(exports){
         ,area: ['700px', '620px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
-          view(this.id).render('merchant/merchant', data).done(function(){
+          view(this.id).render('scenic/merchant/merchant', data).done(function(){
             form.render(null, 'layuiadmin-form-merchant');
                      
             //监听提交

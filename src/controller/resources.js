@@ -125,6 +125,7 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
+      ,{field: 'adminId', title: '#ID'}
       ,{field: 'partner_name', title: '合作方账号'}
       ,{field: 'resources', title: '景区资源', width: 250}
       ,{field: 'contract', title: '联系人', width: 160,templet:function(d) {

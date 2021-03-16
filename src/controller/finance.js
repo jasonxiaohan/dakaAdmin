@@ -12,43 +12,6 @@ layui.define(['table', 'form','util'], function(exports){
   ,util = layui.util
   ,form = layui.form;
 
-  
-  //监听工具条
-  table.on('tool(LAY-user-manage)', function(obj){
-    var data = obj.data;
-    if(obj.event === 'del'){
-      layer.prompt({
-        formType: 1
-        ,title: '敏感操作，请验证口令'
-      }, function(value, index){
-        layer.close(index);
-        
-        layer.confirm('真的删除行么', function(index){
-          obj.del();
-          layer.close(index);
-        });
-      });
-    } else if(obj.event === 'edit'){
-      admin.popup({
-        title: '编辑用户'
-        ,area: ['500px', '450px']
-        ,id: 'LAY-popup-user-add'
-        ,success: function(layero, index){
-          view(this.id).render('user/user/userform', data).done(function(){
-            form.render(null, 'layuiadmin-form-useradmin');
-            
-            //监听提交
-            form.on('submit(LAY-user-front-submit)', function(data){
-              var field = data.field; //获取提交的字段
-              layui.table.reload('LAY-user-manage'); //重载表格
-              layer.close(index); //执行关闭 
-            });
-          });
-        }
-      });
-    }
-  });
-
   //资金账户列表
   table.render({
     elem: '#LAY-financelist-manage'
@@ -57,11 +20,11 @@ layui.define(['table', 'form','util'], function(exports){
       access_token: layui.data(setter.tableName).access_token,
       level: 1,
       is_resource: 1,
-      partner_type: 1,
+      partner_type: 3,
     }
     ,cols: [[
-      {field: 'partner_name', title: '商户'},
-      ,{field: 'contract', title: '已消费', templet:function(d) {
+      {field: 'partner_name', title: '商户'}
+      ,{field: 'margin', title: '已消费', templet:function(d) {
         return parseFloat(d.margin-d.availableMargin);
       }}
       ,{field: 'availableMargin', title: '可消费', templet:function(d) {
@@ -236,106 +199,6 @@ layui.define(['table', 'form','util'], function(exports){
           });
         }
       });
-    }
-  });
-
-  //角色管理
-  table.render({
-    elem: '#LAY-user-back-role'
-    ,url: setter.remoteurl+'/systemrole/roles'
-    ,where: {
-      access_token: layui.data(setter.tableName).access_token
-    }
-    ,cols: [[
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'roleId', width: 80, title: 'ID', sort: true}
-      ,{field: 'roleName', title: '角色名'}
-      ,{field: 'rights', title: '拥有权限'}
-      ,{field: 'descr', title: '具体描述'}
-      ,{title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-resources-manager'}
-    ]]
-    ,text: {
-        none: '暂无数据'
-      }
-  });
-  
-  //监听工具条
-  table.on('tool(LAY-user-back-role)', function(obj){
-    var data = obj.data;
-    if(obj.event === 'del'){
-      layer.confirm('确定删除此角色？', function(index){
-        admin.req({
-          url: setter.remoteurl+'/systemrole/roles'
-          ,method: 'DELETE'
-          ,data: {"roleId": obj.data.roleId}
-          ,success: function(res){
-            if (res.code == 0) {
-              layer.msg("删除成功",{time: 1000,icon: 1},function(){
-                  var index = parent.layer.getFrameIndex(window.name);
-                  parent.layer.close(index);
-                  window.parent.location.reload();
-              });
-            } else {
-              layer.msg(res.msg, {icon: 5});
-            }
-          }
-        }); 
-        obj.del();
-        layer.close(index);
-      });
-    }else if(obj.event === 'edit'){
-      admin.popup({
-        title: '修改新角色'
-        ,area: ['500px', '480px']
-        ,id: 'LAY-popup-user-add'
-        ,success: function(layero, index){
-          view(this.id).render('user/administrators/roleform', data).done(function(){
-            form.render(null, 'layuiadmin-form-role');
-            
-            //监听提交
-            form.on('submit(LAY-user-role-submit)', function(data){
-              var field = data.field; //获取提交的字段
-
-              //提交 Ajax 成功后，关闭当前弹层并重载表格
-              admin.req({
-                url: setter.remoteurl+'/systemrole/roles'
-                ,method: 'PUT'
-                ,data: field
-                ,success: function(res){
-                  if (res.code == 0) {
-                    layer.msg("修改成功",{time: 1000,icon: 1},function(){
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
-                        window.parent.location.reload();
-                    });
-                  } else {
-                    layer.msg(res.msg, {icon: 5});
-                  }
-                }
-              }); 
-              layui.table.reload('LAY-user-back-role'); //重载表格
-              layer.close(index); //执行关闭 
-            });
-          });
-        }
-      });
-    } else {
-       admin.req({
-        url: setter.remoteurl+'/systemrole/roles'
-        ,method: 'POST'
-        ,data: obj.field
-        ,success: function(res){
-          if (res.code == 0) {
-            layer.msg("添加成功",{time: 1000,icon: 1},function(){
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                window.parent.location.reload();
-            });
-          } else {
-            layer.msg(res.msg, {icon: 5});
-          }
-        }
-      }); 
     }
   });
 

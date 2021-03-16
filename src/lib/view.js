@@ -101,6 +101,9 @@ layui.define(['laytpl', 'layer'], function(exports){
         else if(res[response.statusName] == statusCode.logout){
           view.exit();
         }
+        else if (res.code == -1) {
+          view.exit();
+        }
         
         //其它异常
         else {

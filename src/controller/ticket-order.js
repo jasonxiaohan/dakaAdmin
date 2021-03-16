@@ -24,18 +24,27 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
-      // ,{field: 'nickName', title: '用户名', width: 120}
+      ,{field: 'cellName', title: '客人信息', width: 160, templet: function(d){
+        return d.userName+' '+d.cellPhone;
+      }}
+      ,{field: 'ticketNums', title: '数量', width: 120, templet: function(d){
+          var ticket = '购'+d.ticketNums+'/退';
+          if (d.refund_status == 1) {
+            ticket+=d.ticketNums;
+          } else {
+            ticket+='0';
+          }
+          if (d.consumeStatus == 1) {
+            ticket+='/用'+d.ticketNums;
+          } else {
+              ticket+='/用0';
+          }
+          return ticket;
+       }}
       ,{field: 'merchantName', title: '分销商名称', width: 180}
-      ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
+      ,{field: 'realAmount', title: '金额', width: 80, templet: function(d) {
         return '￥'+d.realAmount;
       }}
-      ,{field: 'payableAmount', title: '应付金额', width: 100, templet: function(d) {
-          return '￥'+d.payableAmount; 
-      }}
-      ,{field: 'discount', title: '折扣优惠', width: 100, templet: function(d) {
-        return '￥'+d.discount;
-      }}
-      ,{field: 'ticketNums', title: '购票数量', width: 100}
       ,{field: 'payStatus', title: '支付状态', width: 100, templet:function(d) {
         if (d.payStatus == 0) {
           return '未付款';
@@ -89,7 +98,7 @@ layui.define(['table', 'form'], function(exports){
     } else if(obj.event === 'edit'){
       admin.popup({
         title: '订单详情页'
-        ,area: ['600px', '580px']
+        ,area: ['700px', '650px']
         ,id: 'LAY-popup-order-add'
         ,success: function(layero, index){
           view(this.id).render('order/order', data).done(function(){
@@ -151,6 +160,18 @@ layui.define(['table', 'form'], function(exports){
           obj.del();
           layer.close(index);
         });
+      });
+    } else if(obj.event === 'view'){
+      admin.popup({
+        title: '订单详情'
+        ,area: ['600px', '650px']
+        ,id: 'LAY-popup-refund-add'
+        ,success: function(layero, index){
+          view(this.id).render('scenic/ticket-order/detail', data).done(function(){
+            form.render(null, 'layuiadmin-form-order');
+
+          });
+        }
       });
     } else if(obj.event === 'download') {
       alert("下载图片");

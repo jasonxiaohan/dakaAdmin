@@ -85,8 +85,11 @@
     </div>
     
     <div class="layui-card-body">
-      <button class="export">导出报表</button>
+      <button class="layui-btn" id="export">
+            <i class="iconfont icon-export"></i> 导出
+      </button>
       <table id="LAY-order-manage" lay-filter="LAY-order-manage"></table>
+      <table id="LAY-order-manage1" style="display: none;"></table>
       <script type="text/html" id="imgTpl"> 
         <img style="display: inline-block;" src= {{ d.img }}>
       </script> 

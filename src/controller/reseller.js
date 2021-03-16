@@ -23,6 +23,7 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
+      ,{field: 'adminId', title: '#ID'}      
       ,{field: 'partner_name', title: '分销商账号'}
       ,{field: 'protocol_name', title: '价格协议', width: 250}
       ,{field: 'contract', title: '联系人', width: 160,templet:function(d) {
@@ -116,8 +117,49 @@ layui.define(['table', 'form','util'], function(exports){
         }
       });
     } else if(obj.event === 'merchant-product-list'){ 
-      console.log(data);
       location.href = '#/merchant/product-list/merchant_id='+data.adminId;
+    } else if (obj.event === 'callback') {
+      admin.popup({
+        title: '编辑商家'
+        ,area: ['700px', '620px']
+        ,id: 'LAY-popup-user-add'
+        ,success: function(layero, index){
+          view(this.id).render('channel/reseller', data).done(function(){
+            form.render(null, 'layuiadmin-form-merchant');
+                     
+            //监听提交
+            form.on('submit(LAY-user-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
+              var authority = new Array();
+              $("input[name='authority']:checked").each(function(){
+                  authority.push($(this).val());
+              });
+              field.authority = authority.join(',');
+
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              admin.req({
+                url: setter.remoteurl+'/systemadmin/users'
+                ,method: 'PUT'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+
+              layui.table.reload('LAY-user-back-manage'); //重载表格
+              layer.close(index); //执行关闭 
+            });
+          });
+        }
+      });
     } 
   });
 

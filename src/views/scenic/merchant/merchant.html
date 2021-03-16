@@ -180,7 +180,9 @@ layui.use(['admin', 'form','layarea'], function(){
   layui.data.ticketModes = function(d){
     layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
       var ticketModeRes = $("input[name='ticketModeRes']").val();
+      console.log(ticketModeRes);
       var ticketModArr = ticketModeRes.split('|');
+      console.log(ticketModArr);
       $.each($("input[name='ticketMode']"),function (val,e){
         for (var i = ticketModArr.length - 1; i >= 0; i--) {
             if ($(this).attr("data") == ticketModArr[i]) {
