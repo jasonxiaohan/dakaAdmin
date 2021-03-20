@@ -24,13 +24,27 @@ layui.define(['table', 'form'], function(exports){
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
-      ,{field: 'nickName', title: '用户名', width: 120}
-      ,{field: 'merchantName', title: '分销商', width: 180}
-      ,{field: 'cellPhone', title: '手机号', width: 120}
-      ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {
+      ,{field: 'cellName', title: '客人信息', width: 160, templet: function(d){
+        return d.userName+' '+d.cellPhone;
+      }}
+      ,{field: 'ticketNums', title: '数量', width: 120, templet: function(d){
+          var ticket = '购'+d.ticketNums+'/退';
+          if (d.refundStatus == 1) {
+            ticket+=d.ticketNums;
+          } else {
+            ticket+='0';
+          }
+          if (d.consumeStatus == 1) {
+            ticket+='/用'+d.ticketNums;
+          } else {
+              ticket+='/用0';
+          }
+          return ticket;
+       }}
+      ,{field: 'merchantName', title: '分销商名称', width: 180}
+      ,{field: 'realAmount', title: '金额', width: 80, templet: function(d) {
         return '￥'+d.realAmount;
       }}
-      ,{field: 'ticketNums', title: '购票数量', width: 100}
       ,{field: 'refundStatus', title: '退款状态', width: 90, templet: '#refundTpl', align: 'center'}
       ,{field: 'createTime', title: '申请时间', sort: true,templet:function(d){return util.toDateString(d.updateTime, "yyyy-MM-dd HH:mm:ss");}}
       ,{title: '操作', width: 160, align:'center', fixed: 'right', toolbar: '#table-refund-webuser'}
@@ -75,15 +89,14 @@ layui.define(['table', 'form'], function(exports){
         });
       });
     } else if(obj.event === 'view'){
-      admin.popup({
+      layer.open({
         title: '退单记录'
         ,area: ['600px', '580px']
         ,id: 'LAY-popup-refund-add'
         ,success: function(layero, index){
-          view(this.id).render('order/refund-order', data).done(function(){
+          view(this.id).render('scenic/ticket-order/refund-order', data).done(function(){
             form.render(null, 'layuiadmin-form-order');
             
-
           });
         }
       });

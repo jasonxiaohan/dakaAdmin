@@ -15,6 +15,18 @@
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">项目类型</label>
+    <div class="layui-input-inline" lay-filter="layui-input-roles">
+      <script type="text/html" template>
+          <select name="product_type">
+            <option value="-1">请选择</option>
+            <option value=0 {{# if(d.params.product_type == 0){ }}selected{{# } }}>网红项目</option> 
+            <option value=1 {{# if(d.params.product_type == 1){ }}selected{{# } }}>自助扫码</option> 
+          </select>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">出码来源</label>
     <div class="layui-input-inline" lay-filter="layui-input-categorys">
       <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/system-channel/channel-list" lay-done="layui.data.categorys(d)">                
@@ -27,14 +39,14 @@
       </script>
     </div>
   </div>
-   <div class="layui-form-item">
+   <!-- <div class="layui-form-item">
     <label class="layui-form-label">票源代码</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
         <input type="text" name="ticket_code" value="{{ d.params.ticket_code || '' }}" lay-verify="required" placeholder="请输入票源代码" autocomplete="off" class="layui-input">
       </script>
     </div>
-  </div>
+  </div> -->
   <div class="layui-form-item">
     <label class="layui-form-label">商品分类</label>
     <div class="layui-input-inline" lay-filter="layui-input-categorys">

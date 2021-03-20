@@ -85,7 +85,7 @@ layui.define(['table', 'form','util'], function(exports){
         ,area: ['750px', '750px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
-          view(this.id).render('merchant/product', data).done(function(){
+          view(this.id).render('scenic/merchant/product', data).done(function(){
             form.render(null, 'layuiadmin-form-product');
                      
             //监听提交

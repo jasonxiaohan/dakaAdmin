@@ -1,53 +1,195 @@
-<title>设置我的密码</title>
+ <style>
+    #container {
+      width: 420%;
+      height: 600%;
+    }
+</style>
 
-<div class="layui-card layadmin-header">
-  <div class="layui-breadcrumb" lay-filter="breadcrumb">
-    <a lay-href="">主页</a>
-    <a><cite>设置</cite></a>
-    <a><cite>我的密码</cite></a>
+<div class="layui-form" lay-filter="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">对接商户</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="hidden" name="admin_id" value="{{ d.params.adminId }}">
+        <input type="text" readonly="readonly" name="partner_name" value="{{ d.params.partner_name || '' }}" lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </script>
+    </div>
   </div>
-</div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">对方发送短信</label>
+    <div class="layui-input-block">
+       <script type="text/html" template>
+        <input type="checkbox" lay-filter="switch" name="is_send_sms" {{ d.params.isSendSms ? 'checked' : '' }} lay-skin="switch" lay-text="是|否">
+        </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">选择对接系统</label>
+    <div class="layui-input-inline" lay-filter="layui-input-categorys">
+      <script type="text/html" id="categorys" template lay-url="{{ layui.setter.remoteurl }}/system-channel/channel-list" lay-done="layui.data.categorys(d)">                
+      <select name="channel_id" lay-verify="" lay-filter="LAY-merchant-category-type">
+          <option value="-1">请选择</option>
+          {{# layui.each(d.data,(i,row)=> { }}
+              <option value="{{ row.channelId }}" {{# if(d.params.channelId == row.channelId){ }}selected{{# } }}>{{ row.channelName  }}</option>
+          {{# }); }}
+        </select> 
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">signkey</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <input type="text" name="sign_key" value="{{ d.params.signkey || '' }}" lay-verify="required" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">callbackUrl</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <input type="text" name="callback_url" value="{{ d.params.callbackUrl || '' }}" lay-verify="required" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+
+  <script type="text/html" id="address" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/address?address={{d.params.address}}" lay-done="layui.data.sendParams(d)">
+  </script>
   
-<div class="layui-fluid">
-  <div class="layui-row layui-col-space15">
-    <div class="layui-col-md12">
-      <div class="layui-card">
-        <div class="layui-card-header">修改密码</div>
-        <div class="layui-card-body" pad15>
-          
-          <div class="layui-form" lay-filter="">
-            <div class="layui-form-item">
-              <label class="layui-form-label">当前密码</label>
-              <div class="layui-input-inline">
-                <input type="password" name="oldPassword" lay-verify="required" lay-verType="tips" class="layui-input">
-              </div>
-            </div>
-            <div class="layui-form-item">
-              <label class="layui-form-label">新密码</label>
-              <div class="layui-input-inline">
-                <input type="password" name="password" lay-verify="pass" lay-verType="tips" autocomplete="off" id="LAY_password" class="layui-input">
-              </div>
-              <div class="layui-form-mid layui-word-aux">6到16个字符</div>
-            </div>
-            <div class="layui-form-item">
-              <label class="layui-form-label">确认新密码</label>
-              <div class="layui-input-inline">
-                <input type="password" name="repassword" lay-verify="repass" lay-verType="tips" autocomplete="off" class="layui-input">
-              </div>
-            </div>
-            <div class="layui-form-item">
-              <div class="layui-input-block">
-                <button class="layui-btn" lay-submit lay-filter="setmypass">确认修改</button>
-              </div>
-            </div>
-          </div>
-          
-        </div>
-      </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
     </div>
   </div>
 </div>
 
 <script>
-layui.use('set', layui.factory('set'));
+layui.use(['admin', 'form'], function(){
+  var $ = layui.$
+  ,form = layui.form;
+  form.render();
+});
+</script>
+
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>
+
+<script type="text/javascript">
+  layui.data.sendParams = function(d) {
+    //地图加载
+    var map = new AMap.Map("container", {
+        resizeEnable: true
+    });
+    //输入提示
+    var autoOptions = {
+        input: "tipinput"
+    };
+    var auto = new AMap.Autocomplete(autoOptions);
+    var placeSearch = new AMap.PlaceSearch({
+        map: map
+    });  //构造地点查询类
+    if (d.data != "undefined") {
+      placeSearch.search(d.data, function (status, result) {
+         // 查询成功时，result即对应匹配的POI信息
+         var pois = result.poiList.pois;
+          for(var i = 0; i < 1; i++){
+              var poi = pois[i];
+              var marker = [];
+              marker[i] = new AMap.Marker({
+                  position: poi.location,   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                  title: poi.name
+              });
+              // 将创建的点标记添加到已有的地图实例：
+              map.add(marker[i]);
+          }
+          map.setFitView();
+
+      });
+    }
+
+    AMap.event.addListener(auto, "select", select);//注册监听，当选中某条记录时会触发
+    function select(e) {
+        placeSearch.setCity(e.poi.adcode);
+        // placeSearch.search(e.poi.name);  //关键字查询查询
+    }
+
+    var geocoder,marker;
+    function regeoCode(longlat) {
+        if(!geocoder){
+            geocoder = new AMap.Geocoder({
+                city: "010", //城市设为北京，默认：“全国”
+                radius: 1000 //范围，默认：500
+            });
+        }
+        var lnglat  = longlat.split(',');
+         if(!marker){
+            marker = new AMap.Marker();
+            map.add(marker);
+        }
+        marker.setPosition(lnglat);
+        
+        geocoder.getAddress(lnglat, function(status, result) {
+            if (status === 'complete'&&result.regeocode) {
+                var address = result.regeocode.formattedAddress;
+                document.getElementById("address").value = address;
+            }else{
+                log.error('根据经纬度查询地址失败')
+            }
+        });
+    }
+
+    function showInfoClick(e){
+        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置单击了地图！'
+        regeoCode(e.lnglat.getLng()+","+e.lnglat.getLat());
+        // document.querySelector("#text").innerText = text;
+        document.getElementById("longitude").value = e.lnglat.getLng();
+        document.getElementById("latitude").value = e.lnglat.getLat();
+    }
+    function showInfoDbClick(e){
+        var text = '您在 [ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ] 的位置双击了地图！'
+        regeoCode(e.lnglat.getLng()+","+e.lnglat.getLat());
+        document.getElementById("longitude").value = e.lnglat.getLng();
+        document.getElementById("latitude").value = e.lnglat.getLat();
+        // document.querySelector("#text").innerText = text;
+    }
+    
+    // 绑定事件
+    map.on('click', showInfoClick);
+    map.on('dblclick', showInfoDbClick);
+  }
+</script>
+
+<script>
+  layui.data.authoritys = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+      var authorityRes = $("input[name='authorityRes']").val();
+      console.log(authorityRes);
+      var authorityArr = authorityRes.split('|');
+      $.each($("input[name='authority']"),function (val,e){
+        for (var i = authorityArr.length - 1; i >= 0; i--) {
+            if ($(this).val() == authorityArr[i]) {
+              $(e).prop("checked", true);
+            } 
+        }
+        form.render();
+      })
+    form.render();
+  });
+  };
+</script>
+
+<script type="text/javascript">
+  
+  layui.data.categorys = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
 </script>

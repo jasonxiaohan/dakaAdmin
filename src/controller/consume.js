@@ -81,41 +81,15 @@ layui.define(['table', 'form'], function(exports){
           layer.close(index);
         });
       });
-    } else if(obj.event === 'edit'){
-      admin.popup({
-        title: '订单详情页'
-        ,area: ['600px', '580px']
-        ,id: 'LAY-popup-consume-add'
+    } else if(obj.event === 'view'){
+      layer.open({
+        title: '订单详情'
+        ,area: ['600px', '650px']
+        ,id: 'LAY-popup-refund-add'
         ,success: function(layero, index){
-          view(this.id).render('order/order', data).done(function(){
+          view(this.id).render('scenic/ticket-order/detail', data).done(function(){
             form.render(null, 'layuiadmin-form-order');
             
-            //监听提交
-            form.on('submit(LAY-consume-back-submit)', function(data){
-              var field = data.field; //获取提交的字段
-
-              //提交 Ajax 成功后，关闭当前弹层并重载表格
-              //$.ajax({});
-              admin.req({
-                url: setter.remoteurl+'/order/orders'
-                ,method: 'PUT'
-                ,data: field
-                ,success: function(res){
-                  if (res.code == 0) {
-                    layer.msg("修改成功",{time: 1000,icon: 1},function(){
-                        var index = parent.layer.getFrameIndex(window.name);
-                        parent.layer.close(index);
-                        window.parent.location.reload();
-                    });
-                  } else {
-                    layer.msg(res.msg, {icon: 5});
-                  }
-                }
-              }); 
-
-              layui.table.reload('LAY-consume-manage'); //重载表格
-              layer.close(index); //执行关闭 
-            });
           });
         }
       });

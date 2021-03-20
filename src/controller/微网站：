@@ -1,0 +1,30 @@
+微网站：
+文档：https://www.tapd.cn/37614108/prong/iterations/card_view#iterationId=1137614108001000029&perPage=50&sort=&order=&wallCardType=story&timespan=1615878706124
+
+UI：https://www.figma.com/file/BfGNz7W07aMT7trORztky6/20210315%E2%80%94%E2%80%94%E5%BE%AE%E7%BD%91%E7%AB%99
+
+
+ALTER TABLE `xmjz`.`store_web_site` 
+ADD COLUMN `aunt_recommnd_switch` tinyint(1) NULL DEFAULT 1 COMMENT '推荐阿姨模块 0:关闭，1:开启' AFTER `show_aunt`,
+ADD COLUMN `service_team_switch` tinyint(1) NULL DEFAULT 1 COMMENT '服务团队模块 0:关闭，1:开启' AFTER `aunt_recommnd_switch`,
+ADD COLUMN `customer_praise_switch` tinyint(1) NULL DEFAULT 1 COMMENT '客户好评模块 0:关闭，1:开启' AFTER `service_team_switch`,
+ADD COLUMN `wikipedia_switch` tinyint(1) NULL COMMENT '常识百科模块 0:关闭 1:开启' AFTER `customer_praise_switch`;
+ALTER TABLE `xmjz`.`store_web_site` 
+MODIFY COLUMN `service_team_switch` tinyint(1) NULL DEFAULT 1 COMMENT '服务团队模块 0:不显示，1：自定义 2:最新更新' AFTER `aunt_recommnd_switch`,
+ADD COLUMN `customer_praise_uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '服务团队模块 ，以逗号\",\"隔开' AFTER `service_team_switch`;
+
+ALTER TABLE `xmjz`.`store_web_site` 
+ADD COLUMN `service_ensure` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '服务保障说明，json串格式' AFTER `wikipedia_switch`;
+
+ALTER TABLE `xmjz`.`user_service` 
+ADD COLUMN `wx_unionid` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT '' COMMENT '微信unionid' AFTER `wxOpenid`;
+
+
+ALTER TABLE `xmjz`.`store_web_site_read_log` 
+ADD COLUMN `website_user_id` bigint(20) NULL COMMENT '微网站用户id' AFTER `share_user_id`;
+
+ALTER TABLE `xmjz`.`store_web_site_read_log` 
+ADD COLUMN `share_user_id` bigint(20) NULL DEFAULT 0 COMMENT '分享人id' AFTER `store_id`;
+
+ALTER TABLE `xmjz`.`store_web_site` 
+ADD COLUMN `template_uuid` varchar(150) NULL COMMENT '模版uuid,json串格式（新微网站）' AFTER `template_sub_uuid`;

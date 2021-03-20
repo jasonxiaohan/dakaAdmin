@@ -28,7 +28,7 @@ layui.define(['table', 'form','util'], function(exports){
     ,url: setter.remoteurl+'/system-merchant-product/products'
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
-      protocol_id: $('#protocol_id').val(),
+      protocol_selected: $('#protocol_id').val(),
     }
      ,toolbar: '#toolbarProduct'
     ,cols: [[

@@ -120,26 +120,21 @@ layui.define(['table', 'form','util'], function(exports){
       location.href = '#/merchant/product-list/merchant_id='+data.adminId;
     } else if (obj.event === 'callback') {
       admin.popup({
-        title: '编辑商家'
+        title: '对接'
         ,area: ['700px', '620px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
-          view(this.id).render('channel/reseller', data).done(function(){
+          view(this.id).render('scenic/channel/callback', data).done(function(){
             form.render(null, 'layuiadmin-form-merchant');
                      
             //监听提交
             form.on('submit(LAY-user-back-submit)', function(data){
               var field = data.field; //获取提交的字段
-              var authority = new Array();
-              $("input[name='authority']:checked").each(function(){
-                  authority.push($(this).val());
-              });
-              field.authority = authority.join(',');
 
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               admin.req({
-                url: setter.remoteurl+'/systemadmin/users'
-                ,method: 'PUT'
+                url: setter.remoteurl+'/systemadmin/channel-setting'
+                ,method: 'POST'
                 ,data: field
                 ,success: function(res){
                   if (res.code == 0) {

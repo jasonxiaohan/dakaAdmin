@@ -162,7 +162,7 @@ layui.define(['table', 'form'], function(exports){
         });
       });
     } else if(obj.event === 'view'){
-      admin.popup({
+      layer.open({
         title: '订单详情'
         ,area: ['600px', '650px']
         ,id: 'LAY-popup-refund-add'

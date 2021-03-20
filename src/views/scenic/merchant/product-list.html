@@ -104,7 +104,7 @@ layui.use('merchant-product', layui.factory('merchant-product')).use(['admin', '
         ,area: ['750px', '750px']
         ,id: 'LAY-popup-merchant-product-add'
         ,success: function(layero, index){
-          view(this.id).render('merchant/product').done(function(){
+          view(this.id).render('scenic/merchant/product').done(function(){
             form.render(null, 'layuiadmin-form-merchant');
             
             //监听提交
