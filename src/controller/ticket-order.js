@@ -29,13 +29,9 @@ layui.define(['table', 'form'], function(exports){
       }}
       ,{field: 'ticketNums', title: '数量', width: 120, templet: function(d){
           var ticket = '购'+d.ticketNums+'/退';
-          if (d.refund_status == 1) {
-            ticket+=d.ticketNums;
-          } else {
-            ticket+='0';
-          }
-          if (d.consumeStatus == 1) {
-            ticket+='/用'+d.ticketNums;
+          ticket+=d.refundNums;
+          if (d.consumeNums != 0) {
+            ticket+='/用'+d.consumeNums;
           } else {
               ticket+='/用0';
           }
@@ -54,7 +50,7 @@ layui.define(['table', 'form'], function(exports){
       ,{field: 'consumeStatus', title: '消费状态', width: 90, templet: '#buttonTpl', align: 'center'}
       ,{field: 'refundStatus', title: '退款状态', width: 90, templet: '#refundTpl', align: 'center'}
       ,{field: 'createTime', title: '下单时间', sort: true,templet:function(d){return util.toDateString(d.createTime, "yyyy-MM-dd HH:mm:ss");}}
-      ,{title: '操作', width: 160, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
+      ,{title: '操作', width: 200, align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
     ]]
     ,page: true
     ,limit: 10
@@ -95,13 +91,13 @@ layui.define(['table', 'form'], function(exports){
           layer.close(index);
         });
       });
-    } else if(obj.event === 'edit'){
+    } else if(obj.event === 'operate'){
       admin.popup({
         title: '订单详情页'
-        ,area: ['700px', '650px']
+        ,area: ['750px', '700px']
         ,id: 'LAY-popup-order-add'
         ,success: function(layero, index){
-          view(this.id).render('order/order', data).done(function(){
+          view(this.id).render('scenic/ticket-order/operate', data).done(function(){
             form.render(null, 'layuiadmin-form-order');
             
             //监听提交
@@ -111,7 +107,7 @@ layui.define(['table', 'form'], function(exports){
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});
               admin.req({
-                url: setter.remoteurl+'/order/orders'
+                url: setter.remoteurl+'/system-merchant-order/orders'
                 ,method: 'PUT'
                 ,data: field
                 ,success: function(res){
@@ -164,8 +160,9 @@ layui.define(['table', 'form'], function(exports){
     } else if(obj.event === 'view'){
       layer.open({
         title: '订单详情'
-        ,area: ['600px', '650px']
+        ,area: ['750px', '700px']
         ,id: 'LAY-popup-refund-add'
+        ,btn: ['确定']
         ,success: function(layero, index){
           view(this.id).render('scenic/ticket-order/detail', data).done(function(){
             form.render(null, 'layuiadmin-form-order');

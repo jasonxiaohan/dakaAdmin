@@ -25,7 +25,7 @@ layui.define(['table', 'form','util'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'product_name', title: '商品名称', width: 150}
+      ,{field: 'product_name', title: '商品名称', width: 180}
       ,{field: 'ticket_source', title: '出码来源', width: 150, templet:function(d){
         if (d.ticket_source == 1) {
           return '极速部落出码';
@@ -33,11 +33,11 @@ layui.define(['table', 'form','util'], function(exports){
           return '票付通';
         }
       }}
-      ,{field: 'ticket_code', title: '票源代码', width: 150}
-      ,{field: 'sell_price', title: '售价', width: 70}
+      ,{field: 'ticket_code', title: '票源代码', width: 180}
+      ,{field: 'sell_price', title: '售价', width: 80}
       ,{field: 'merchant_name', title: '商家名称', width: 150}
       ,{field: 'category_name', title: '商家类型', width: 150}
-      ,{title: '操作', width: 300, align: 'center', fixed: 'right', toolbar: '#table-merchant-product-manager'}
+      ,{title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-merchant-product-manager'}
     ]]
     ,done: function(res, curr, count) {
       layer.closeAll();
@@ -79,7 +79,7 @@ layui.define(['table', 'form','util'], function(exports){
           layer.close(index);
         });
       });
-    }else if(obj.event === 'edit'){ 
+    } else if(obj.event === 'edit'){ 
       admin.popup({
         title: '编辑商家商品'
         ,area: ['750px', '750px']
@@ -105,6 +105,48 @@ layui.define(['table', 'form','util'], function(exports){
                 ,success: function(res){
                   if (res.code == 0) {
                     layer.msg("修改成功",{time: 1000,icon: 1},function(){
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                        window.parent.location.reload();
+                    });
+                  } else {
+                    layer.msg(res.msg, {icon: 5});
+                  }
+                }
+              }); 
+
+              layui.table.reload('LAY-user-back-manage'); //重载表格
+              layer.close(index); //执行关闭 
+            });
+          });
+        }
+      });
+    } else if(obj.event === 'buy'){ 
+      admin.popup({
+        title: '产品购买'
+        ,area: ['750px', '750px']
+        ,id: 'LAY-popup-user-add'
+        ,success: function(layero, index){
+          view(this.id).render('merchant/merchant-buy', data).done(function(){
+            form.render(null, 'layuiadmin-form-product');
+                     
+            //监听提交
+            form.on('submit(LAY-user-back-submit)', function(data){
+              var field = data.field; //获取提交的字段
+              var required= new Array();
+              $("input[name='required']:checked").each(function(){
+                  required.push($(this).val());
+              });
+              field.required = required.join(',');
+
+              //提交 Ajax 成功后，关闭当前弹层并重载表格
+              admin.req({
+                url: setter.remoteurl+'/mall-order/order'
+                ,method: 'POST'
+                ,data: field
+                ,success: function(res){
+                  if (res.code == 0) {
+                    layer.msg("购买成功",{time: 1000,icon: 1},function(){
                         var index = parent.layer.getFrameIndex(window.name);
                         parent.layer.close(index);
                         window.parent.location.reload();

@@ -16,10 +16,10 @@ layui.define(['table', 'form'], function(exports){
   //网红项目管理
   table.render({
     elem: '#LAY-scan-manage'
-    ,url: setter.remoteurl+'/scan/scans' //模拟接口
+    ,url: setter.remoteurl+'/scan/merchant-scans' 
     ,where: {
       access_token: layui.data(setter.tableName).access_token,
-      source: 0,
+      source: 1,
     }
     ,cols: [[
     {type: 'checkbox', fixed: 'left'}
@@ -79,7 +79,7 @@ layui.define(['table', 'form'], function(exports){
         ,area: ['450px', '550px']
         ,id: 'LAY-popup-scan-edit'        
         ,success: function(layero, index){
-          view(this.id).render('device/product/system/scan', data).done(function(){
+          view(this.id).render('/merchant/scan', data).done(function(){
             form.render(null, 'layuiadmin-form-scan');
             
             //监听提交
@@ -117,5 +117,5 @@ layui.define(['table', 'form'], function(exports){
   });
 
 
-  exports('scan', {})
+  exports('merchant-scan', {})
 });

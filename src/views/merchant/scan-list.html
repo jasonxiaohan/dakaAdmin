@@ -1,65 +1,73 @@
 
 
-<title>价格协议</title>
+<title>网红游乐项目</title>
   
 <div class="layui-card layadmin-header">
   <div class="layui-breadcrumb" lay-filter="breadcrumb">
     <a lay-href="">主页</a>
-    <a><cite>渠道管理</cite></a>
-    <a><cite>价格协议</cite></a>
+    <a><cite>设置</cite></a>
+    <a><cite>扫码人员</cite></a>
   </div>
 </div>
 
-<div class="layui-fluid">   
+<div class="layui-fluid">
   <div class="layui-card">
-    <!-- <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-protocol-formlist">
+    <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-scan-front-formlist">
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label">搜索产品</label>
+          <label class="layui-form-label">姓名</label>
           <div class="layui-input-block">
-            <input type="text" name="product_name" placeholder="请输入" autocomplete="off" class="layui-input">
+            <input type="text" name="username" placeholder="请输入" autocomplete="off" class="layui-input">
           </div>
         </div>
         <div class="layui-inline">
-          <label class="layui-form-label">搜索商户</label>
+          <label class="layui-form-label">商户名称</label>
           <div class="layui-input-block">
-            <input type="text" name="merchant_name" placeholder="请输入" autocomplete="off" class="layui-input">
+            <script id="role" type="text/html" template lay-url="{{ layui.setter.remoteurl }}/systemadmin/userlist" lay-done="layui.data.data(d)">               
+            <select name="adminId" lay-verify="" lay-filter="LAY-user-admin-type">
+                <option value="-1">全部商户</option>
+                {{# layui.each(d.data,(i,row)=> { }}
+                    <option value="{{ row.adminId }}" >{{ row.username  }}</option>
+                {{# }); }}
+              </select> 
+            </script>
           </div>
-        </div>     
+        </div>
         <div class="layui-inline">
-          <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-recourse-back-search">
+          <button class="layui-btn layuiadmin-btn-scan" lay-submit lay-filter="LAY-scan-front-search">
             <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
           </button>
         </div>
       </div>
-    </div> -->
+    </div>
     
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
-        <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建价格协议</i></button>
+        <!-- <button class="layui-btn layuiadmin-btn-scan" data-type="batchdel">删除</button> -->
+        <button class="layui-btn layuiadmin-btn-scan" data-type="add">添加</button>
       </div>
       
-      <table id="LAY-protocol-manage" lay-filter="LAY-protocol-manage"></table>  
+      <table id="LAY-scan-manage" lay-filter="LAY-scan-manage"></table>
+      <script type="text/html" id="imgTpl"> 
+        <img style="display: inline-block;" src= {{ d.img }}>
+      </script> 
       <script type="text/html" id="buttonTpl">
         {{#  if(d.enabled == true){ }}
-          <button class="layui-btn layui-btn-xs">已审核</button>
+          <button class="layui-btn layui-btn-xs">有效</button>
         {{#  } else { }}
-          <button class="layui-btn layui-btn-primary layui-btn-xs">未审核</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs">无效</button>
         {{#  } }}
       </script>
-      <script type="text/html" id="table-protocol-manager">
+      <script type="text/html" id="table-scan-webuser">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="author"><i class="layui-icon layui-icon-edit"></i>授权产品</a>
-        <!-- <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="author_merchant"><i class="layui-icon layui-icon-edit"></i>授权商户</a> -->
-        
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
       </script>
     </div>
   </div>
 </div>
 
 <script>
-layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', 'channel-protocol', 'table'], function(){
+layui.use('merchant-scan', layui.factory('merchant-scan')).use(['admin', 'table'], function(){
   var $ = layui.$
   ,admin = layui.admin
   ,view = layui.view
@@ -67,14 +75,14 @@ layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', '
   ,setter = layui.setter
   ,form = layui.form;
   
-  form.render(null, 'layadmin-protocol-formlist');
+  form.render(null, 'layadmin-scan-front-formlist');
   
   //监听搜索
-  form.on('submit(LAY-recourse-back-search)', function(data){
+  form.on('submit(LAY-scan-front-search)', function(data){
     var field = data.field;
     
     //执行重载
-    table.reload('LAY-protocol-manage', {
+    table.reload('LAY-scan-manage', {
       where: field
     });
   });
@@ -82,13 +90,13 @@ layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', '
   //事件
   var active = {
     batchdel: function(){
-      var checkStatus = table.checkStatus('LAY-protocol-manage')
+      var checkStatus = table.checkStatus('LAY-scan-manage')
       ,checkData = checkStatus.data; //得到选中的数据
 
       if(checkData.length === 0){
         return layer.msg('请选择数据');
       }
-
+      
       layer.prompt({
         formType: 1
         ,title: '敏感操作，请验证口令'
@@ -96,28 +104,35 @@ layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', '
         layer.close(index);
         
         layer.confirm('确定删除吗？', function(index) {
-          table.reload('LAY-protocol-manage');
+          
+          //执行 Ajax 后重载
+          /*
+          admin.req({
+            url: 'xxx'
+            //,……
+          });
+          */
+          table.reload('LAY-user-manage');
           layer.msg('已删除');
         });
-      }); 
+      });
     }
     ,add: function(){
       admin.popup({
-        title: '创建价格协议'
-        ,area: ['500px', '450px']
-        ,id: 'LAY-popup-protocol-add'
+        title: '添加扫码人员'
+        ,area: ['450px', '450px']
+        ,id: 'LAY-popup-scan-add'
         ,success: function(layero, index){
-          view(this.id).render('channel/protocol').done(function(){
-            form.render(null, 'layuiadmin-form-admin');
-            
+          view(this.id).render('merchant/scan').done(function(){
+            form.render(null, 'layuiadmin-form-scan');
             //监听提交
-            form.on('submit(LAY-user-back-submit)', function(data){
+            form.on('submit(LAY-scan-back-submit)', function(data){
               var field = data.field; //获取提交的字段
-
+              
               //提交 Ajax 成功后，关闭当前弹层并重载表格
               //$.ajax({});
               admin.req({
-                url: setter.remoteurl+'/system-protocol/protocol'
+                url: setter.remoteurl+'/scan/scans'
                 ,method: 'POST'
                 ,data: field
                 ,success: function(res){
@@ -133,29 +148,28 @@ layui.use('channel-protocol', layui.factory('channel-protocol')).use(['admin', '
                 }
               }); 
 
-              layui.table.reload('LAY-protocol-manage'); //重载表格
+              layui.table.reload('LAY-scan-manage'); //重载表格
               layer.close(index); //执行关闭 
-            });
+            })
           });
         }
       });
-    }
-  }  
-  $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+    },
+  };
+  
+  $('.layui-btn.layuiadmin-btn-scan').on('click', function(){
     var type = $(this).data('type');
     active[type] ? active[type].call(this) : '';
   });
+  
 });
+
 </script>
 
 <script type="text/javascript">
-  layui.data.roles = function(d){
+  layui.data.data = function(d){
     layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
     form.render();
   });
   };
-
-  function selectSingle(id) {
-    console.log(id);
-  }
 </script>

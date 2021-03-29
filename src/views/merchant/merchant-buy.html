@@ -1,0 +1,212 @@
+ <style>
+    #container {
+      width: 420%;
+      height: 600%;
+    }
+    .plus-minus .layui-input-block{position: relative;}
+    .plus-minus input{position: absolute;top: 0px;left: 0px;text-align: center;}
+    .plus-minus button:nth-of-type(1){position: absolute;top: 0px;left: 0px;height: 100%;}
+    .plus-minus button:last-child{position: absolute;top: 0px;right: 0px;height: 100%;}
+</style>
+<div class="layui-form" lay-filter="layuiadmin-form-product" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">商品名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="hidden" name="product_no" value="{{ d.params.product_id }}">
+        <input type="hidden" name="merchant_no" value="{{ d.params.merchant_id }}">
+        <input type="hidden" name="timestamp" value="{{ d.params.product_id }}">
+        <label class="layui-form-label" style="width: 180px;text-align:left">{{ d.params.product_name }} </label>
+      </script>
+    </div>
+  </div> 
+  <div class="layui-form-item">
+    <label class="layui-form-label">建议零售价</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 180px;text-align:left">¥ {{ d.params.author_price }} </label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">实际售价</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="sell_price" id="sell_price" value="{{ d.params.sell_price || '' }}" lay-verify="required" placeholder="请输入商品售价" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">游玩日期</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="scheduledTime" id="scheduledTime" value="" lay-verify="required" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="plus-minus">
+    <div class="layui-form-item">
+    <label class="layui-form-label">购买数量</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+         <input type="number" name="ticket_num" id="ticket_num" data-step="1" value="1" data-minvalue="1" lay-verify="required" placeholder="0" autocomplete="off" class="layui-input num">
+      </script>
+    </div>
+  </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">共计 ¥</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+         <input type="text" id="payable_amount" name="payable_amount" data-step="1" value="{{ d.params.original_price }}" lay-verify="required" autocomplete="off" class="layui-input">
+         <input type="hidden" id="real_amount" name="real_amount" value="{{ d.params.original_price }}">
+      </script>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+    <label class="layui-form-label">游客姓名</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input name="user_name" lay-verify="" placeholder="" autocomplete="off" class="layui-input"></input>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">手机号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input name="mobile" lay-verify="" placeholder="" autocomplete="off" class="layui-input"></input>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">身份证号</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input name="id_card" lay-verify="" placeholder="" autocomplete="off" class="layui-input"></input>
+      </script>
+    </div>
+  </div>
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-user-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+//配置插件目录
+layui.config({
+    base: './mods/'
+    , version: '1.2'
+});
+
+layui.use(['admin', 'form','layarea', 'upload', 'laydate', 'common'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,layarea = layui.layarea
+  ,setter = layui.setter
+  ,laydate = layui.laydate
+  ,upload = layui.upload;
+  form.render();
+
+  layarea.render({
+    elem: '#area-picker',
+    data: {
+        province: $("input[name='hide_province']").val(),
+        city: $("input[name='hide_city']").val(),
+        county: $("input[name='hide_area']").val(),
+      },
+      change: function (res) {
+
+      },
+  });
+
+  //上传图片
+  upload.render({
+    elem: '#layuiadmin-upload-product'
+    ,url: setter.remoteurl+'/upload/upload?access_token='+layui.data(setter.tableName).access_token
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+    }
+    ,accept: 'images'
+    ,method: 'POST'
+    ,acceptMime: 'image/*'
+    ,done: function(res){
+      $(this.item).prev("div").children("input").val(res.data.src)
+    }
+  });
+
+
+   //监听指定开关
+  form.on('radio(switchInvalid)', function(data){
+    // 指定日期方式
+    if (data.value == 1) {
+        $("#layui-form-invalid_time").show();
+    } else {
+      $("#layui-form-invalid_time").hide();
+    }
+  });
+  
+  laydate.render({
+    elem: '#scheduledTime'
+    ,type: 'date'
+  });
+
+  
+  laydate.render({
+    elem: '#invalidTime'
+    ,type: 'date'
+    ,range: true
+  });
+
+  //限定可选时间
+  laydate.render({
+    elem: '#advance_time'
+    ,type: 'time'
+    //,min: '09:30:00'
+    //,max: '17:30:00'
+    ,btns: ['clear', 'confirm']
+  });
+  $("#ticket_num").on("input",function(e){
+        var price = $("#sell_price").val() * e.delegateTarget.value;
+        $("#payable_amount").val(price);
+        $("#real_amount").val(price);
+    });
+});
+</script>
+
+<script type="text/javascript">
+  layui.data.categorys = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+  layui.data.invalidType = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{       
+      var invalid_type = $("input[name='invalid_type']:checked").val();
+      if (invalid_type == 1) {
+        $("#layui-form-invalid_time").show();
+      }
+    form.render();
+  });
+  };
+  layui.data.requireds = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+      var requiredRes = $("input[name='requiredRes']").val();
+      var requiredArr = requiredRes.split('|');
+      $.each($("input[name='required']"),function (val,e){
+        for (var i = requiredArr.length - 1; i >= 0; i--) {
+            if ($(this).attr("data") == requiredArr[i]) {
+              $(e).prop("checked", true);
+            } 
+        }
+        form.render();
+      })
+    form.render();
+  });
+  };
+</script>

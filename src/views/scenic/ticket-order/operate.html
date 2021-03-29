@@ -1,0 +1,129 @@
+
+
+<div class="layui-form" lay-filter="layuiadmin-form-order" style="padding: 20px 30px 0 0;">
+  <div class="layui-form-item">
+    <label class="layui-form-label">订单编号</label>
+    <div class="layui-input-block">
+      <script type="text/html" template>
+        <input type="hidden" name="orderNo" value="{{ d.params.orderNo }} " lay-verify="required|number">
+        <label class="layui-form-label" style="width: 180px;text-align:left">{{ d.params.orderNo }} </label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">项目名称</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 180px;text-align:left">{{ d.params.title }} </label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">实付金额</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 180px;text-align:left">¥ {{ d.params.realAmount }} </label>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">已购买</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 180px;text-align:left"> {{ d.params.ticketNums }} 张</label>
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">已核销</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <label class="layui-form-label" style="width: 150px;text-align:left">{{ d.params.consumeNums }} 张</label>
+      </script>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">消费数量</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <input type="text" name="consumeNums" value="0" lay-verify="required|number" placeholder="" autocomplete="off" class="layui-input">
+      </script>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">已退票</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <label class="layui-form-label" style="width: 150px;text-align:left">{{ d.params.refundNums }} 张</label>
+      </script>
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">退票数量</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+          <input type="text" name="refundNums" value="0" placeholder="" autocomplete="off" class="layui-input">
+      </script>
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">重发短信</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="checkbox" name="resendSms" lay-skin="switch" lay-text="是|否">
+      </script>
+    </div>
+  </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">转发短信</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="forwardSms" value="" placeholder="" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">预定时间</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" id="scheduledTime" name="scheduledTime" placeholder="yyyy-MM-dd HH:mm:ss" value="{{ layui.util.toDateString(d.params.scheduledTime, 'yyyy-MM-dd HH:mm:ss') }}" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"></label>
+    <div class="layui-input-inline">
+      <input type="button" lay-submit lay-filter="LAY-order-back-submit" value="确认" class="layui-btn">
+    </div>
+  </div>
+</div>
+
+<script>
+layui.use(['admin', 'form', 'upload', 'laydate'], function(){
+  var $ = layui.$
+  ,form = layui.form
+  ,setter = layui.setter
+  ,laydate = layui.laydate
+  ,upload = layui.upload;
+  form.render();
+  
+  laydate.render({
+    elem: '#scheduledTime'
+    ,type: 'datetime'
+  });
+
+});
+ 
+</script>
+
+<script type="text/javascript">
+  layui.data.roles = function(d){
+    layui.use(['form','laytpl','jquery'],(form,laytpl,$)=>{  
+    form.render();
+  });
+  };
+</script>
