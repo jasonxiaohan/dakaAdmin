@@ -41,10 +41,14 @@
     </div>
     
     <div class="layui-card-body">
-      <div style="padding-bottom: 10px;">
-        <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建分销商</i></button>
-      </div>
+        <script type="text/html" id="table-account-admin">
+           {{#  if(d.roleId == 1 || d.roleId == 4){ }}
+          <div style="padding-bottom: 10px;">
+            <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
+            <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建分销商</i></button>
+          </div>
+           {{#  } }}
+         </script>
       
       <table id="LAY-reseller-manage" lay-filter="LAY-reseller-manage"></table>  
       <script type="text/html" id="buttonTpl">

@@ -124,7 +124,7 @@ layui.define(['table', 'form','util'], function(exports){
     } else if(obj.event === 'buy'){ 
       admin.popup({
         title: '产品购买'
-        ,area: ['750px', '750px']
+        ,area: ['550px', '650px']
         ,id: 'LAY-popup-user-add'
         ,success: function(layero, index){
           view(this.id).render('merchant/merchant-buy', data).done(function(){
@@ -161,7 +161,7 @@ layui.define(['table', 'form','util'], function(exports){
               layer.close(index); //执行关闭 
             });
           });
-        }
+        },
       });
     } else if(obj.event === 'merchant-product-list'){ 
       location.href = '#/merchant/product-list/merchant_id='+data.merchant_id;
