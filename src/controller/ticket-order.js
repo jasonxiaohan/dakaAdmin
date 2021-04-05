@@ -23,7 +23,9 @@ layui.define(['table', 'form'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'orderNo', width: 250, title: '订单号', sort: true}
+      ,{field: 'orderNo', width: 250, title: '产品信息', sort: true, templet: function(d){
+         return d.title+' '+d.orderNo;
+      }}
       ,{field: 'cellName', title: '客人信息', width: 160, templet: function(d){
         return d.userName+' '+d.cellPhone;
       }}
@@ -54,6 +56,59 @@ layui.define(['table', 'form'], function(exports){
     ]]
     ,page: true
     ,limit: 10
+    // ,height: 'full-320'
+    ,text: {
+        none: '暂无数据'
+      }
+  });
+
+  // 验票管理
+  table.render({
+    elem: '#LAY-order-ticket-manage'
+    ,url: setter.remoteurl+'/order/merchant-orders' //模拟接口
+    ,cellMinWidth: 80
+    ,where: {
+      access_token: layui.data(setter.tableName).access_token,
+      source: 1,
+      consumeStatus: 0,
+      refundStatus: 0,
+    }
+     ,cols: [[
+      {field: 'orderNo', title: '产品信息', sort: true, templet: function(d){
+         return d.title+' '+d.orderNo;
+      }}
+      ,{field: 'cellName', title: '客人信息', templet: function(d){
+        return d.userName+' '+d.cellPhone;
+      }}
+      ,{field: 'ticketNums', title: '数量', templet: function(d){
+          var ticket = '购'+d.ticketNums+'/退';
+          ticket+=d.refundNums;
+          if (d.consumeNums != 0) {
+            ticket+='/用'+d.consumeNums;
+          } else {
+              ticket+='/用0';
+          }
+          return ticket;
+       }}
+      ,{field: 'payStatus', title: '支付状态', templet:function(d) {
+        if (d.payStatus == 0) {
+          return '未付款';
+        } 
+        return '已付款';
+      }} 
+      ,{field: 'consumeStatus', title: '消费状态', templet: '#buttonTpl', align: 'center'}
+      ,{field: 'refundStatus', title: '退款状态', templet: '#refundTpl', align: 'center'}
+      ,{field: 'completionTime', title: '最近核销时间', align: 'left', templet:function(d)
+        {
+          if (d.completionTime == null) {
+            return "";
+          }
+          return util.toDateString(d.completionTime, "yyyy-MM-dd HH:mm:ss");
+        }
+      }
+      ,{field: 'consume_num', title: '使用数量', edit: 'text', align: 'center'}
+      ,{title: '操作', align:'center', fixed: 'right', toolbar: '#table-order-webuser'}
+    ]]
     // ,height: 'full-320'
     ,text: {
         none: '暂无数据'
@@ -144,6 +199,56 @@ layui.define(['table', 'form'], function(exports){
             ,success: function(res){
               if (res.code == 0) {
                 layer.msg("退款成功",{time: 1000,icon: 1},function(){
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+              } else {
+                layer.msg(res.msg, {icon: 5});
+              }
+            }
+          }); 
+          obj.del();
+          layer.close(index);
+        });
+      });
+    } else if(obj.event === 'view'){
+      layer.open({
+        title: '订单详情'
+        ,area: ['750px', '700px']
+        ,id: 'LAY-popup-refund-add'
+        ,btn: ['确定']
+        ,success: function(layero, index){
+          view(this.id).render('scenic/ticket-order/detail', data).done(function(){
+            form.render(null, 'layuiadmin-form-order');
+
+          });
+        }
+      });
+    } else if(obj.event === 'download') {
+      alert("下载图片");
+    }
+  });
+
+  //监听工具条
+  table.on('tool(LAY-order-ticket-manage)', function(obj){
+    var data = obj.data;
+    if(obj.event === 'use-ticket'){
+      console.log(data);
+      layer.prompt({
+        formType: 1
+        ,title: '敏感操作，请验证口令'
+      }, function(value, index){
+        layer.close(index);
+        
+        layer.confirm('确认使用么?', function(index){
+          admin.req({
+            url: setter.remoteurl+'/system-merchant-order/orders'
+            ,method: 'PUT'
+            ,data: {orderNo: data.orderNo,consumeNums: data.consume_num}
+            ,success: function(res){
+              if (res.code == 0) {
+                layer.msg("验票成功",{time: 1000,icon: 1},function(){
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
                     window.parent.location.reload();

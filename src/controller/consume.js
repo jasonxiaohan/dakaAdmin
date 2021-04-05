@@ -24,8 +24,12 @@ layui.define(['table', 'form'], function(exports){
     }
     ,cols: [[
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'orderNo', width: 230, title: '订单号', sort: true}
-      ,{field: 'nickName', title: '用户名', width: 120}
+      ,{field: 'orderNo', width: 250, title: '产品信息', sort: true, templet: function(d){
+         return d.title+' '+d.orderNo;
+      }}
+      ,{field: 'cellName', title: '客人信息', width: 160, templet: function(d){
+        return d.userName+' '+d.cellPhone;
+      }}
       ,{field: 'merchantName', title: '分销商名称', width: 180}
       ,{field: 'cellPhone', title: '手机号', width: 120}
       ,{field: 'realAmount', title: '实付金额', width: 100, templet: function(d) {

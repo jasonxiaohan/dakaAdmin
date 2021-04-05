@@ -36,15 +36,18 @@
 
     <div class="layui-card-body">
       <div style="padding-bottom: 10px;">
-        <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="batchdel">删除</button> -->
-        <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建商品</i></button>
+        <script type="text/html" template>
+            {{# if(layui.data(layui.setter.tableName).role_id == 1){ }}
+            <button class="layui-btn layuiadmin-btn-admin layui-btn-sm" data-type="add"><i class="layui-icon">创建商品</i></button>
+            {{#  } }}
+        </script>
       </div>
       
       <table id="LAY-merchant-product-manage" lay-filter="LAY-merchant-product-manage"></table>  
       <script type="text/html" id="table-merchant-product-manager">
         <a class="layui-btn layui-btn-xs" lay-event="buy"><i class="layui-icon layui-icon-cart-simple"></i>购买</a>
         <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-        {{#  if(layui.data(layui.setter.tableName).role_id == '1'){ }}
+        {{# if(layui.data(layui.setter.tableName).role_id == '1'){ }}
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         {{#  } }}
       </script>

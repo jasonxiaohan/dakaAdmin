@@ -29,7 +29,7 @@
     <label class="layui-form-label">开启状态</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
-        <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.enabled ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
+        <input type="checkbox" lay-filter="switch" name="enabled" {{ d.params.paymentEnabled ? 'checked' : '' }} lay-skin="switch" lay-text="开启|关闭">
         <input type="hidden" name="adminId" value="{{ d.params.adminId }}">
       </script>
     </div>

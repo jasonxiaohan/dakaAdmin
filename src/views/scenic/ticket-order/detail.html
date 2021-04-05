@@ -81,6 +81,15 @@
       </script>
     </div>
   </div>
+   <div class="layui-form-item">
+    <label class="layui-form-label">核销时间</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <label class="layui-form-label" style="width: 150px;text-align:left">{{
+        d.params.completionTime ? layui.util.toDateString(d.params.completionTime, 'yyyy-MM-dd HH:mm:ss') : '' }}</label>
+      </script>
+    </div>
+  </div>
   <div class="layui-form-item">
     <label class="layui-form-label">联系人手机号</label>
     <div class="layui-input-inline">
