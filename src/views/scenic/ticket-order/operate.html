@@ -90,7 +90,7 @@
     <label class="layui-form-label">预定时间</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
-        <input type="text" id="scheduledTime" name="scheduledTime" placeholder="yyyy-MM-dd HH:mm:ss" value="{{ layui.util.toDateString(d.params.scheduledTime, 'yyyy-MM-dd HH:mm:ss') }}" autocomplete="off" class="layui-input">
+        <input type="text" id="scheduledTime" name="scheduledTime" placeholder="yyyy-MM-dd" value="{{ layui.util.toDateString(d.params.scheduledTime, 'yyyy-MM-dd') }}" autocomplete="off" class="layui-input">
       </script>
     </div>
   </div>
@@ -113,7 +113,7 @@ layui.use(['admin', 'form', 'upload', 'laydate'], function(){
   
   laydate.render({
     elem: '#scheduledTime'
-    ,type: 'datetime'
+    ,type: 'date'
   });
 
 });

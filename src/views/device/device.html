@@ -23,6 +23,14 @@
     </div>
   </div>
   <div class="layui-form-item">
+    <label class="layui-form-label">设备负责人</label>
+    <div class="layui-input-inline">
+      <script type="text/html" template>
+        <input type="text" name="sell_name" value="{{ d.params.sell_name || '' }}" lay-verify="required" placeholder="请输入设备负责人名称" autocomplete="off" class="layui-input">
+      </script>
+    </div>
+  </div>
+  <div class="layui-form-item">
     <label class="layui-form-label">设备编号</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
@@ -30,7 +38,7 @@
       </script>
     </div>
   </div>
-  <div class="layui-form-item">
+  <!-- <div class="layui-form-item">
     <label class="layui-form-label">图片</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
@@ -38,14 +46,11 @@
       </script>
     </div>
     <button style="float: left;" type="button" class="layui-btn" id="layuiadmin-upload-device">上传图片</button> 
-  </div>
-  <div class="layui-form-item">
+  </div> -->
+  <!-- <div class="layui-form-item">
     <label class="layui-form-label">设备状态</label>
     <div class="layui-input-inline">
       <script type="text/html" template>
-          <!-- <input type="option" name="status" value="1" lay-skin="primary" title="关机" >    
-          <input type="option" name="status" value="2" lay-skin="primary" title="开机" >    
-          <input type="option" name="status" value="3" lay-skin="primary" title="损坏" >   -->  
           <select name="device_status" lay-filter="device_status">
             <option value="0" {{# if(d.params.status == 0){ }}selected{{# } }}>关机</option>
             <option value="1" {{# if(d.params.status == 1){ }}selected{{# } }}>开机</option>
@@ -53,7 +58,7 @@
           </select>
       </script>
     </div>
-  </div>
+  </div> -->
   
   <div class="layui-form-item">
     <label class="layui-form-label"></label>

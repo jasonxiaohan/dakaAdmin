@@ -100,41 +100,57 @@ layui.define(['table', 'form'], function(exports){
                 }
               }); 
 
-              layui.table.reload('LAY-ad-manage'); //重载表格
+              layui.table.reload('LAY-device-manage'); //重载表格
               layer.close(index); //执行关闭 
             });
           });
         }
       });
     }else if(obj.event === 'open'){
-      layer.prompt({
-        formType: 1
-        ,title: '敏感操作，请验证口令'
-      }, function(value, index){
-        layer.close(index);
-        
-        layer.confirm('真的删除行么', function(index){
-          admin.req({
-            url: setter.remoteurl+'/ad/adverts'
-            ,method: 'DELETE'
-            ,data: {advert_id: data.id}
-            ,success: function(res){
-              if (res.code == 0) {
-                layer.msg("删除成功",{time: 1000,icon: 1},function(){
-                    var index = parent.layer.getFrameIndex(window.name);
-                    parent.layer.close(index);
-                    window.parent.location.reload();
-                });
-              } else {
-                layer.msg(res.msg, {icon: 5});
-              }
-            }
-          }); 
-          obj.del();
-          layer.close(index);
-        });
-      });
+      var field = obj.data; //获取提交的字段
+      field.device_status = 1;
+      admin.req({
+        url: setter.remoteurl+'/system-device/bootup'
+        ,method: 'PUT'
+        ,data: field
+        ,success: function(res){
+          if (res.code == 0) {
+            layer.msg("开机成功",{time: 1000,icon: 1},function(){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
+          } else {
+            layer.msg(res.msg, {icon: 5});
+          }
+        }
+      }); 
+      obj.del();
+      layui.table.reload('LAY-device-manage'); //重载表格
+      layer.close(index);
     } else if(obj.event === 'close'){
+      var field = obj.data; //获取提交的字段
+      field.device_status = 0;
+      admin.req({
+        url: setter.remoteurl+'/system-device/bootup'
+        ,method: 'PUT'
+        ,data: field
+        ,success: function(res){
+          if (res.code == 0) {
+            layer.msg("开机成功",{time: 1000,icon: 1},function(){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
+          } else {
+            layer.msg(res.msg, {icon: 5});
+          }
+        }
+      }); 
+      obj.del();
+      layui.table.reload('LAY-device-manage'); //重载表格
+      layer.close(index);
+    } else if(obj.event === 'delete'){
       layer.prompt({
         formType: 1
         ,title: '敏感操作，请验证口令'
@@ -143,9 +159,9 @@ layui.define(['table', 'form'], function(exports){
         
         layer.confirm('真的删除行么', function(index){
           admin.req({
-            url: setter.remoteurl+'/ad/adverts'
+            url: setter.remoteurl+'/system-device/device'
             ,method: 'DELETE'
-            ,data: {advert_id: data.id}
+            ,data: {id: data.id}
             ,success: function(res){
               if (res.code == 0) {
                 layer.msg("删除成功",{time: 1000,icon: 1},function(){
@@ -159,34 +175,7 @@ layui.define(['table', 'form'], function(exports){
             }
           }); 
           obj.del();
-          layer.close(index);
-        });
-      });
-    } else if(obj.event === 'error'){
-      layer.prompt({
-        formType: 1
-        ,title: '敏感操作，请验证口令'
-      }, function(value, index){
-        layer.close(index);
-        
-        layer.confirm('真的删除行么', function(index){
-          admin.req({
-            url: setter.remoteurl+'/ad/adverts'
-            ,method: 'DELETE'
-            ,data: {advert_id: data.id}
-            ,success: function(res){
-              if (res.code == 0) {
-                layer.msg("删除成功",{time: 1000,icon: 1},function(){
-                    var index = parent.layer.getFrameIndex(window.name);
-                    parent.layer.close(index);
-                    window.parent.location.reload();
-                });
-              } else {
-                layer.msg(res.msg, {icon: 5});
-              }
-            }
-          }); 
-          obj.del();
+          layui.table.reload('LAY-device-manage'); //重载表格
           layer.close(index);
         });
       });
